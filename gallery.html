@@ -55,11 +55,78 @@
           >
         </a>
 
-        <nav class="hidden md:flex space-x-8 font-medium">
+        <!-- Desktop Nav -->
+        <nav
+          class="hidden md:flex items-center space-x-8 font-medium"
+          aria-label="Primary navigation"
+        >
           <a href="index.html" class="hover:text-primary transition">Home</a>
           <a href="gallery.html" class="text-primary font-semibold">Gallery</a>
           <a href="blog.html" class="hover:text-primary transition">Blog</a>
           <a href="contact.html" class="hover:text-primary transition"
+            >Contact</a
+          >
+          <a
+            href="contact.html"
+            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
+          >
+            Get a Quote
+          </a>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button
+          id="menuBtn"
+          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+        >
+          <!-- Hamburger icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Panel -->
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden border-t border-gray-200 bg-white"
+      >
+        <nav
+          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium"
+          aria-label="Mobile navigation"
+        >
+          <a
+            href="index.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Home</a
+          >
+          <a
+            href="gallery.html"
+            class="mobile-link py-2 px-3 rounded-lg bg-primary/10 text-primary"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Blog</a
+          >
+          <a
+            href="contact.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
             >Contact</a
           >
         </nav>
@@ -133,8 +200,7 @@
         >
           <div>
             <h2 class="text-3xl font-extrabold text-gray-900">
-              Projects
-              <span class="text-primary">Showcase</span>
+              Projects <span class="text-primary">Showcase</span>
             </h2>
             <p class="mt-2 text-gray-600 max-w-2xl">
               Filter by category or search by project name/location. Click any
@@ -157,7 +223,7 @@
               />
             </div>
 
-            <!-- Sort (optional) -->
+            <!-- Sort -->
             <select
               id="sortSelect"
               class="w-full sm:w-48 border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -180,31 +246,31 @@
           </button>
           <button
             data-filter="residential"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition"
+            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
           >
             Residential
           </button>
           <button
             data-filter="commercial"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition"
+            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
           >
             Commercial
           </button>
           <button
             data-filter="infrastructure"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition"
+            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
           >
             Infrastructure
           </button>
           <button
             data-filter="renovation"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition"
+            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
           >
             Renovation
           </button>
           <button
             data-filter="structural"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition"
+            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
           >
             Structural
           </button>
@@ -337,11 +403,12 @@
       </div>
     </div>
 
+    <!-- ================= SCRIPTS ================= -->
     <script>
       // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Project data (you can replace with real projects later)
+      // Project data (replace with real projects)
       const projects = [
         {
           title: "Residential Building",
@@ -417,17 +484,16 @@
 
       function sortItems(items) {
         const copy = [...items];
-        if (sortMode === "name") {
+        if (sortMode === "name")
           copy.sort((a, b) => a.title.localeCompare(b.title));
-        } else if (sortMode === "location") {
+        else if (sortMode === "location")
           copy.sort((a, b) => a.location.localeCompare(b.location));
-        }
         return copy; // featured keeps original order
       }
 
       function filteredProjects() {
         const q = normalize(query);
-        let items = projects.filter((p) => {
+        const items = projects.filter((p) => {
           const matchesFilter =
             activeFilter === "all" || p.category === activeFilter;
           const matchesQuery =
@@ -455,45 +521,45 @@
         grid.innerHTML = items
           .map(
             (p, idx) => `
-      <article
-        class="group relative overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
-        role="button"
-        tabindex="0"
-        aria-label="Open ${p.title} preview"
-        data-idx="${idx}"
-      >
-        <div class="relative h-72 overflow-hidden">
-          <img
-            src="${p.img}"
-            alt="${p.title}"
-            loading="lazy"
-            class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90"></div>
+            <article
+              class="group relative overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
+              role="button"
+              tabindex="0"
+              aria-label="Open ${p.title} preview"
+              data-idx="${idx}"
+            >
+              <div class="relative h-72 overflow-hidden">
+                <img
+                  src="${p.img}"
+                  alt="${p.title}"
+                  loading="lazy"
+                  class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90"></div>
 
-          <div class="absolute top-4 left-4 flex items-center gap-2">
-            <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-gray-900">
-              ${p.status}
-            </span>
-            <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white">
-              ${p.tag}
-            </span>
-          </div>
-        </div>
+                <div class="absolute top-4 left-4 flex items-center gap-2">
+                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-gray-900">
+                    ${p.status}
+                  </span>
+                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white">
+                    ${p.tag}
+                  </span>
+                </div>
+              </div>
 
-        <div class="p-6">
-          <h3 class="text-xl font-extrabold text-gray-900 group-hover:text-primary transition">
-            ${p.title}
-          </h3>
-          <p class="mt-2 text-gray-600">📍 ${p.location}</p>
+              <div class="p-6">
+                <h3 class="text-xl font-extrabold text-gray-900 group-hover:text-primary transition">
+                  ${p.title}
+                </h3>
+                <p class="mt-2 text-gray-600">📍 ${p.location}</p>
 
-          <div class="mt-5 flex items-center justify-between">
-            <p class="text-sm text-gray-500">Click to preview</p>
-            <span class="text-primary font-semibold">View →</span>
-          </div>
-        </div>
-      </article>
-    `
+                <div class="mt-5 flex items-center justify-between">
+                  <p class="text-sm text-gray-500">Click to preview</p>
+                  <span class="text-primary font-semibold">View →</span>
+                </div>
+              </div>
+            </article>
+          `
           )
           .join("");
 
@@ -501,8 +567,8 @@
         grid.querySelectorAll("[data-idx]").forEach((el) => {
           const idx = Number(el.getAttribute("data-idx"));
           const p = items[idx];
-
           const open = () => openLightbox(p);
+
           el.addEventListener("click", open);
           el.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") open();
@@ -528,10 +594,12 @@
       }
 
       closeLightbox.addEventListener("click", closeModal);
+
       lightbox.addEventListener("click", (e) => {
         // click outside card closes
         if (e.target === lightbox.firstElementChild) closeModal();
       });
+
       document.addEventListener("keydown", (e) => {
         if (!lightbox.classList.contains("hidden") && e.key === "Escape")
           closeModal();
@@ -582,11 +650,52 @@
         document
           .querySelector('.filter-btn[data-filter="all"]')
           .classList.add("bg-primary", "text-white", "border-primary");
+
         render();
       });
 
-      // First render
+      // Initial render
       render();
+    </script>
+
+    <script>
+      // Mobile navbar toggle
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      function closeMenu() {
+        if (!mobileMenu || !menuBtn) return;
+        mobileMenu.classList.add("hidden");
+        menuBtn.setAttribute("aria-expanded", "false");
+      }
+
+      function toggleMenu() {
+        if (!mobileMenu || !menuBtn) return;
+        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+        menuBtn.setAttribute("aria-expanded", String(!isOpen));
+        mobileMenu.classList.toggle("hidden");
+      }
+
+      menuBtn?.addEventListener("click", toggleMenu);
+
+      // Close when clicking a link
+      document.querySelectorAll(".mobile-link").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      // Close on outside click
+      document.addEventListener("click", (e) => {
+        if (!mobileMenu || !menuBtn) return;
+        const clickedInsideMenu = mobileMenu.contains(e.target);
+        const clickedButton = menuBtn.contains(e.target);
+        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+        if (isOpen && !clickedInsideMenu && !clickedButton) closeMenu();
+      });
+
+      // Close on ESC
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
+      });
     </script>
   </body>
 </html>

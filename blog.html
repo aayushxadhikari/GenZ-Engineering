@@ -61,6 +61,7 @@
           >
         </a>
 
+        <!-- Desktop Nav -->
         <nav
           class="hidden md:flex items-center space-x-8 font-medium"
           aria-label="Primary navigation"
@@ -84,6 +85,70 @@
           >
             Get a Quote
           </a>
+        </nav>
+
+        <!-- Mobile Menu Button (FIXED: icon always visible even if JS fails) -->
+        <button
+          id="menuBtn"
+          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+          type="button"
+        >
+          <!-- Default hamburger icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Panel -->
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden border-t border-gray-200 bg-white"
+      >
+        <nav
+          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium"
+          aria-label="Mobile navigation"
+        >
+          <a
+            href="index.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Home</a
+          >
+          <a
+            href="gallery.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Gallery</a
+          >
+          <a
+            href="blog.html"
+            class="mobile-link py-2 px-3 rounded-lg bg-primary/10 text-primary"
+            >Blog</a
+          >
+          <a
+            href="contact.html"
+            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Contact</a
+          >
+
+          <a
+            href="contact.html"
+            class="mobile-link mt-2 bg-primary text-white py-2.5 px-3 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft text-center"
+            >Get a Quote</a
+          >
         </nav>
       </div>
     </header>
@@ -226,6 +291,7 @@
             <button
               id="resetBtn"
               class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+              type="button"
             >
               Reset
             </button>
@@ -298,171 +364,227 @@
     </script>
 
     <script>
-      // Active nav highlight
-      const current = (
-        location.pathname.split("/").pop() || "index.html"
-      ).toLowerCase();
-      document.querySelectorAll("[data-nav]").forEach((a) => {
-        if ((a.getAttribute("href") || "").toLowerCase() === current) {
-          a.classList.add("text-primary", "font-semibold");
-        }
-      });
-
-      // Footer year
-      document.getElementById("year").textContent = new Date().getFullYear();
-
-      // Blog post data (replace with real posts)
-      const posts = [
-        {
-          title: "Structural Safety: What Clients Should Ask",
-          excerpt:
-            "Questions that protect you from poor workmanship, weak design, and hidden costs.",
-          category: "safety",
-          tag: "Safety",
-          date: "Jan 2026",
-          read: "5 min read",
-          href: "posts/structural-safety-questions.html",
-          img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=70",
-        },
-        {
-          title: "Cement Storage Basics: Silo Types & Best Practices",
-          excerpt:
-            "Horizontal vs vertical silos, moisture protection, discharge systems, and maintenance tips.",
-          category: "materials",
-          tag: "Materials",
-          date: "Jan 2026",
-          read: "7 min read",
-          href: "posts/cement-silo-basics.html",
-          img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70",
-        },
-        {
-          title: "Budget Control: How to Avoid Cost Overruns",
-          excerpt:
-            "Simple methods to keep your project on budget without compromising quality.",
-          category: "planning",
-          tag: "Planning",
-          date: "Dec 2025",
-          read: "6 min read",
-          href: "posts/budget-control.html",
-          img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=70",
-        },
-        {
-          title: "Engineering Design: What a Good Drawing Set Includes",
-          excerpt:
-            "Key sheets and details your contractor needs for accurate execution and fewer mistakes.",
-          category: "design",
-          tag: "Design",
-          date: "Dec 2025",
-          read: "6 min read",
-          href: "posts/drawing-set.html",
-          img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1200&q=70",
-        },
-        {
-          title: "Site Supervision: Daily Checklist for Quality",
-          excerpt:
-            "From materials inspection to curing and measurements—quick daily checks that matter.",
-          category: "safety",
-          tag: "Quality",
-          date: "Dec 2025",
-          read: "4 min read",
-          href: "posts/site-supervision-checklist.html",
-          img: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=70",
-        },
-        {
-          title: "Renovation Planning: Before You Break Anything",
-          excerpt:
-            "How to assess structure, utilities, and permissions before starting renovation work.",
-          category: "planning",
-          tag: "Renovation",
-          date: "Nov 2025",
-          read: "5 min read",
-          href: "posts/renovation-planning.html",
-          img: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70",
-        },
-      ];
-
-      // State
-      let query = "";
-      let category = "all";
-
-      const grid = document.getElementById("grid");
-      const countEl = document.getElementById("count");
-      const emptyState = document.getElementById("emptyState");
-      const searchInput = document.getElementById("searchInput");
-      const categorySelect = document.getElementById("categorySelect");
-
-      function normalize(s) {
-        return (s || "").toLowerCase().trim();
-      }
-
-      function filtered() {
-        const q = normalize(query);
-        return posts.filter((p) => {
-          const matchesCategory = category === "all" || p.category === category;
-          const matchesQuery =
-            !q ||
-            normalize(p.title).includes(q) ||
-            normalize(p.excerpt).includes(q) ||
-            normalize(p.tag).includes(q);
-          return matchesCategory && matchesQuery;
+      document.addEventListener("DOMContentLoaded", () => {
+        // ===== Active nav highlight (desktop) =====
+        const current = (
+          location.pathname.split("/").pop() || "index.html"
+        ).toLowerCase();
+        document.querySelectorAll("[data-nav]").forEach((a) => {
+          if ((a.getAttribute("href") || "").toLowerCase() === current) {
+            a.classList.add("text-primary", "font-semibold");
+          }
         });
-      }
 
-      function render() {
-        const items = filtered();
-        countEl.textContent = items.length;
+        // Footer year
+        document.getElementById("year").textContent = new Date().getFullYear();
 
-        if (!items.length) {
-          grid.innerHTML = "";
-          emptyState.classList.remove("hidden");
-          return;
+        // ===== Mobile Navbar Toggle (FIXED) =====
+        const menuBtn = document.getElementById("menuBtn");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        const iconHamburger = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        `;
+        const iconClose = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        `;
+
+        function setMenuOpen(open) {
+          if (!menuBtn || !mobileMenu) return;
+          menuBtn.setAttribute("aria-expanded", String(open));
+          mobileMenu.classList.toggle("hidden", !open);
+          menuBtn.innerHTML = open ? iconClose : iconHamburger;
         }
-        emptyState.classList.add("hidden");
 
-        grid.innerHTML = items
-          .map(
-            (p) => `
-          <article class="bg-white border rounded-2xl overflow-hidden hover:border-primary transition shadow-soft hover:shadow-lg">
-            <img src="${p.img}" alt="${p.title}" class="w-full h-44 object-cover" loading="lazy" />
-            <div class="p-6">
-              <div class="flex items-center justify-between gap-3">
-                <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">${p.tag}</span>
-                <span class="text-xs text-gray-500">${p.date} • ${p.read}</span>
-              </div>
-              <h3 class="mt-4 text-xl font-extrabold text-gray-900 leading-snug">
-                ${p.title}
-              </h3>
-              <p class="mt-2 text-gray-600">
-                ${p.excerpt}
-              </p>
-              <a href="${p.href}" class="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:underline">
-                Read more <span>→</span>
-              </a>
-            </div>
-          </article>
-        `
-          )
-          .join("");
-      }
+        if (menuBtn && mobileMenu) {
+          // Start closed
+          setMenuOpen(false);
 
-      searchInput.addEventListener("input", (e) => {
-        query = e.target.value;
+          menuBtn.addEventListener("click", () => {
+            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+            setMenuOpen(!isOpen);
+          });
+
+          // Close when clicking a link
+          mobileMenu.querySelectorAll("a").forEach((a) => {
+            a.addEventListener("click", () => setMenuOpen(false));
+          });
+
+          // Close on outside click
+          document.addEventListener("click", (e) => {
+            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+            if (!isOpen) return;
+            if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+              setMenuOpen(false);
+            }
+          });
+
+          // Close on ESC
+          document.addEventListener("keydown", (e) => {
+            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+            if (isOpen && e.key === "Escape") setMenuOpen(false);
+          });
+        }
+
+        // ===== Blog post data (replace with real posts) =====
+        const posts = [
+          {
+            title: "Structural Safety: What Clients Should Ask",
+            excerpt:
+              "Questions that protect you from poor workmanship, weak design, and hidden costs.",
+            category: "safety",
+            tag: "Safety",
+            date: "Jan 2026",
+            read: "5 min read",
+            href: "posts/structural-safety-questions.html",
+            img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=70",
+          },
+          {
+            title: "Cement Storage Basics: Silo Types & Best Practices",
+            excerpt:
+              "Horizontal vs vertical silos, moisture protection, discharge systems, and maintenance tips.",
+            category: "materials",
+            tag: "Materials",
+            date: "Jan 2026",
+            read: "7 min read",
+            href: "posts/cement-silo-basics.html",
+            img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70",
+          },
+          {
+            title: "Budget Control: How to Avoid Cost Overruns",
+            excerpt:
+              "Simple methods to keep your project on budget without compromising quality.",
+            category: "planning",
+            tag: "Planning",
+            date: "Dec 2025",
+            read: "6 min read",
+            href: "posts/budget-control.html",
+            img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=70",
+          },
+          {
+            title: "Engineering Design: What a Good Drawing Set Includes",
+            excerpt:
+              "Key sheets and details your contractor needs for accurate execution and fewer mistakes.",
+            category: "design",
+            tag: "Design",
+            date: "Dec 2025",
+            read: "6 min read",
+            href: "posts/drawing-set.html",
+            img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1200&q=70",
+          },
+          {
+            title: "Site Supervision: Daily Checklist for Quality",
+            excerpt:
+              "From materials inspection to curing and measurements—quick daily checks that matter.",
+            category: "safety",
+            tag: "Quality",
+            date: "Dec 2025",
+            read: "4 min read",
+            href: "posts/site-supervision-checklist.html",
+            img: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=70",
+          },
+          {
+            title: "Renovation Planning: Before You Break Anything",
+            excerpt:
+              "How to assess structure, utilities, and permissions before starting renovation work.",
+            category: "planning",
+            tag: "Renovation",
+            date: "Nov 2025",
+            read: "5 min read",
+            href: "posts/renovation-planning.html",
+            img: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70",
+          },
+        ];
+
+        // State
+        let query = "";
+        let category = "all";
+
+        const grid = document.getElementById("grid");
+        const countEl = document.getElementById("count");
+        const emptyState = document.getElementById("emptyState");
+        const searchInput = document.getElementById("searchInput");
+        const categorySelect = document.getElementById("categorySelect");
+
+        function normalize(s) {
+          return (s || "").toLowerCase().trim();
+        }
+
+        function filtered() {
+          const q = normalize(query);
+          return posts.filter((p) => {
+            const matchesCategory =
+              category === "all" || p.category === category;
+            const matchesQuery =
+              !q ||
+              normalize(p.title).includes(q) ||
+              normalize(p.excerpt).includes(q) ||
+              normalize(p.tag).includes(q);
+            return matchesCategory && matchesQuery;
+          });
+        }
+
+        function render() {
+          const items = filtered();
+          countEl.textContent = items.length;
+
+          if (!items.length) {
+            grid.innerHTML = "";
+            emptyState.classList.remove("hidden");
+            return;
+          }
+          emptyState.classList.add("hidden");
+
+          grid.innerHTML = items
+            .map(
+              (p) => `
+                <article class="bg-white border rounded-2xl overflow-hidden hover:border-primary transition shadow-soft hover:shadow-lg">
+                  <img src="${p.img}" alt="${p.title}" class="w-full h-44 object-cover" loading="lazy" />
+                  <div class="p-6">
+                    <div class="flex items-center justify-between gap-3">
+                      <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">${p.tag}</span>
+                      <span class="text-xs text-gray-500">${p.date} • ${p.read}</span>
+                    </div>
+                    <h3 class="mt-4 text-xl font-extrabold text-gray-900 leading-snug">
+                      ${p.title}
+                    </h3>
+                    <p class="mt-2 text-gray-600">
+                      ${p.excerpt}
+                    </p>
+                    <a href="${p.href}" class="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:underline">
+                      Read more <span>→</span>
+                    </a>
+                  </div>
+                </article>
+              `
+            )
+            .join("");
+        }
+
+        searchInput.addEventListener("input", (e) => {
+          query = e.target.value;
+          render();
+        });
+
+        categorySelect.addEventListener("change", (e) => {
+          category = e.target.value;
+          render();
+        });
+
+        document.getElementById("resetBtn")?.addEventListener("click", () => {
+          query = "";
+          category = "all";
+          searchInput.value = "";
+          categorySelect.value = "all";
+          render();
+        });
+
         render();
       });
-      categorySelect.addEventListener("change", (e) => {
-        category = e.target.value;
-        render();
-      });
-
-      document.getElementById("resetBtn")?.addEventListener("click", () => {
-        query = "";
-        category = "all";
-        searchInput.value = "";
-        categorySelect.value = "all";
-        render();
-      });
-
-      render();
     </script>
   </body>
 </html>
