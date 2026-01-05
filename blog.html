@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Blog | GenZ Engineering</title>
+    <meta
+      name="description"
+      content="Construction and engineering insights from GenZ Engineering—project planning, safety, materials, and best practices."
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Blog | GenZ Engineering" />
+    <meta
+      property="og:description"
+      content="Construction and engineering insights—planning, safety, materials, and best practices."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#c62828" },
+            boxShadow: { soft: "0 12px 30px rgba(0,0,0,0.12)" },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-white text-gray-800 antialiased">
+    <!-- ================= NAVBAR ================= -->
+    <header
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
+      >
+        <a href="index.html" class="flex items-center gap-3">
+          <div
+            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+          >
+            <span class="text-primary font-black">GZ</span>
+          </div>
+          <span class="text-2xl font-extrabold tracking-wide text-primary"
+            >GenZ Engineering</span
+          >
+        </a>
+
+        <nav
+          class="hidden md:flex items-center space-x-8 font-medium"
+          aria-label="Primary navigation"
+        >
+          <a data-nav href="index.html" class="hover:text-primary transition"
+            >Home</a
+          >
+          <a data-nav href="gallery.html" class="hover:text-primary transition"
+            >Gallery</a
+          >
+          <a data-nav href="blog.html" class="hover:text-primary transition"
+            >Blog</a
+          >
+          <a data-nav href="contact.html" class="hover:text-primary transition"
+            >Contact</a
+          >
+
+          <a
+            href="contact.html"
+            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
+          >
+            Get a Quote
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ================= HERO ================= -->
+    <section class="relative overflow-hidden">
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-primary/10 via-white to-white"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 py-16 relative">
+        <div class="max-w-3xl">
+          <p
+            class="inline-flex items-center gap-2 text-sm bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full"
+          >
+            <span class="h-2 w-2 rounded-full bg-primary"></span>
+            Practical guides • Safety • Materials • Planning
+          </p>
+          <h1
+            class="mt-6 text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight"
+          >
+            Blog & Insights
+          </h1>
+          <p class="mt-4 text-lg text-gray-600">
+            Short, useful articles to help clients understand engineering,
+            construction quality, and project management.
+          </p>
+
+          <!-- Controls -->
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <div class="relative w-full sm:w-96">
+              <span
+                class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                >🔎</span
+              >
+              <input
+                id="searchInput"
+                class="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                placeholder="Search articles (e.g., safety, cement, budget)"
+                aria-label="Search blog posts"
+              />
+            </div>
+
+            <select
+              id="categorySelect"
+              class="w-full sm:w-56 border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
+              aria-label="Filter by category"
+            >
+              <option value="all">All categories</option>
+              <option value="planning">Planning</option>
+              <option value="safety">Safety</option>
+              <option value="materials">Materials</option>
+              <option value="design">Design</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 pb-24">
+      <!-- ================= FEATURED ================= -->
+      <section class="mt-6">
+        <div class="flex items-end justify-between gap-4">
+          <h2 class="text-2xl font-extrabold text-gray-900">Featured</h2>
+          <a
+            href="contact.html"
+            class="text-sm font-semibold text-primary hover:underline"
+            >Need help with a project? →</a
+          >
+        </div>
+
+        <article
+          class="mt-5 grid lg:grid-cols-2 gap-6 border rounded-2xl overflow-hidden bg-white shadow-soft hover:shadow-lg transition"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=70"
+            alt="Featured post"
+            class="w-full h-64 lg:h-full object-cover"
+            loading="lazy"
+          />
+          <div class="p-6 flex flex-col">
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                >Planning</span
+              >
+              <span
+                class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                >Checklist</span
+              >
+            </div>
+            <h3 class="mt-4 text-2xl font-extrabold text-gray-900">
+              How to Plan a Construction Project (Client Checklist)
+            </h3>
+            <p class="mt-3 text-gray-600">
+              A simple step-by-step guide: scope, budget, drawings, approvals,
+              timeline, contractor selection, and quality checks.
+            </p>
+
+            <div class="mt-5 text-sm text-gray-500">
+              <span>Jan 2026</span> • <span>6 min read</span> •
+              <span>GenZ Engineering</span>
+            </div>
+
+            <div class="mt-6">
+              <a
+                href="posts/construction-planning-checklist.html"
+                class="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
+              >
+                Read article <span>→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= POSTS GRID ================= -->
+      <section class="mt-12">
+        <div class="flex items-center justify-between gap-4">
+          <h2 class="text-2xl font-extrabold text-gray-900">Latest Articles</h2>
+          <p class="text-sm text-gray-600">
+            Showing
+            <span id="count" class="font-semibold text-gray-900">0</span> posts
+          </p>
+        </div>
+
+        <div
+          id="grid"
+          class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        ></div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="hidden text-center py-14">
+          <div
+            class="mx-auto max-w-md bg-white border rounded-2xl p-10 shadow-soft"
+          >
+            <p class="text-2xl font-extrabold text-gray-900">No posts found</p>
+            <p class="mt-2 text-gray-600">
+              Try a different keyword or category.
+            </p>
+            <button
+              id="resetBtn"
+              class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= NEWSLETTER CTA ================= -->
+      <section class="mt-16">
+        <div
+          class="rounded-2xl border bg-gray-50 p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+        >
+          <div>
+            <h3 class="text-2xl font-extrabold text-gray-900">
+              Get new posts in your inbox
+            </h3>
+            <p class="mt-2 text-gray-600">
+              Monthly tips on construction planning, safety, and quality
+              control.
+            </p>
+          </div>
+          <form
+            class="w-full lg:w-auto flex flex-col sm:flex-row gap-3"
+            action="#"
+            method="post"
+          >
+            <input
+              type="email"
+              required
+              placeholder="you@example.com"
+              class="w-full sm:w-80 border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            <button
+              class="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition"
+              type="submit"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+        <p class="mt-3 text-xs text-gray-500">
+          For real subscriptions, connect to Mailchimp/Brevo/Sendinblue or a
+          backend endpoint.
+        </p>
+      </section>
+    </main>
+
+    <footer class="border-t bg-white">
+      <div
+        class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500"
+      >
+        <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
+        <div class="flex gap-5">
+          <a class="hover:text-primary transition" href="terms.html">Terms</a>
+          <a class="hover:text-primary transition" href="privacy.html"
+            >Privacy</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <!-- ================= JSON-LD (optional but recommended) ================= -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "GenZ Engineering Blog",
+        "description": "Construction and engineering insights from GenZ Engineering."
+      }
+    </script>
+
+    <script>
+      // Active nav highlight
+      const current = (
+        location.pathname.split("/").pop() || "index.html"
+      ).toLowerCase();
+      document.querySelectorAll("[data-nav]").forEach((a) => {
+        if ((a.getAttribute("href") || "").toLowerCase() === current) {
+          a.classList.add("text-primary", "font-semibold");
+        }
+      });
+
+      // Footer year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Blog post data (replace with real posts)
+      const posts = [
+        {
+          title: "Structural Safety: What Clients Should Ask",
+          excerpt:
+            "Questions that protect you from poor workmanship, weak design, and hidden costs.",
+          category: "safety",
+          tag: "Safety",
+          date: "Jan 2026",
+          read: "5 min read",
+          href: "posts/structural-safety-questions.html",
+          img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Cement Storage Basics: Silo Types & Best Practices",
+          excerpt:
+            "Horizontal vs vertical silos, moisture protection, discharge systems, and maintenance tips.",
+          category: "materials",
+          tag: "Materials",
+          date: "Jan 2026",
+          read: "7 min read",
+          href: "posts/cement-silo-basics.html",
+          img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Budget Control: How to Avoid Cost Overruns",
+          excerpt:
+            "Simple methods to keep your project on budget without compromising quality.",
+          category: "planning",
+          tag: "Planning",
+          date: "Dec 2025",
+          read: "6 min read",
+          href: "posts/budget-control.html",
+          img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Engineering Design: What a Good Drawing Set Includes",
+          excerpt:
+            "Key sheets and details your contractor needs for accurate execution and fewer mistakes.",
+          category: "design",
+          tag: "Design",
+          date: "Dec 2025",
+          read: "6 min read",
+          href: "posts/drawing-set.html",
+          img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Site Supervision: Daily Checklist for Quality",
+          excerpt:
+            "From materials inspection to curing and measurements—quick daily checks that matter.",
+          category: "safety",
+          tag: "Quality",
+          date: "Dec 2025",
+          read: "4 min read",
+          href: "posts/site-supervision-checklist.html",
+          img: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Renovation Planning: Before You Break Anything",
+          excerpt:
+            "How to assess structure, utilities, and permissions before starting renovation work.",
+          category: "planning",
+          tag: "Renovation",
+          date: "Nov 2025",
+          read: "5 min read",
+          href: "posts/renovation-planning.html",
+          img: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70",
+        },
+      ];
+
+      // State
+      let query = "";
+      let category = "all";
+
+      const grid = document.getElementById("grid");
+      const countEl = document.getElementById("count");
+      const emptyState = document.getElementById("emptyState");
+      const searchInput = document.getElementById("searchInput");
+      const categorySelect = document.getElementById("categorySelect");
+
+      function normalize(s) {
+        return (s || "").toLowerCase().trim();
+      }
+
+      function filtered() {
+        const q = normalize(query);
+        return posts.filter((p) => {
+          const matchesCategory = category === "all" || p.category === category;
+          const matchesQuery =
+            !q ||
+            normalize(p.title).includes(q) ||
+            normalize(p.excerpt).includes(q) ||
+            normalize(p.tag).includes(q);
+          return matchesCategory && matchesQuery;
+        });
+      }
+
+      function render() {
+        const items = filtered();
+        countEl.textContent = items.length;
+
+        if (!items.length) {
+          grid.innerHTML = "";
+          emptyState.classList.remove("hidden");
+          return;
+        }
+        emptyState.classList.add("hidden");
+
+        grid.innerHTML = items
+          .map(
+            (p) => `
+          <article class="bg-white border rounded-2xl overflow-hidden hover:border-primary transition shadow-soft hover:shadow-lg">
+            <img src="${p.img}" alt="${p.title}" class="w-full h-44 object-cover" loading="lazy" />
+            <div class="p-6">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">${p.tag}</span>
+                <span class="text-xs text-gray-500">${p.date} • ${p.read}</span>
+              </div>
+              <h3 class="mt-4 text-xl font-extrabold text-gray-900 leading-snug">
+                ${p.title}
+              </h3>
+              <p class="mt-2 text-gray-600">
+                ${p.excerpt}
+              </p>
+              <a href="${p.href}" class="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:underline">
+                Read more <span>→</span>
+              </a>
+            </div>
+          </article>
+        `
+          )
+          .join("");
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        query = e.target.value;
+        render();
+      });
+      categorySelect.addEventListener("change", (e) => {
+        category = e.target.value;
+        render();
+      });
+
+      document.getElementById("resetBtn")?.addEventListener("click", () => {
+        query = "";
+        category = "all";
+        searchInput.value = "";
+        categorySelect.value = "all";
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
