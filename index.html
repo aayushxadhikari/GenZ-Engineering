@@ -61,10 +61,7 @@
         }
       }
 
-      /* -------- Parallax (better + stable) --------
-         We move the hero background relative to the HERO section (not whole page),
-         so it feels smooth and "correct" and doesn't jump.
-      */
+      /* Parallax helpers (improved) */
       .parallax-wrap {
         position: absolute;
         inset: 0;
@@ -72,29 +69,27 @@
       }
       .parallax-img {
         position: absolute;
-        inset: -12% -12% -12% -12%;
-        width: 124%;
-        height: 124%;
+        inset: -10% -10% -10% -10%;
+        width: 120%;
+        height: 120%;
         object-fit: cover;
         transform: translate3d(0, 0, 0) scale(1.08);
         will-change: transform;
       }
 
-      /* -------- Scroll stage images (slide from right) -------- */
+      /* Stage figures (fade + slide from right) */
       .stage-figure {
         position: absolute;
         inset: 0;
         opacity: 0;
-        transform: translateX(90px) scale(1.01);
+        transform: translateX(90px);
         transition:
-          opacity 320ms ease,
-          transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
-        pointer-events: none; /* only active gets pointer events */
+          opacity 350ms ease,
+          transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
       }
       .stage-figure.is-active {
         opacity: 1;
-        transform: translateX(0) scale(1);
-        pointer-events: auto;
+        transform: translateX(0);
       }
       .stage-figure img {
         width: 100%;
@@ -102,10 +97,37 @@
         object-fit: cover;
       }
 
-      /* Small visual cue for active step */
-      .story-step.is-active {
-        border-color: rgba(198, 40, 40, 0.35);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      /* ===== Stacked Cards ===== */
+      .stack {
+        --card-gap: 18px;
+        --pin-top: 92px; /* pins below navbar */
+      }
+      .stack-card {
+        position: sticky;
+        top: var(--pin-top);
+        transform-origin: 50% 100%;
+        will-change: transform;
+        transition:
+          transform 180ms ease,
+          border-color 180ms ease,
+          box-shadow 180ms ease;
+      }
+      .stack-card:nth-child(1) {
+        margin-top: 0;
+      }
+      .stack-card:nth-child(2) {
+        margin-top: var(--card-gap);
+      }
+      .stack-card:nth-child(3) {
+        margin-top: calc(var(--card-gap) * 2);
+      }
+      .stack-card:nth-child(4) {
+        margin-top: calc(var(--card-gap) * 3);
+      }
+      @media (max-width: 1023px) {
+        .stack {
+          --pin-top: 84px;
+        }
       }
     </style>
   </head>
@@ -150,7 +172,7 @@
             Home
           </a>
 
-          <!-- ✅ Services Dropdown (refined hover + page links) -->
+          <!-- ✅ Services Dropdown (stable hover + page links) -->
           <div class="relative group">
             <button
               class="inline-flex items-center gap-2 hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
@@ -173,7 +195,7 @@
               </svg>
             </button>
 
-            <!-- Hover buffer so menu doesn't disappear when moving cursor down -->
+            <!-- Hover buffer -->
             <div
               class="absolute left-0 top-full h-4 w-72"
               aria-hidden="true"
@@ -193,6 +215,15 @@
                   </p>
                 </a>
                 <a
+                  href="renovation.html"
+                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
+                >
+                  🛠️ Renovation
+                  <p class="text-xs text-gray-500 mt-1">
+                    Retrofitting & upgrades
+                  </p>
+                </a>
+                <a
                   href="architecture.html"
                   class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
                 >
@@ -208,15 +239,6 @@
                   🎨 Interior Design
                   <p class="text-xs text-gray-500 mt-1">
                     Modern finishes & space planning
-                  </p>
-                </a>
-                <a
-                  href="renovation.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🛠️ Renovation
-                  <p class="text-xs text-gray-500 mt-1">
-                    Retrofitting & upgrades
                   </p>
                 </a>
               </div>
@@ -313,16 +335,6 @@
               class="hidden bg-white border-t border-gray-200"
             >
               <a
-                href="architecture.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🧱 Architecture Design</a
-              >
-              <a
-                href="interior.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🎨 Interior Design</a
-              >
-              <a
                 href="construction.html"
                 class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
                 >🏗️ Construction</a
@@ -331,6 +343,16 @@
                 href="renovation.html"
                 class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
                 >🛠️ Renovation</a
+              >
+              <a
+                href="architecture.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🧱 Architecture Design</a
+              >
+              <a
+                href="interior.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🎨 Interior Design</a
               >
             </div>
           </div>
@@ -365,14 +387,11 @@
     </header>
 
     <main id="main">
-      <!-- ================= HERO (Better Parallax) ================= -->
-      <section
-        id="hero"
-        class="relative min-h-[92vh] flex items-center justify-center"
-      >
+      <!-- ================= HERO (Parallax) ================= -->
+      <section class="relative min-h-[92vh] flex items-center justify-center">
         <div class="parallax-wrap">
           <img
-            id="heroParallaxImg"
+            id="heroParallax"
             src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
             alt="Construction site"
             class="parallax-img"
@@ -438,7 +457,7 @@
       </section>
 
       <!-- ================= ABOUT ================= -->
-      <section class="py-24 bg-gray-50">
+      <section id="about" class="py-24 bg-gray-50">
         <div
           class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center"
         >
@@ -509,6 +528,20 @@
             </a>
 
             <a
+              href="renovation.html"
+              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+            >
+              <h3 class="text-xl font-semibold text-primary mb-3">
+                Renovation
+              </h3>
+              <p class="text-gray-600">
+                Renovation, retrofitting & strengthening for performance and
+                modern finishes.
+              </p>
+              <p class="mt-4 text-primary font-semibold">Learn more →</p>
+            </a>
+
+            <a
               href="architecture.html"
               class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
             >
@@ -517,7 +550,7 @@
               </h3>
               <p class="text-gray-600">
                 Planning-focused architectural concepts, drawings, and
-                compliance support.
+                compliance support for buildable designs.
               </p>
               <p class="mt-4 text-primary font-semibold">Learn more →</p>
             </a>
@@ -530,22 +563,8 @@
                 Interior Design
               </h3>
               <p class="text-gray-600">
-                Space planning and modern interiors with clean finishes and
-                material selection.
-              </p>
-              <p class="mt-4 text-primary font-semibold">Learn more →</p>
-            </a>
-
-            <a
-              href="renovation.html"
-              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
-            >
-              <h3 class="text-xl font-semibold text-primary mb-3">
-                Renovation
-              </h3>
-              <p class="text-gray-600">
-                Renovation, retrofitting & strengthening for performance and
-                modern finishes.
+                Space planning and modern interiors with clean finishes,
+                lighting, and material selection.
               </p>
               <p class="mt-4 text-primary font-semibold">Learn more →</p>
             </a>
@@ -568,106 +587,166 @@
         </div>
       </section>
 
-      <!-- ================= SCROLL STAGE ================= -->
+      <!-- ================= HOW WE DELIVER (STACKED CARDS) ================= -->
       <section id="service-story" class="bg-gray-50">
         <div class="max-w-7xl mx-auto px-6 py-24">
           <div class="text-center mb-12">
             <h2 class="text-4xl font-bold text-primary">How We Deliver</h2>
             <p class="mt-4 text-gray-600 max-w-3xl mx-auto">
-              Scroll to see our service focus shift—each stage highlights the
-              work style and visuals behind it.
+              Scroll to see our service focus shift—stacked cards pin smoothly
+              while the visuals update.
             </p>
           </div>
 
           <div class="grid lg:grid-cols-2 gap-10 items-start">
-            <div class="space-y-6">
-              <article
-                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
-                data-stage="construction"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-sm font-bold text-primary">Step 01</p>
-                    <h3 class="text-2xl font-extrabold mt-1">Construction</h3>
+            <!-- LEFT: stacked cards -->
+            <div class="relative">
+              <div class="stack relative">
+                <article
+                  class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                  data-stage="construction"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <p class="text-sm font-bold text-primary">Step 01</p>
+                      <h3 class="text-2xl font-extrabold mt-1">Construction</h3>
+                    </div>
+                    <a
+                      href="construction.html"
+                      class="text-primary font-semibold hover:underline"
+                      >Open page →</a
+                    >
                   </div>
-                  <a
-                    href="construction.html"
-                    class="text-primary font-semibold hover:underline"
-                    >Open page →</a
-                  >
-                </div>
-                <p class="mt-3 text-gray-600">
-                  Site discipline, skilled supervision, and quality checks—built
-                  to schedule with clear reporting.
-                </p>
-              </article>
+                  <p class="mt-3 text-gray-600">
+                    Site discipline, skilled supervision, and quality
+                    checks—built to schedule with clear reporting.
+                  </p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                      >Execution</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Safety</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Milestones</span
+                    >
+                  </div>
+                </article>
 
-              <article
-                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
-                data-stage="renovation"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-sm font-bold text-primary">Step 02</p>
-                    <h3 class="text-2xl font-extrabold mt-1">Renovation</h3>
+                <article
+                  class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                  data-stage="renovation"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <p class="text-sm font-bold text-primary">Step 02</p>
+                      <h3 class="text-2xl font-extrabold mt-1">Renovation</h3>
+                    </div>
+                    <a
+                      href="renovation.html"
+                      class="text-primary font-semibold hover:underline"
+                      >Open page →</a
+                    >
                   </div>
-                  <a
-                    href="renovation.html"
-                    class="text-primary font-semibold hover:underline"
-                    >Open page →</a
-                  >
-                </div>
-                <p class="mt-3 text-gray-600">
-                  Upgrades, retrofitting, waterproofing, and modern
-                  finishes—planned to minimize disruption and risk.
-                </p>
-              </article>
+                  <p class="mt-3 text-gray-600">
+                    Upgrades, retrofitting, waterproofing, and modern
+                    finishes—planned to minimize disruption and risk.
+                  </p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                      >Retrofitting</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Repairs</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Finishes</span
+                    >
+                  </div>
+                </article>
 
-              <article
-                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
-                data-stage="architecture"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-sm font-bold text-primary">Step 03</p>
-                    <h3 class="text-2xl font-extrabold mt-1">Architecture</h3>
+                <article
+                  class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                  data-stage="architecture"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <p class="text-sm font-bold text-primary">Step 03</p>
+                      <h3 class="text-2xl font-extrabold mt-1">Architecture</h3>
+                    </div>
+                    <a
+                      href="architecture.html"
+                      class="text-primary font-semibold hover:underline"
+                      >Open page →</a
+                    >
                   </div>
-                  <a
-                    href="architecture.html"
-                    class="text-primary font-semibold hover:underline"
-                    >Open page →</a
-                  >
-                </div>
-                <p class="mt-3 text-gray-600">
-                  Buildable designs with smart layouts, code-aware planning, and
-                  drawings that reduce site confusion.
-                </p>
-              </article>
+                  <p class="mt-3 text-gray-600">
+                    Buildable designs with smart layouts, code-aware planning,
+                    and drawings that reduce site confusion.
+                  </p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                      >Planning</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Drawings</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Compliance</span
+                    >
+                  </div>
+                </article>
 
-              <article
-                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
-                data-stage="interior"
-              >
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-sm font-bold text-primary">Step 04</p>
-                    <h3 class="text-2xl font-extrabold mt-1">
-                      Interior Design
-                    </h3>
+                <article
+                  class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                  data-stage="interior"
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <p class="text-sm font-bold text-primary">Step 04</p>
+                      <h3 class="text-2xl font-extrabold mt-1">
+                        Interior Design
+                      </h3>
+                    </div>
+                    <a
+                      href="interior.html"
+                      class="text-primary font-semibold hover:underline"
+                      >Open page →</a
+                    >
                   </div>
-                  <a
-                    href="interior.html"
-                    class="text-primary font-semibold hover:underline"
-                    >Open page →</a
-                  >
-                </div>
-                <p class="mt-3 text-gray-600">
-                  Space planning, material selection, and modern finishes—making
-                  spaces functional, clean, and premium.
-                </p>
-              </article>
+                  <p class="mt-3 text-gray-600">
+                    Space planning, material selection, and modern
+                    finishes—making spaces functional, clean, and premium.
+                  </p>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                      >Space</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Lighting</span
+                    >
+                    <span
+                      class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                      >Finishes</span
+                    >
+                  </div>
+                </article>
+              </div>
             </div>
 
+            <!-- RIGHT: sticky visuals -->
             <div class="lg:sticky lg:top-28">
               <div
                 class="relative overflow-hidden rounded-2xl border shadow-soft bg-white h-[460px] sm:h-[520px]"
@@ -714,7 +793,7 @@
                 <figure class="stage-figure" data-stage-img="architecture">
                   <img
                     src="https://images.unsplash.com/photo-1529421308418-eab98863cee1?auto=format&fit=crop&w=1600&q=70"
-                    alt="Architecture design"
+                    alt="Architecture"
                     loading="lazy"
                   />
                   <div
@@ -731,7 +810,7 @@
                 <figure class="stage-figure" data-stage-img="interior">
                   <img
                     src="https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1600&q=70"
-                    alt="Interior design"
+                    alt="Interior"
                     loading="lazy"
                   />
                   <div
@@ -748,11 +827,11 @@
                 </figure>
               </div>
 
-              <div class="mt-5 text-sm text-gray-600">
-                Tip: On desktop, the image stays
-                <span class="font-semibold">sticky</span> while you scroll the
-                steps.
-              </div>
+              <p class="mt-5 text-sm text-gray-600">
+                On desktop, the visuals stay
+                <span class="font-semibold">sticky</span> while the cards stack
+                and pin.
+              </p>
             </div>
           </div>
         </div>
@@ -764,17 +843,15 @@
           class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-center"
         >
           <div class="hover:scale-105 transition">
-            <h2 class="text-5xl font-extrabold">50+</h2>
+            <h3 class="text-5xl font-extrabold">50+</h3>
             <p class="mt-3 text-lg">Projects Completed</p>
           </div>
-
           <div class="hover:scale-105 transition">
-            <h2 class="text-5xl font-extrabold">10+</h2>
+            <h3 class="text-5xl font-extrabold">10+</h3>
             <p class="mt-3 text-lg">Years of Experience</p>
           </div>
-
           <div class="hover:scale-105 transition">
-            <h2 class="text-5xl font-extrabold">100%</h2>
+            <h3 class="text-5xl font-extrabold">100%</h3>
             <p class="mt-3 text-lg">Client Satisfaction</p>
           </div>
         </div>
@@ -855,6 +932,11 @@
               >
             </li>
             <li>
+              <a href="renovation.html" class="hover:text-primary transition"
+                >Renovation</a
+              >
+            </li>
+            <li>
               <a href="architecture.html" class="hover:text-primary transition"
                 >Architecture Design</a
               >
@@ -862,11 +944,6 @@
             <li>
               <a href="interior.html" class="hover:text-primary transition"
                 >Interior Design</a
-              >
-            </li>
-            <li>
-              <a href="renovation.html" class="hover:text-primary transition"
-                >Renovation</a
               >
             </li>
           </ul>
@@ -905,7 +982,6 @@
         class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500"
       >
         <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
-
         <div class="flex space-x-6 mt-4 md:mt-0">
           <a href="terms.html" class="hover:text-primary transition"
             >Terms of Service</a
@@ -945,7 +1021,7 @@
         mobileServicesIcon.textContent = isOpen ? "+" : "–";
       });
 
-      // Active nav highlight
+      // Active nav highlight (based on current filename)
       const current = (
         location.pathname.split("/").pop() || "index.html"
       ).toLowerCase();
@@ -954,71 +1030,52 @@
         if (href === current) a.classList.add("text-primary", "font-semibold");
       });
 
-      // =========================================================
-      // ✅ BETTER PARALLAX:
-      // - Parallax is calculated relative to the HERO section
-      // - Smooth eased animation using requestAnimationFrame
-      // - Clamped so it never over-moves
-      // =========================================================
+      // ---------------------------
+      // Better Parallax (bounded to hero section)
+      // ---------------------------
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
-      const hero = document.getElementById("hero");
-      const heroImg = document.getElementById("heroParallaxImg");
-
-      let currentY = 0;
-      let targetY = 0;
-      let rafId = null;
+      const hero = document.querySelector("section.relative.min-h-\\[92vh\\]");
+      const heroImg = document.getElementById("heroParallax");
 
       function clamp(n, min, max) {
         return Math.max(min, Math.min(max, n));
       }
 
-      function updateParallaxTarget() {
+      function parallaxTick() {
         if (reduceMotion || !hero || !heroImg) return;
 
-        const rect = hero.getBoundingClientRect();
-        const viewH = window.innerHeight || 800;
+        const r = hero.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
 
-        // progress: 0 when hero top at bottom of viewport, 1 when hero bottom at top
-        const total = rect.height + viewH;
-        const passed = viewH - rect.top;
-        const progress = clamp(passed / total, 0, 1);
+        // progress: 0 when hero top hits top, 1 when hero bottom hits top
+        const progress = clamp((0 - r.top) / (r.height || 1), 0, 1);
 
-        // move range in px (increase if you want stronger parallax)
-        const maxMove = 130;
+        // subtle translate + scale
+        const translate = progress * 70; // px
+        const scale = 1.08 + progress * 0.03;
 
-        // map progress to [-maxMove/2, +maxMove/2]
-        targetY = (progress - 0.5) * maxMove;
+        heroImg.style.transform = `translate3d(0, ${translate}px, 0) scale(${scale})`;
       }
 
-      function animateParallax() {
-        if (reduceMotion || !heroImg) return;
-
-        // ease toward target
-        currentY += (targetY - currentY) * 0.08;
-
-        heroImg.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0) scale(1.10)`;
-
-        rafId = requestAnimationFrame(animateParallax);
-      }
-
-      if (!reduceMotion && hero && heroImg) {
-        updateParallaxTarget();
-        if (!rafId) animateParallax();
-
-        window.addEventListener("scroll", updateParallaxTarget, {
-          passive: true,
+      let rafId = null;
+      function onScroll() {
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          parallaxTick();
+          rafId = null;
         });
-        window.addEventListener("resize", updateParallaxTarget);
       }
 
-      // =========================================================
-      // ✅ SCROLL STAGE (more reliable):
-      // - Uses IO with a single clear "center line"
-      // - Adds active highlight on the left card
-      // =========================================================
-      const steps = Array.from(document.querySelectorAll(".story-step"));
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      parallaxTick();
+
+      // ---------------------------------------------------------
+      // STACKED CARDS + IMAGE SWAP
+      // ---------------------------------------------------------
+      const stackCards = Array.from(document.querySelectorAll(".stack-card"));
       const figures = Array.from(document.querySelectorAll("[data-stage-img]"));
 
       function setActiveStage(stage) {
@@ -1028,60 +1085,49 @@
             f.getAttribute("data-stage-img") === stage,
           ),
         );
-        steps.forEach((s) =>
-          s.classList.toggle(
-            "is-active",
-            s.getAttribute("data-stage") === stage,
-          ),
-        );
       }
 
-      if ("IntersectionObserver" in window && steps.length) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            // prefer entries that are intersecting and closest to center
-            const center = window.innerHeight * 0.45;
-            const candidates = entries
-              .filter((e) => e.isIntersecting)
-              .map((e) => {
-                const r = e.target.getBoundingClientRect();
-                return { el: e.target, dist: Math.abs(r.top - center) };
-              })
-              .sort((a, b) => a.dist - b.dist);
+      function pickActiveCard() {
+        const center = window.innerHeight * 0.42;
 
-            if (!candidates.length) return;
+        let best = null;
+        let bestDist = Infinity;
 
-            const stage = candidates[0].el.getAttribute("data-stage");
-            if (stage) setActiveStage(stage);
-          },
-          {
-            root: null,
-            threshold: [0.15, 0.25, 0.35, 0.45],
-            rootMargin: "-25% 0px -45% 0px",
-          },
-        );
+        stackCards.forEach((c) => {
+          const r = c.getBoundingClientRect();
+          const dist = Math.abs(r.top - center);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = c;
+          }
+        });
 
-        steps.forEach((s) => observer.observe(s));
-        // set initial
-        setActiveStage(steps[0].getAttribute("data-stage"));
-      } else {
-        // fallback
-        window.addEventListener("scroll", () => {
-          const center = window.innerHeight * 0.45;
-          let best = steps[0];
-          let bestDist = Infinity;
-          steps.forEach((s) => {
-            const r = s.getBoundingClientRect();
-            const d = Math.abs(r.top - center);
-            if (d < bestDist) {
-              bestDist = d;
-              best = s;
-            }
-          });
-          const stage = best?.getAttribute("data-stage");
-          if (stage) setActiveStage(stage);
+        const stage = best?.getAttribute("data-stage");
+        if (stage) setActiveStage(stage);
+      }
+
+      function updateStackTransforms() {
+        if (reduceMotion) return;
+        stackCards.forEach((card, i) => {
+          const base = 1 - i * 0.03; // depth look
+          card.style.transform = `scale(${base})`;
         });
       }
+
+      updateStackTransforms();
+      pickActiveCard();
+
+      if ("IntersectionObserver" in window && stackCards.length) {
+        const obs = new IntersectionObserver(() => pickActiveCard(), {
+          threshold: [0.01, 0.15, 0.35, 0.55],
+          rootMargin: "-25% 0px -45% 0px",
+        });
+        stackCards.forEach((c) => obs.observe(c));
+      } else {
+        window.addEventListener("scroll", pickActiveCard, { passive: true });
+      }
+
+      window.addEventListener("scroll", pickActiveCard, { passive: true });
     </script>
   </body>
 </html>
