@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -13,14 +13,20 @@
     <link rel="canonical" href="https://genzengineering.com/" />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="GenZ Engineering | Construction & Engineering" />
+    <meta
+      property="og:title"
+      content="GenZ Engineering | Construction & Engineering"
+    />
     <meta
       property="og:description"
       content="Construction • Engineering Design • Project Management. Safe, modern, high-quality delivery."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://genzengineering.com/" />
-    <meta property="og:image" content="https://images.unsplash.com/photo-1503387762-592deb58ef4e" />
+    <meta
+      property="og:image"
+      content="https://images.unsplash.com/photo-1503387762-592deb58ef4e"
+    />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -38,9 +44,7 @@
         theme: {
           extend: {
             colors: { primary: "#c62828" },
-            boxShadow: {
-              soft: "0 10px 30px rgba(0,0,0,0.12)",
-            },
+            boxShadow: { soft: "0 10px 30px rgba(0,0,0,0.12)" },
           },
         },
       };
@@ -56,6 +60,53 @@
           transition-duration: 0.01ms !important;
         }
       }
+
+      /* -------- Parallax (better + stable) --------
+         We move the hero background relative to the HERO section (not whole page),
+         so it feels smooth and "correct" and doesn't jump.
+      */
+      .parallax-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      .parallax-img {
+        position: absolute;
+        inset: -12% -12% -12% -12%;
+        width: 124%;
+        height: 124%;
+        object-fit: cover;
+        transform: translate3d(0, 0, 0) scale(1.08);
+        will-change: transform;
+      }
+
+      /* -------- Scroll stage images (slide from right) -------- */
+      .stage-figure {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transform: translateX(90px) scale(1.01);
+        transition:
+          opacity 320ms ease,
+          transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        pointer-events: none; /* only active gets pointer events */
+      }
+      .stage-figure.is-active {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+        pointer-events: auto;
+      }
+      .stage-figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Small visual cue for active step */
+      .story-step.is-active {
+        border-color: rgba(198, 40, 40, 0.35);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
     </style>
   </head>
 
@@ -69,29 +120,128 @@
     </a>
 
     <!-- ================= NAVBAR ================= -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
+    <header
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
+      >
         <a href="index.html" class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center">
+          <div
+            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+          >
             <span class="text-primary font-black">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold tracking-wide text-primary">
-            GenZ Engineering
-          </span>
+          <span class="text-2xl font-extrabold tracking-wide text-primary"
+            >GenZ Engineering</span
+          >
         </a>
 
         <!-- Desktop Nav -->
-        <nav class="hidden md:flex items-center space-x-8 font-medium" aria-label="Primary navigation">
-          <a data-nav href="index.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">
+        <nav
+          class="hidden md:flex items-center space-x-8 font-medium"
+          aria-label="Primary navigation"
+        >
+          <a
+            data-nav
+            href="index.html"
+            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
+          >
             Home
           </a>
-          <a data-nav href="gallery.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">
+
+          <!-- ✅ Services Dropdown (refined hover + page links) -->
+          <div class="relative group">
+            <button
+              class="inline-flex items-center gap-2 hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
+              aria-haspopup="true"
+              aria-expanded="false"
+              type="button"
+            >
+              Services
+              <svg
+                class="h-4 w-4 opacity-80"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <!-- Hover buffer so menu doesn't disappear when moving cursor down -->
+            <div
+              class="absolute left-0 top-full h-4 w-72"
+              aria-hidden="true"
+            ></div>
+
+            <div
+              class="absolute left-0 top-full mt-3 w-72 rounded-2xl border bg-white shadow-soft opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition duration-200"
+            >
+              <div class="p-2">
+                <a
+                  href="construction.html"
+                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
+                >
+                  🏗️ Construction
+                  <p class="text-xs text-gray-500 mt-1">
+                    Residential & commercial execution
+                  </p>
+                </a>
+                <a
+                  href="architecture.html"
+                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
+                >
+                  🧱 Architecture Design
+                  <p class="text-xs text-gray-500 mt-1">
+                    Concepts, plans & compliance
+                  </p>
+                </a>
+                <a
+                  href="interior.html"
+                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
+                >
+                  🎨 Interior Design
+                  <p class="text-xs text-gray-500 mt-1">
+                    Modern finishes & space planning
+                  </p>
+                </a>
+                <a
+                  href="renovation.html"
+                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
+                >
+                  🛠️ Renovation
+                  <p class="text-xs text-gray-500 mt-1">
+                    Retrofitting & upgrades
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <a
+            data-nav
+            href="gallery.html"
+            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
+          >
             Gallery
           </a>
-          <a data-nav href="blog.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">
+          <a
+            data-nav
+            href="blog.html"
+            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
+          >
             Blog
           </a>
-          <a data-nav href="contact.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">
+          <a
+            data-nav
+            href="contact.html"
+            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
+          >
             Contact
           </a>
 
@@ -111,27 +261,98 @@
           aria-expanded="false"
           aria-controls="mobileMenu"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div id="mobileMenu" class="md:hidden hidden border-t border-gray-200 bg-white">
-        <nav class="max-w-7xl mx-auto px-6 py-4 grid gap-3" aria-label="Mobile navigation">
-          <a data-nav href="index.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">
-            Home
-          </a>
-          <a data-nav href="gallery.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">
-            Gallery
-          </a>
-          <a data-nav href="blog.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">
-            Blog
-          </a>
-          <a data-nav href="contact.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">
-            Contact
-          </a>
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden border-t border-gray-200 bg-white"
+      >
+        <nav
+          class="max-w-7xl mx-auto px-6 py-4 grid gap-3"
+          aria-label="Mobile navigation"
+        >
+          <a
+            data-nav
+            href="index.html"
+            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Home</a
+          >
+
+          <!-- Mobile Services Dropdown -->
+          <div class="border border-gray-200 rounded-xl overflow-hidden">
+            <button
+              id="mobileServicesBtn"
+              class="w-full flex items-center justify-between py-2 px-3 hover:bg-gray-50 hover:text-primary transition"
+              aria-expanded="false"
+              type="button"
+            >
+              <span>Services</span>
+              <span id="mobileServicesIcon" class="text-primary font-bold"
+                >+</span
+              >
+            </button>
+
+            <div
+              id="mobileServicesPanel"
+              class="hidden bg-white border-t border-gray-200"
+            >
+              <a
+                href="architecture.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🧱 Architecture Design</a
+              >
+              <a
+                href="interior.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🎨 Interior Design</a
+              >
+              <a
+                href="construction.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🏗️ Construction</a
+              >
+              <a
+                href="renovation.html"
+                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
+                >🛠️ Renovation</a
+              >
+            </div>
+          </div>
+
+          <a
+            data-nav
+            href="gallery.html"
+            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Gallery</a
+          >
+          <a
+            data-nav
+            href="blog.html"
+            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Blog</a
+          >
+          <a
+            data-nav
+            href="contact.html"
+            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            >Contact</a
+          >
 
           <a
             href="contact.html"
@@ -144,33 +365,39 @@
     </header>
 
     <main id="main">
-      <!-- ================= HERO ================= -->
-      <section class="relative min-h-[92vh] flex items-center justify-center">
-        <!-- Background image -->
-        <img
-          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
-          alt="Construction site"
-          class="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-        />
+      <!-- ================= HERO (Better Parallax) ================= -->
+      <section
+        id="hero"
+        class="relative min-h-[92vh] flex items-center justify-center"
+      >
+        <div class="parallax-wrap">
+          <img
+            id="heroParallaxImg"
+            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
+            alt="Construction site"
+            class="parallax-img"
+            loading="eager"
+          />
+        </div>
 
-        <!-- Overlay -->
         <div class="absolute inset-0 bg-black/60"></div>
 
-        <!-- Content -->
         <div class="relative z-10 text-center text-white px-6 max-w-5xl">
-          <p class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6">
+          <p
+            class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6"
+          >
             <span class="h-2 w-2 rounded-full bg-primary"></span>
             Construction • Engineering • Project Management
           </p>
 
-          <h2 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+          <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
             Engineering the <span class="text-primary">Future</span><br />
             With Precision & Trust
-          </h2>
+          </h1>
 
           <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
-            Safe execution, clear communication, and disciplined scheduling—from concept to handover.
+            Safe execution, clear communication, and disciplined scheduling—from
+            concept to handover.
           </p>
 
           <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -212,26 +439,34 @@
 
       <!-- ================= ABOUT ================= -->
       <section class="py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+        <div
+          class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center"
+        >
           <div>
-            <h3 class="text-4xl font-bold text-primary mb-6">Who We Are</h3>
+            <h2 class="text-4xl font-bold text-primary mb-6">Who We Are</h2>
             <p class="text-lg leading-relaxed mb-6">
-              GenZ Engineering is a modern engineering and construction firm committed to delivering safe,
-              innovative, and high-quality infrastructure solutions.
+              GenZ Engineering is a modern engineering and construction firm
+              committed to delivering safe, innovative, and high-quality
+              infrastructure solutions.
             </p>
             <p class="text-gray-600 mb-8">
-              From residential buildings to commercial projects, our team focuses on engineering accuracy,
-              workmanship, and transparent project coordination.
+              From residential buildings to commercial projects, our team
+              focuses on engineering accuracy, workmanship, and transparent
+              project coordination.
             </p>
 
             <div class="grid sm:grid-cols-2 gap-4">
               <div class="rounded-2xl border bg-white p-5">
                 <p class="font-semibold">✅ Quality Control</p>
-                <p class="text-sm text-gray-600 mt-1">Material checks, inspections, and documentation.</p>
+                <p class="text-sm text-gray-600 mt-1">
+                  Material checks, inspections, and documentation.
+                </p>
               </div>
               <div class="rounded-2xl border bg-white p-5">
                 <p class="font-semibold">✅ On-time Delivery</p>
-                <p class="text-sm text-gray-600 mt-1">Scheduling, milestones, and progress tracking.</p>
+                <p class="text-sm text-gray-600 mt-1">
+                  Scheduling, milestones, and progress tracking.
+                </p>
               </div>
             </div>
           </div>
@@ -251,69 +486,295 @@
       <section id="services" class="py-28 bg-white">
         <div class="max-w-7xl mx-auto px-6">
           <div class="text-center mb-16">
-            <h3 class="text-4xl font-bold text-primary">Our Core Services</h3>
+            <h2 class="text-4xl font-bold text-primary">Our Core Services</h2>
             <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
-              End-to-end service delivery with clear scope, cost control, and engineering compliance.
+              End-to-end service delivery with clear scope, cost control, and
+              engineering compliance.
             </p>
           </div>
 
           <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1">
-              <h4 class="text-xl font-semibold text-primary mb-3">Construction</h4>
+            <a
+              href="construction.html"
+              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+            >
+              <h3 class="text-xl font-semibold text-primary mb-3">
+                Construction
+              </h3>
               <p class="text-gray-600">
-                Residential & commercial construction with skilled execution and site discipline.
+                Residential & commercial construction with skilled execution and
+                site discipline.
               </p>
-            </div>
+              <p class="mt-4 text-primary font-semibold">Learn more →</p>
+            </a>
 
-            <div class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1">
-              <h4 class="text-xl font-semibold text-primary mb-3">Engineering Design</h4>
+            <a
+              href="architecture.html"
+              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+            >
+              <h3 class="text-xl font-semibold text-primary mb-3">
+                Architecture Design
+              </h3>
               <p class="text-gray-600">
-                Structural & civil designs aligned with safety, codes, and practicality.
+                Planning-focused architectural concepts, drawings, and
+                compliance support.
               </p>
-            </div>
+              <p class="mt-4 text-primary font-semibold">Learn more →</p>
+            </a>
 
-            <div class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1">
-              <h4 class="text-xl font-semibold text-primary mb-3">Project Management</h4>
+            <a
+              href="interior.html"
+              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+            >
+              <h3 class="text-xl font-semibold text-primary mb-3">
+                Interior Design
+              </h3>
               <p class="text-gray-600">
-                Planning, scheduling, procurement support, cost control, and supervision.
+                Space planning and modern interiors with clean finishes and
+                material selection.
               </p>
-            </div>
+              <p class="mt-4 text-primary font-semibold">Learn more →</p>
+            </a>
 
-            <div class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1">
-              <h4 class="text-xl font-semibold text-primary mb-3">Renovation</h4>
+            <a
+              href="renovation.html"
+              class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+            >
+              <h3 class="text-xl font-semibold text-primary mb-3">
+                Renovation
+              </h3>
               <p class="text-gray-600">
-                Renovation, retrofitting & strengthening for performance and modern finishes.
+                Renovation, retrofitting & strengthening for performance and
+                modern finishes.
               </p>
-            </div>
+              <p class="mt-4 text-primary font-semibold">Learn more →</p>
+            </a>
           </div>
 
-          <!-- Optional: quick CTA -->
-          <div class="mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 border rounded-2xl p-6">
+          <div
+            class="mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 border rounded-2xl p-6"
+          >
             <p class="text-gray-700">
-              Want a custom proposal? Share your drawings / requirements and we’ll respond quickly.
+              Want a custom proposal? Share your drawings / requirements and
+              we’ll respond quickly.
             </p>
-            <a href="contact.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">
+            <a
+              href="contact.html"
+              class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+            >
               Request Proposal
             </a>
           </div>
         </div>
       </section>
 
+      <!-- ================= SCROLL STAGE ================= -->
+      <section id="service-story" class="bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 py-24">
+          <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-primary">How We Deliver</h2>
+            <p class="mt-4 text-gray-600 max-w-3xl mx-auto">
+              Scroll to see our service focus shift—each stage highlights the
+              work style and visuals behind it.
+            </p>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-10 items-start">
+            <div class="space-y-6">
+              <article
+                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
+                data-stage="construction"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-bold text-primary">Step 01</p>
+                    <h3 class="text-2xl font-extrabold mt-1">Construction</h3>
+                  </div>
+                  <a
+                    href="construction.html"
+                    class="text-primary font-semibold hover:underline"
+                    >Open page →</a
+                  >
+                </div>
+                <p class="mt-3 text-gray-600">
+                  Site discipline, skilled supervision, and quality checks—built
+                  to schedule with clear reporting.
+                </p>
+              </article>
+
+              <article
+                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
+                data-stage="renovation"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-bold text-primary">Step 02</p>
+                    <h3 class="text-2xl font-extrabold mt-1">Renovation</h3>
+                  </div>
+                  <a
+                    href="renovation.html"
+                    class="text-primary font-semibold hover:underline"
+                    >Open page →</a
+                  >
+                </div>
+                <p class="mt-3 text-gray-600">
+                  Upgrades, retrofitting, waterproofing, and modern
+                  finishes—planned to minimize disruption and risk.
+                </p>
+              </article>
+
+              <article
+                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
+                data-stage="architecture"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-bold text-primary">Step 03</p>
+                    <h3 class="text-2xl font-extrabold mt-1">Architecture</h3>
+                  </div>
+                  <a
+                    href="architecture.html"
+                    class="text-primary font-semibold hover:underline"
+                    >Open page →</a
+                  >
+                </div>
+                <p class="mt-3 text-gray-600">
+                  Buildable designs with smart layouts, code-aware planning, and
+                  drawings that reduce site confusion.
+                </p>
+              </article>
+
+              <article
+                class="story-step bg-white border rounded-2xl p-6 shadow-soft"
+                data-stage="interior"
+              >
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-sm font-bold text-primary">Step 04</p>
+                    <h3 class="text-2xl font-extrabold mt-1">
+                      Interior Design
+                    </h3>
+                  </div>
+                  <a
+                    href="interior.html"
+                    class="text-primary font-semibold hover:underline"
+                    >Open page →</a
+                  >
+                </div>
+                <p class="mt-3 text-gray-600">
+                  Space planning, material selection, and modern finishes—making
+                  spaces functional, clean, and premium.
+                </p>
+              </article>
+            </div>
+
+            <div class="lg:sticky lg:top-28">
+              <div
+                class="relative overflow-hidden rounded-2xl border shadow-soft bg-white h-[460px] sm:h-[520px]"
+              >
+                <figure
+                  class="stage-figure is-active"
+                  data-stage-img="construction"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=70"
+                    alt="Construction"
+                    loading="lazy"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                  ></div>
+                  <figcaption
+                    class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                  >
+                    <p class="text-sm font-bold text-primary">Construction</p>
+                    <p class="text-2xl font-extrabold">Disciplined execution</p>
+                  </figcaption>
+                </figure>
+
+                <figure class="stage-figure" data-stage-img="renovation">
+                  <img
+                    src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1600&q=70"
+                    alt="Renovation"
+                    loading="lazy"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                  ></div>
+                  <figcaption
+                    class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                  >
+                    <p class="text-sm font-bold text-primary">Renovation</p>
+                    <p class="text-2xl font-extrabold">
+                      Upgrades & retrofitting
+                    </p>
+                  </figcaption>
+                </figure>
+
+                <figure class="stage-figure" data-stage-img="architecture">
+                  <img
+                    src="https://images.unsplash.com/photo-1529421308418-eab98863cee1?auto=format&fit=crop&w=1600&q=70"
+                    alt="Architecture design"
+                    loading="lazy"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                  ></div>
+                  <figcaption
+                    class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                  >
+                    <p class="text-sm font-bold text-primary">Architecture</p>
+                    <p class="text-2xl font-extrabold">Plans you can build</p>
+                  </figcaption>
+                </figure>
+
+                <figure class="stage-figure" data-stage-img="interior">
+                  <img
+                    src="https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1600&q=70"
+                    alt="Interior design"
+                    loading="lazy"
+                  />
+                  <div
+                    class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                  ></div>
+                  <figcaption
+                    class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                  >
+                    <p class="text-sm font-bold text-primary">
+                      Interior Design
+                    </p>
+                    <p class="text-2xl font-extrabold">Modern finishes</p>
+                  </figcaption>
+                </figure>
+              </div>
+
+              <div class="mt-5 text-sm text-gray-600">
+                Tip: On desktop, the image stays
+                <span class="font-semibold">sticky</span> while you scroll the
+                steps.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ================= STATS ================= -->
       <section class="py-24 bg-primary text-white">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-center">
+        <div
+          class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-center"
+        >
           <div class="hover:scale-105 transition">
-            <h4 class="text-5xl font-extrabold">50+</h4>
+            <h2 class="text-5xl font-extrabold">50+</h2>
             <p class="mt-3 text-lg">Projects Completed</p>
           </div>
 
           <div class="hover:scale-105 transition">
-            <h4 class="text-5xl font-extrabold">10+</h4>
+            <h2 class="text-5xl font-extrabold">10+</h2>
             <p class="mt-3 text-lg">Years of Experience</p>
           </div>
 
           <div class="hover:scale-105 transition">
-            <h4 class="text-5xl font-extrabold">100%</h4>
+            <h2 class="text-5xl font-extrabold">100%</h2>
             <p class="mt-3 text-lg">Client Satisfaction</p>
           </div>
         </div>
@@ -321,9 +782,12 @@
 
       <!-- ================= CTA ================= -->
       <section class="py-24 bg-gray-900 text-white text-center">
-        <h3 class="text-4xl font-bold mb-6">Let’s Build Something Great Together</h3>
+        <h2 class="text-4xl font-bold mb-6">
+          Let’s Build Something Great Together
+        </h2>
         <p class="text-gray-300 mb-10">
-          Contact us today to discuss your next project and get a quick estimate.
+          Contact us today to discuss your next project and get a quick
+          estimate.
         </p>
         <a
           href="contact.html"
@@ -338,18 +802,22 @@
     <footer class="bg-white border-t border-gray-200">
       <div class="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
         <div>
-          <h3 class="text-2xl font-extrabold text-primary mb-4">GenZ Engineering</h3>
+          <h3 class="text-2xl font-extrabold text-primary mb-4">
+            GenZ Engineering
+          </h3>
           <ul class="space-y-3 text-gray-600">
             <li class="hover:text-primary transition">📍 Bhaktapur, Nepal</li>
             <li>
-              <a href="mailto:info@genzengineering.com" class="hover:text-primary transition">
-                ✉️ info@genzengineering.com
-              </a>
+              <a
+                href="mailto:info@genzengineering.com"
+                class="hover:text-primary transition"
+                >✉️ info@genzengineering.com</a
+              >
             </li>
             <li>
-              <a href="tel:+9779800000000" class="hover:text-primary transition">
-                📞 +977 98XXXXXXXX
-              </a>
+              <a href="tel:+9779800000000" class="hover:text-primary transition"
+                >📞 +977 98XXXXXXXX</a
+              >
             </li>
           </ul>
         </div>
@@ -357,45 +825,94 @@
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Company</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="index.html#about" class="hover:text-primary transition">About Us</a></li>
-            <li><a href="gallery.html" class="hover:text-primary transition">Projects</a></li>
-            <li><a href="blog.html" class="hover:text-primary transition">Blog</a></li>
-            <li><a href="contact.html" class="hover:text-primary transition">Careers</a></li>
+            <li>
+              <a href="index.html#about" class="hover:text-primary transition"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a href="gallery.html" class="hover:text-primary transition"
+                >Projects</a
+              >
+            </li>
+            <li>
+              <a href="blog.html" class="hover:text-primary transition">Blog</a>
+            </li>
+            <li>
+              <a href="contact.html" class="hover:text-primary transition"
+                >Careers</a
+              >
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Services</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="index.html#services" class="hover:text-primary transition">Residential Construction</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Commercial Construction</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Architecture & Engineering</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Interiors & Renovation</a></li>
+            <li>
+              <a href="construction.html" class="hover:text-primary transition"
+                >Construction</a
+              >
+            </li>
+            <li>
+              <a href="architecture.html" class="hover:text-primary transition"
+                >Architecture Design</a
+              >
+            </li>
+            <li>
+              <a href="interior.html" class="hover:text-primary transition"
+                >Interior Design</a
+              >
+            </li>
+            <li>
+              <a href="renovation.html" class="hover:text-primary transition"
+                >Renovation</a
+              >
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Resources</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="contact.html#faq" class="hover:text-primary transition">FAQ</a></li>
-            <li><a href="contact.html" class="hover:text-primary transition">Contact Us</a></li>
-            <li><a href="privacy.html" class="hover:text-primary transition">Privacy Policy</a></li>
-            <li><a href="terms.html" class="hover:text-primary transition">Terms of Service</a></li>
+            <li>
+              <a href="contact.html#faq" class="hover:text-primary transition"
+                >FAQ</a
+              >
+            </li>
+            <li>
+              <a href="contact.html" class="hover:text-primary transition"
+                >Contact Us</a
+              >
+            </li>
+            <li>
+              <a href="privacy.html" class="hover:text-primary transition"
+                >Privacy Policy</a
+              >
+            </li>
+            <li>
+              <a href="terms.html" class="hover:text-primary transition"
+                >Terms of Service</a
+              >
+            </li>
           </ul>
-          <p class="text-xs text-gray-500 mt-4">
-            Tip: create <span class="font-medium">privacy.html</span> and <span class="font-medium">terms.html</span> later (or link to a hosted policy).
-          </p>
         </div>
       </div>
 
       <div class="border-t border-gray-200"></div>
 
-      <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+      <div
+        class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500"
+      >
         <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
 
         <div class="flex space-x-6 mt-4 md:mt-0">
-          <a href="terms.html" class="hover:text-primary transition">Terms of Service</a>
-          <a href="privacy.html" class="hover:text-primary transition">Privacy Policy</a>
+          <a href="terms.html" class="hover:text-primary transition"
+            >Terms of Service</a
+          >
+          <a href="privacy.html" class="hover:text-primary transition"
+            >Privacy Policy</a
+          >
         </div>
       </div>
     </footer>
@@ -408,22 +925,163 @@
       // Mobile menu toggle
       const btn = document.getElementById("menuBtn");
       const menu = document.getElementById("mobileMenu");
-
       btn?.addEventListener("click", () => {
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", String(!isOpen));
         menu.classList.toggle("hidden");
       });
 
-      // Active nav highlight (based on current filename)
-      const current = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+      // Mobile services toggle
+      const mobileServicesBtn = document.getElementById("mobileServicesBtn");
+      const mobileServicesPanel = document.getElementById(
+        "mobileServicesPanel",
+      );
+      const mobileServicesIcon = document.getElementById("mobileServicesIcon");
+      mobileServicesBtn?.addEventListener("click", () => {
+        const isOpen =
+          mobileServicesBtn.getAttribute("aria-expanded") === "true";
+        mobileServicesBtn.setAttribute("aria-expanded", String(!isOpen));
+        mobileServicesPanel.classList.toggle("hidden");
+        mobileServicesIcon.textContent = isOpen ? "+" : "–";
+      });
+
+      // Active nav highlight
+      const current = (
+        location.pathname.split("/").pop() || "index.html"
+      ).toLowerCase();
       document.querySelectorAll("[data-nav]").forEach((a) => {
         const href = (a.getAttribute("href") || "").toLowerCase();
-        if (href === current) {
-          a.classList.add("text-primary");
-          a.classList.add("font-semibold");
-        }
+        if (href === current) a.classList.add("text-primary", "font-semibold");
       });
+
+      // =========================================================
+      // ✅ BETTER PARALLAX:
+      // - Parallax is calculated relative to the HERO section
+      // - Smooth eased animation using requestAnimationFrame
+      // - Clamped so it never over-moves
+      // =========================================================
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const hero = document.getElementById("hero");
+      const heroImg = document.getElementById("heroParallaxImg");
+
+      let currentY = 0;
+      let targetY = 0;
+      let rafId = null;
+
+      function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+      }
+
+      function updateParallaxTarget() {
+        if (reduceMotion || !hero || !heroImg) return;
+
+        const rect = hero.getBoundingClientRect();
+        const viewH = window.innerHeight || 800;
+
+        // progress: 0 when hero top at bottom of viewport, 1 when hero bottom at top
+        const total = rect.height + viewH;
+        const passed = viewH - rect.top;
+        const progress = clamp(passed / total, 0, 1);
+
+        // move range in px (increase if you want stronger parallax)
+        const maxMove = 130;
+
+        // map progress to [-maxMove/2, +maxMove/2]
+        targetY = (progress - 0.5) * maxMove;
+      }
+
+      function animateParallax() {
+        if (reduceMotion || !heroImg) return;
+
+        // ease toward target
+        currentY += (targetY - currentY) * 0.08;
+
+        heroImg.style.transform = `translate3d(0, ${currentY.toFixed(2)}px, 0) scale(1.10)`;
+
+        rafId = requestAnimationFrame(animateParallax);
+      }
+
+      if (!reduceMotion && hero && heroImg) {
+        updateParallaxTarget();
+        if (!rafId) animateParallax();
+
+        window.addEventListener("scroll", updateParallaxTarget, {
+          passive: true,
+        });
+        window.addEventListener("resize", updateParallaxTarget);
+      }
+
+      // =========================================================
+      // ✅ SCROLL STAGE (more reliable):
+      // - Uses IO with a single clear "center line"
+      // - Adds active highlight on the left card
+      // =========================================================
+      const steps = Array.from(document.querySelectorAll(".story-step"));
+      const figures = Array.from(document.querySelectorAll("[data-stage-img]"));
+
+      function setActiveStage(stage) {
+        figures.forEach((f) =>
+          f.classList.toggle(
+            "is-active",
+            f.getAttribute("data-stage-img") === stage,
+          ),
+        );
+        steps.forEach((s) =>
+          s.classList.toggle(
+            "is-active",
+            s.getAttribute("data-stage") === stage,
+          ),
+        );
+      }
+
+      if ("IntersectionObserver" in window && steps.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            // prefer entries that are intersecting and closest to center
+            const center = window.innerHeight * 0.45;
+            const candidates = entries
+              .filter((e) => e.isIntersecting)
+              .map((e) => {
+                const r = e.target.getBoundingClientRect();
+                return { el: e.target, dist: Math.abs(r.top - center) };
+              })
+              .sort((a, b) => a.dist - b.dist);
+
+            if (!candidates.length) return;
+
+            const stage = candidates[0].el.getAttribute("data-stage");
+            if (stage) setActiveStage(stage);
+          },
+          {
+            root: null,
+            threshold: [0.15, 0.25, 0.35, 0.45],
+            rootMargin: "-25% 0px -45% 0px",
+          },
+        );
+
+        steps.forEach((s) => observer.observe(s));
+        // set initial
+        setActiveStage(steps[0].getAttribute("data-stage"));
+      } else {
+        // fallback
+        window.addEventListener("scroll", () => {
+          const center = window.innerHeight * 0.45;
+          let best = steps[0];
+          let bestDist = Infinity;
+          steps.forEach((s) => {
+            const r = s.getBoundingClientRect();
+            const d = Math.abs(r.top - center);
+            if (d < bestDist) {
+              bestDist = d;
+              best = s;
+            }
+          });
+          const stage = best?.getAttribute("data-stage");
+          if (stage) setActiveStage(stage);
+        });
+      }
     </script>
   </body>
 </html>
