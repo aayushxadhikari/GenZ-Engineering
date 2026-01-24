@@ -27,11 +27,8 @@
       property="og:image"
       content="https://images.unsplash.com/photo-1503387762-592deb58ef4e"
     />
-
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Basic CSP (CDN-based). If you move Tailwind locally, you can tighten this a lot. -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src 'self' https: data:; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
@@ -43,15 +40,21 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary: "#c62828" },
-            boxShadow: { soft: "0 10px 30px rgba(0,0,0,0.12)" },
+            colors: {
+              primary: "#c62828",
+              ink: "#0b0b10",
+              soft: "#f6f7fb",
+            },
+            boxShadow: {
+              soft: "0 10px 30px rgba(0,0,0,0.12)",
+              glass: "0 14px 40px rgba(0,0,0,0.10)",
+            },
           },
         },
       };
     </script>
 
     <style>
-      /* Respect users who prefer reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
           scroll-behavior: auto !important;
@@ -61,7 +64,12 @@
         }
       }
 
-      /* Parallax helpers (improved) */
+      /* iOS safe area */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
       .parallax-wrap {
         position: absolute;
         inset: 0;
@@ -75,9 +83,9 @@
         object-fit: cover;
         transform: translate3d(0, 0, 0) scale(1.08);
         will-change: transform;
+        filter: contrast(1.12) saturate(1.08);
       }
 
-      /* Stage figures (fade + slide from right) */
       .stage-figure {
         position: absolute;
         inset: 0;
@@ -95,12 +103,13 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        filter: contrast(1.12) saturate(1.08);
       }
 
-      /* ===== Stacked Cards ===== */
+      /* ===== Stacked Cards (DESKTOP ONLY sticky) ===== */
       .stack {
         --card-gap: 18px;
-        --pin-top: 92px; /* pins below navbar */
+        --pin-top: 92px;
       }
       .stack-card {
         position: sticky;
@@ -112,9 +121,6 @@
           border-color 180ms ease,
           box-shadow 180ms ease;
       }
-      .stack-card:nth-child(1) {
-        margin-top: 0;
-      }
       .stack-card:nth-child(2) {
         margin-top: var(--card-gap);
       }
@@ -124,29 +130,171 @@
       .stack-card:nth-child(4) {
         margin-top: calc(var(--card-gap) * 3);
       }
+
+      /* Mobile: disable sticky stacking (fix jank) */
       @media (max-width: 1023px) {
         .stack {
           --pin-top: 84px;
         }
+        .stack-card {
+          position: relative;
+          top: auto;
+          margin-top: 14px !important;
+          transform: none !important;
+        }
       }
 
-      /* ✅ NEW: fixed hero layer + scrolling content layer */
       .hero-fixed {
         position: fixed;
         inset: 0;
         width: 100%;
-        height: 92vh; /* matches your original min-h-[92vh] */
-        z-index: 0; /* behind header + content */
+        height: 92vh;
+        z-index: 0;
       }
       .content-layer {
         position: relative;
-        z-index: 10; /* above hero */
+        z-index: 10;
+      }
+
+      /* ================= DYNAMIC ISLAND NAV ================= */
+      .island-header {
+        position: fixed;
+        top: calc(14px + var(--safe-top));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(980px, calc(100% - 20px));
+        pointer-events: none;
+      }
+
+      .island {
+        pointer-events: auto;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9999px;
+
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        box-shadow:
+          0 14px 40px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      .island::before {
+        content: "";
+        position: absolute;
+        inset: -60% -40%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(198, 40, 40, 0.14),
+          rgba(198, 40, 40, 0.06) 46%,
+          rgba(255, 255, 255, 0) 74%
+        );
+        transform: rotate(10deg);
+        pointer-events: none;
+      }
+
+      .island a,
+      .island button {
+        position: relative;
+      }
+
+      .island-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .island-link {
+        padding: 8px 12px;
+        border-radius: 9999px;
+        font-weight: 800;
+        color: rgba(11, 11, 16, 0.92);
+        transition: 180ms ease;
+      }
+      .island-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+      }
+      .island-link.is-active {
+        background: rgba(198, 40, 40, 0.12);
+        border: 1px solid rgba(198, 40, 40, 0.28);
+        color: #0b0b10;
+      }
+
+      .island-cta {
+        background: rgba(198, 40, 40, 0.95);
+        color: #ffffff;
+        padding: 9px 14px;
+        border-radius: 9999px;
+        font-weight: 900;
+        transition: 180ms ease;
+        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        white-space: nowrap;
+      }
+
+      .mobile-glass {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+      }
+
+      /* Mobile menu panel: constrain width + center */
+      #mobileMenu > nav {
+        max-width: 520px;
+      }
+
+      .hero-title {
+        text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      }
+      .hero-subtitle {
+        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      }
+
+      .glass-pill {
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+      }
+
+      /* Mobile: reduce hero height slightly (less “too tall”) */
+      @media (max-width: 640px) {
+        .hero-fixed {
+          height: 86vh;
+        }
+        #heroSpacer {
+          height: 86vh !important;
+        }
       }
     </style>
   </head>
 
-  <body class="bg-white text-gray-800 antialiased">
-    <!-- Skip link (accessibility) -->
+  <body class="bg-white text-ink antialiased">
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
@@ -154,151 +302,44 @@
       Skip to content
     </a>
 
-    <!-- ================= NAVBAR ================= -->
-    <header
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
-    >
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
-      >
-        <a href="index.html" class="flex items-center gap-3">
+    <!-- ================= DYNAMIC ISLAND NAVBAR ================= -->
+    <header class="island-header" aria-label="Header">
+      <div class="island">
+        <a href="index.html" class="island-chip">
           <div
-            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+            class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
-            <span class="text-primary font-black">GZ</span>
+            <span class="text-ink font-extrabold">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold tracking-wide text-primary"
-            >GenZ Engineering</span
-          >
+          <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <!-- Desktop Nav -->
         <nav
-          class="hidden md:flex items-center space-x-8 font-medium"
+          class="island-nav hidden md:flex items-center gap-1"
           aria-label="Primary navigation"
         >
-          <a
-            data-nav
-            href="index.html"
-            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
-          >
-            Home
-          </a>
-
-          <!-- ✅ Services Dropdown (stable hover + page links) -->
-          <div class="relative group">
-            <button
-              class="inline-flex items-center gap-2 hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
-              aria-haspopup="true"
-              aria-expanded="false"
-              type="button"
-            >
-              Services
-              <svg
-                class="h-4 w-4 opacity-80"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <!-- Hover buffer -->
-            <div
-              class="absolute left-0 top-full h-4 w-72"
-              aria-hidden="true"
-            ></div>
-
-            <div
-              class="absolute left-0 top-full mt-3 w-72 rounded-2xl border bg-white shadow-soft opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 transition duration-200"
-            >
-              <div class="p-2">
-                <a
-                  href="construction.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🏗️ Construction
-                  <p class="text-xs text-gray-500 mt-1">
-                    Residential & commercial execution
-                  </p>
-                </a>
-                <a
-                  href="renovation.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🛠️ Renovation
-                  <p class="text-xs text-gray-500 mt-1">
-                    Retrofitting & upgrades
-                  </p>
-                </a>
-                <a
-                  href="architecture.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🧱 Architecture Design
-                  <p class="text-xs text-gray-500 mt-1">
-                    Concepts, plans & compliance
-                  </p>
-                </a>
-                <a
-                  href="interior.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🎨 Interior Design
-                  <p class="text-xs text-gray-500 mt-1">
-                    Modern finishes & space planning
-                  </p>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <a
-            data-nav
-            href="gallery.html"
-            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
-          >
-            Gallery
-          </a>
-          <a
-            data-nav
-            href="blog.html"
-            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
-          >
-            Blog
-          </a>
-          <a
-            data-nav
-            href="contact.html"
-            class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded"
-          >
-            Contact
-          </a>
-
-          <a
-            href="contact.html"
-            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-          >
-            Get a Quote
-          </a>
+          <a data-nav href="index.html" class="island-link">Home</a>
+          <a href="#services" class="island-link">Services</a>
+          <a data-nav href="gallery.html" class="island-link">Gallery</a>
+          <a data-nav href="blog.html" class="island-link">Blog</a>
+          <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
 
-        <!-- Mobile Menu Button -->
+        <a href="contact.html" class="hidden md:inline-flex island-cta"
+          >Get a Quote</a
+        >
+
         <button
           id="menuBtn"
-          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          class="md:hidden inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-3 py-2 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-primary/25"
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="mobileMenu"
+          type="button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="h-6 w-6 text-ink"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -313,94 +354,48 @@
         </button>
       </div>
 
-      <!-- Mobile Menu Panel -->
-      <div
-        id="mobileMenu"
-        class="md:hidden hidden border-t border-gray-200 bg-white"
-      >
+      <div id="mobileMenu" class="hidden mt-3">
         <nav
-          class="max-w-7xl mx-auto px-6 py-4 grid gap-3"
-          aria-label="Mobile navigation"
+          class="mx-auto w-full rounded-2xl shadow-soft p-3 grid gap-2 mobile-glass"
         >
           <a
             data-nav
             href="index.html"
-            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
           >
-
-          <!-- Mobile Services Dropdown -->
-          <div class="border border-gray-200 rounded-xl overflow-hidden">
-            <button
-              id="mobileServicesBtn"
-              class="w-full flex items-center justify-between py-2 px-3 hover:bg-gray-50 hover:text-primary transition"
-              aria-expanded="false"
-              type="button"
-            >
-              <span>Services</span>
-              <span id="mobileServicesIcon" class="text-primary font-bold"
-                >+</span
-              >
-            </button>
-
-            <div
-              id="mobileServicesPanel"
-              class="hidden bg-white border-t border-gray-200"
-            >
-              <a
-                href="construction.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🏗️ Construction</a
-              >
-              <a
-                href="renovation.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🛠️ Renovation</a
-              >
-              <a
-                href="architecture.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🧱 Architecture Design</a
-              >
-              <a
-                href="interior.html"
-                class="block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🎨 Interior Design</a
-              >
-            </div>
-          </div>
-
+          <a
+            href="#services"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Services</a
+          >
           <a
             data-nav
             href="gallery.html"
-            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Gallery</a
           >
           <a
             data-nav
             href="blog.html"
-            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Blog</a
           >
           <a
             data-nav
             href="contact.html"
-            class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Contact</a
           >
-
-          <a
-            href="contact.html"
-            class="mt-2 bg-primary text-white px-4 py-3 rounded-lg font-semibold hover:bg-red-700 transition text-center"
+          <a href="contact.html" class="mt-1 island-cta text-center"
+            >Get a Quote</a
           >
-            Get a Quote
-          </a>
         </nav>
       </div>
     </header>
 
     <main id="main">
-      <!-- ================= HERO (Fixed + Parallax) ================= -->
+      <!-- ================= HERO ================= -->
       <section
         id="heroSection"
         class="hero-fixed flex items-center justify-center"
@@ -408,103 +403,135 @@
         <div class="parallax-wrap">
           <img
             id="heroParallax"
-            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
+            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=85"
             alt="Construction site"
             class="parallax-img"
             loading="eager"
           />
         </div>
 
-        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="absolute inset-0 bg-black/18"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/12"
+        ></div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(198,40,40,0.14),transparent_60%)]"
+        ></div>
 
-        <div class="relative z-10 text-center text-white px-6 max-w-5xl">
+        <div
+          class="relative z-10 text-center text-white px-5 sm:px-6 max-w-5xl"
+        >
           <p
-            class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6"
+            class="inline-flex items-center gap-2 glass-pill px-4 py-2 rounded-full text-xs sm:text-sm mb-5"
           >
             <span class="h-2 w-2 rounded-full bg-primary"></span>
-            Construction • Engineering • Project Management
+            <span class="text-white/90 font-medium"
+              >Construction • Engineering • Project Management</span
+            >
           </p>
 
-          <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+          <!-- Mobile-optimized type scale -->
+          <h1
+            class="text-3xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-5 hero-title"
+          >
             Engineering the <span class="text-primary">Future</span><br />
-            With Precision & Trust
+            <span class="text-white">With Precision & Trust</span>
           </h1>
 
-          <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
+          <p
+            class="text-base sm:text-lg md:text-xl text-white/80 mb-8 max-w-3xl mx-auto hero-subtitle"
+          >
             Safe execution, clear communication, and disciplined scheduling—from
             concept to handover.
           </p>
 
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <!-- Mobile: full-width buttons -->
+          <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <a
               href="contact.html"
-              class="bg-primary px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition transform hover:-translate-y-1 shadow-soft"
+              class="w-full sm:w-auto bg-primary text-white px-7 py-3.5 rounded-lg font-semibold hover:brightness-95 transition transform hover:-translate-y-1 shadow-soft"
             >
               Get a Quote
             </a>
 
             <a
               href="#services"
-              class="border border-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-black transition"
+              class="w-full sm:w-auto border border-white/25 bg-white/12 text-white px-7 py-3.5 rounded-lg font-semibold hover:bg-white/18 transition"
             >
               Our Services
             </a>
           </div>
 
-          <div class="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4 text-left">
-            <div class="bg-white/10 border border-white/10 rounded-xl p-4">
-              <p class="text-sm text-gray-200">Response time</p>
-              <p class="text-lg font-bold">24–48 hrs</p>
+          <!-- Mobile: 2x2 grid tighter -->
+          <div
+            class="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 text-left"
+          >
+            <div class="glass-card rounded-xl p-3.5 sm:p-4">
+              <p class="text-xs sm:text-sm text-white/75">Response time</p>
+              <p class="text-base sm:text-lg font-bold text-white">24–48 hrs</p>
             </div>
-            <div class="bg-white/10 border border-white/10 rounded-xl p-4">
-              <p class="text-sm text-gray-200">Coverage</p>
-              <p class="text-lg font-bold">Nepal-wide</p>
+
+            <div class="glass-card rounded-xl p-3.5 sm:p-4">
+              <p class="text-xs sm:text-sm text-white/75">Coverage</p>
+              <p class="text-base sm:text-lg font-bold text-white">
+                Nepal-wide
+              </p>
             </div>
-            <div class="bg-white/10 border border-white/10 rounded-xl p-4">
-              <p class="text-sm text-gray-200">Safety-first</p>
-              <p class="text-lg font-bold">Quality checks</p>
+
+            <div class="glass-card rounded-xl p-3.5 sm:p-4">
+              <p class="text-xs sm:text-sm text-white/75">Safety-first</p>
+              <p class="text-base sm:text-lg font-bold text-white">
+                Quality checks
+              </p>
             </div>
-            <div class="bg-white/10 border border-white/10 rounded-xl p-4">
-              <p class="text-sm text-gray-200">Delivery</p>
-              <p class="text-lg font-bold">On schedule</p>
+
+            <div class="glass-card rounded-xl p-3.5 sm:p-4">
+              <p class="text-xs sm:text-sm text-white/75">Delivery</p>
+              <p class="text-base sm:text-lg font-bold text-white">
+                On schedule
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Spacer: ensures content starts after hero height -->
       <div id="heroSpacer" aria-hidden="true" class="h-[92vh]"></div>
 
-      <!-- Everything below scrolls over the fixed hero -->
       <div class="content-layer">
         <!-- ================= ABOUT ================= -->
-        <section id="about" class="py-24 bg-gray-50">
+        <section id="about" class="py-20 sm:py-24 bg-white">
           <div
-            class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center"
+            class="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12 md:gap-16 items-center"
           >
             <div>
-              <h2 class="text-4xl font-bold text-primary mb-6">Who We Are</h2>
-              <p class="text-lg leading-relaxed mb-6">
+              <h2 class="text-3xl sm:text-4xl font-bold text-primary mb-5">
+                Who We Are
+              </h2>
+              <p class="text-base sm:text-lg leading-relaxed mb-5 text-ink/80">
                 GenZ Engineering is a modern engineering and construction firm
                 committed to delivering safe, innovative, and high-quality
                 infrastructure solutions.
               </p>
-              <p class="text-gray-600 mb-8">
+              <p class="text-ink/65 mb-7">
                 From residential buildings to commercial projects, our team
                 focuses on engineering accuracy, workmanship, and transparent
                 project coordination.
               </p>
 
               <div class="grid sm:grid-cols-2 gap-4">
-                <div class="rounded-2xl border bg-white p-5">
+                <div
+                  class="rounded-2xl border border-black/10 bg-white p-5 shadow-soft"
+                >
                   <p class="font-semibold">✅ Quality Control</p>
-                  <p class="text-sm text-gray-600 mt-1">
+                  <p class="text-sm text-ink/65 mt-1">
                     Material checks, inspections, and documentation.
                   </p>
                 </div>
-                <div class="rounded-2xl border bg-white p-5">
+                <div
+                  class="rounded-2xl border border-black/10 bg-white p-5 shadow-soft"
+                >
                   <p class="font-semibold">✅ On-time Delivery</p>
-                  <p class="text-sm text-gray-600 mt-1">
+                  <p class="text-sm text-ink/65 mt-1">
                     Scheduling, milestones, and progress tracking.
                   </p>
                 </div>
@@ -523,25 +550,27 @@
         </section>
 
         <!-- ================= SERVICES ================= -->
-        <section id="services" class="py-28 bg-white">
-          <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-              <h2 class="text-4xl font-bold text-primary">Our Core Services</h2>
-              <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+        <section id="services" class="py-22 sm:py-28 bg-soft">
+          <div class="max-w-7xl mx-auto px-5 sm:px-6">
+            <div class="text-center mb-12 sm:mb-16">
+              <h2 class="text-3xl sm:text-4xl font-bold text-primary">
+                Our Core Services
+              </h2>
+              <p class="mt-3 sm:mt-4 text-ink/70 max-w-2xl mx-auto">
                 End-to-end service delivery with clear scope, cost control, and
                 engineering compliance.
               </p>
             </div>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               <a
                 href="construction.html"
-                class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+                class="group bg-white p-7 sm:p-8 rounded-2xl border border-black/10 hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
               >
                 <h3 class="text-xl font-semibold text-primary mb-3">
                   Construction
                 </h3>
-                <p class="text-gray-600">
+                <p class="text-ink/70">
                   Residential & commercial construction with skilled execution
                   and site discipline.
                 </p>
@@ -550,12 +579,12 @@
 
               <a
                 href="renovation.html"
-                class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+                class="group bg-white p-7 sm:p-8 rounded-2xl border border-black/10 hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
               >
                 <h3 class="text-xl font-semibold text-primary mb-3">
                   Renovation
                 </h3>
-                <p class="text-gray-600">
+                <p class="text-ink/70">
                   Renovation, retrofitting & strengthening for performance and
                   modern finishes.
                 </p>
@@ -564,26 +593,26 @@
 
               <a
                 href="architecture.html"
-                class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+                class="group bg-white p-7 sm:p-8 rounded-2xl border border-black/10 hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
               >
                 <h3 class="text-xl font-semibold text-primary mb-3">
                   Architecture Design
                 </h3>
-                <p class="text-gray-600">
-                  Planning-focused architectural concepts, drawings, and
-                  compliance support for buildable designs.
+                <p class="text-ink/70">
+                  Planning-focused concepts, drawings, and compliance support
+                  for buildable designs.
                 </p>
                 <p class="mt-4 text-primary font-semibold">Learn more →</p>
               </a>
 
               <a
                 href="interior.html"
-                class="group bg-gray-50 p-8 rounded-2xl border hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
+                class="group bg-white p-7 sm:p-8 rounded-2xl border border-black/10 hover:border-primary hover:shadow-soft transition transform hover:-translate-y-1 block"
               >
                 <h3 class="text-xl font-semibold text-primary mb-3">
                   Interior Design
                 </h3>
-                <p class="text-gray-600">
+                <p class="text-ink/70">
                   Space planning and modern interiors with clean finishes,
                   lighting, and material selection.
                 </p>
@@ -592,15 +621,15 @@
             </div>
 
             <div
-              class="mt-14 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 border rounded-2xl p-6"
+              class="mt-10 sm:mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white border border-black/10 rounded-2xl p-6 shadow-soft"
             >
-              <p class="text-gray-700">
+              <p class="text-ink/75">
                 Want a custom proposal? Share your drawings / requirements and
                 we’ll respond quickly.
               </p>
               <a
                 href="contact.html"
-                class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+                class="w-full sm:w-auto text-center bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
               >
                 Request Proposal
               </a>
@@ -608,23 +637,30 @@
           </div>
         </section>
 
-        <!-- ================= HOW WE DELIVER (STACKED CARDS) ================= -->
-        <section id="service-story" class="bg-gray-50">
-          <div class="max-w-7xl mx-auto px-6 py-24">
-            <div class="text-center mb-12">
-              <h2 class="text-4xl font-bold text-primary">How We Deliver</h2>
-              <p class="mt-4 text-gray-600 max-w-3xl mx-auto">
+        <!-- ================= HOW WE DELIVER ================= -->
+        <section id="service-story" class="bg-white">
+          <div class="max-w-7xl mx-auto px-5 sm:px-6 py-20 sm:py-24">
+            <div class="text-center mb-10 sm:mb-12">
+              <h2 class="text-3xl sm:text-4xl font-bold text-primary">
+                How We Deliver
+              </h2>
+              <p class="mt-3 sm:mt-4 text-ink/70 max-w-3xl mx-auto">
                 Scroll to see our service focus shift—stacked cards pin smoothly
                 while the visuals update.
               </p>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-10 items-start">
-              <!-- LEFT: stacked cards -->
+            <div class="grid lg:grid-cols-2 gap-8 sm:gap-10 items-start">
+              <!-- LEFT -->
               <div class="relative">
                 <div class="stack relative">
+                  <!-- your cards unchanged -->
+                  <!-- (kept same content) -->
+                  <!-- ... -->
+                  <!-- For brevity, keep the card HTML exactly as you had it -->
+                  <!-- START cards -->
                   <article
-                    class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                    class="stack-card bg-white border border-black/10 rounded-2xl p-6 shadow-soft"
                     data-stage="construction"
                   >
                     <div class="flex items-start justify-between gap-4">
@@ -640,28 +676,28 @@
                         >Open page →</a
                       >
                     </div>
-                    <p class="mt-3 text-gray-600">
+                    <p class="mt-3 text-ink/70">
                       Site discipline, skilled supervision, and quality
                       checks—built to schedule with clear reporting.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2">
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
                         >Execution</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Safety</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Milestones</span
                       >
                     </div>
                   </article>
 
                   <article
-                    class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                    class="stack-card bg-white border border-black/10 rounded-2xl p-6 shadow-soft"
                     data-stage="renovation"
                   >
                     <div class="flex items-start justify-between gap-4">
@@ -675,28 +711,28 @@
                         >Open page →</a
                       >
                     </div>
-                    <p class="mt-3 text-gray-600">
+                    <p class="mt-3 text-ink/70">
                       Upgrades, retrofitting, waterproofing, and modern
                       finishes—planned to minimize disruption and risk.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2">
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
                         >Retrofitting</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Repairs</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Finishes</span
                       >
                     </div>
                   </article>
 
                   <article
-                    class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                    class="stack-card bg-white border border-black/10 rounded-2xl p-6 shadow-soft"
                     data-stage="architecture"
                   >
                     <div class="flex items-start justify-between gap-4">
@@ -712,28 +748,28 @@
                         >Open page →</a
                       >
                     </div>
-                    <p class="mt-3 text-gray-600">
+                    <p class="mt-3 text-ink/70">
                       Buildable designs with smart layouts, code-aware planning,
                       and drawings that reduce site confusion.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2">
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
                         >Planning</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Drawings</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Compliance</span
                       >
                     </div>
                   </article>
 
                   <article
-                    class="stack-card bg-white border rounded-2xl p-6 shadow-soft"
+                    class="stack-card bg-white border border-black/10 rounded-2xl p-6 shadow-soft"
                     data-stage="interior"
                   >
                     <div class="flex items-start justify-between gap-4">
@@ -749,50 +785,54 @@
                         >Open page →</a
                       >
                     </div>
-                    <p class="mt-3 text-gray-600">
+                    <p class="mt-3 text-ink/70">
                       Space planning, material selection, and modern
                       finishes—making spaces functional, clean, and premium.
                     </p>
                     <div class="mt-4 flex flex-wrap gap-2">
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
                         >Space</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Lighting</span
                       >
                       <span
-                        class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
+                        class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/75 border border-black/10"
                         >Finishes</span
                       >
                     </div>
                   </article>
+                  <!-- END cards -->
                 </div>
               </div>
 
-              <!-- RIGHT: sticky visuals -->
+              <!-- RIGHT -->
               <div class="lg:sticky lg:top-28">
                 <div
-                  class="relative overflow-hidden rounded-2xl border shadow-soft bg-white h-[460px] sm:h-[520px]"
+                  class="relative overflow-hidden rounded-2xl border border-black/10 shadow-soft bg-white h-[320px] sm:h-[420px] lg:h-[520px]"
                 >
                   <figure
                     class="stage-figure is-active"
                     data-stage-img="construction"
                   >
                     <img
-                      src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=70"
+                      src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=80"
                       alt="Construction"
                       loading="lazy"
                     />
+                    <div class="absolute inset-0 bg-black/14"></div>
                     <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
                     ></div>
                     <figcaption
-                      class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                      class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white"
                     >
-                      <p class="text-sm font-bold text-primary">Construction</p>
-                      <p class="text-2xl font-extrabold">
+                      <p class="text-sm font-bold text-white/90">
+                        Construction
+                      </p>
+                      <p class="text-xl sm:text-2xl font-extrabold">
                         Disciplined execution
                       </p>
                     </figcaption>
@@ -800,18 +840,19 @@
 
                   <figure class="stage-figure" data-stage-img="renovation">
                     <img
-                      src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1600&q=70"
+                      src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1600&q=80"
                       alt="Renovation"
                       loading="lazy"
                     />
+                    <div class="absolute inset-0 bg-black/14"></div>
                     <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
                     ></div>
                     <figcaption
-                      class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                      class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white"
                     >
-                      <p class="text-sm font-bold text-primary">Renovation</p>
-                      <p class="text-2xl font-extrabold">
+                      <p class="text-sm font-bold text-white/90">Renovation</p>
+                      <p class="text-xl sm:text-2xl font-extrabold">
                         Upgrades & retrofitting
                       </p>
                     </figcaption>
@@ -819,45 +860,53 @@
 
                   <figure class="stage-figure" data-stage-img="architecture">
                     <img
-                      src="https://images.unsplash.com/photo-1529421308418-eab98863cee1?auto=format&fit=crop&w=1600&q=70"
+                      src="https://images.unsplash.com/photo-1529421308418-eab98863cee1?auto=format&fit=crop&w=1600&q=80"
                       alt="Architecture"
                       loading="lazy"
                     />
+                    <div class="absolute inset-0 bg-black/14"></div>
                     <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
                     ></div>
                     <figcaption
-                      class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                      class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white"
                     >
-                      <p class="text-sm font-bold text-primary">Architecture</p>
-                      <p class="text-2xl font-extrabold">Plans you can build</p>
+                      <p class="text-sm font-bold text-white/90">
+                        Architecture
+                      </p>
+                      <p class="text-xl sm:text-2xl font-extrabold">
+                        Plans you can build
+                      </p>
                     </figcaption>
                   </figure>
 
                   <figure class="stage-figure" data-stage-img="interior">
                     <img
-                      src="https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1600&q=70"
+                      src="https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=1600&q=80"
                       alt="Interior"
                       loading="lazy"
                     />
+                    <div class="absolute inset-0 bg-black/14"></div>
                     <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+                      class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
                     ></div>
                     <figcaption
-                      class="absolute bottom-0 left-0 right-0 p-6 text-white"
+                      class="absolute bottom-0 left-0 right-0 p-5 sm:p-6 text-white"
                     >
-                      <p class="text-sm font-bold text-primary">
+                      <p class="text-sm font-bold text-white/90">
                         Interior Design
                       </p>
-                      <p class="text-2xl font-extrabold">Modern finishes</p>
+                      <p class="text-xl sm:text-2xl font-extrabold">
+                        Modern finishes
+                      </p>
                     </figcaption>
                   </figure>
                 </div>
 
-                <p class="mt-5 text-sm text-gray-600">
-                  On desktop, the visuals stay
-                  <span class="font-semibold">sticky</span> while the cards
-                  stack and pin.
+                <p class="mt-4 text-sm text-ink/60">
+                  On desktop, visuals stay
+                  <span class="font-semibold text-ink">sticky</span>. On mobile,
+                  everything scrolls naturally for smooth performance.
                 </p>
               </div>
             </div>
@@ -865,50 +914,58 @@
         </section>
 
         <!-- ================= STATS ================= -->
-        <section class="py-24 bg-primary text-white">
+        <section class="py-20 sm:py-24 bg-primary text-white">
           <div
-            class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-center"
+            class="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-3 gap-10 sm:gap-12 text-center"
           >
             <div class="hover:scale-105 transition">
-              <h3 class="text-5xl font-extrabold">50+</h3>
-              <p class="mt-3 text-lg">Projects Completed</p>
+              <h3 class="text-4xl sm:text-5xl font-extrabold">50+</h3>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg">
+                Projects Completed
+              </p>
             </div>
             <div class="hover:scale-105 transition">
-              <h3 class="text-5xl font-extrabold">10+</h3>
-              <p class="mt-3 text-lg">Years of Experience</p>
+              <h3 class="text-4xl sm:text-5xl font-extrabold">10+</h3>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg">
+                Years of Experience
+              </p>
             </div>
             <div class="hover:scale-105 transition">
-              <h3 class="text-5xl font-extrabold">100%</h3>
-              <p class="mt-3 text-lg">Client Satisfaction</p>
+              <h3 class="text-4xl sm:text-5xl font-extrabold">100%</h3>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg">
+                Client Satisfaction
+              </p>
             </div>
           </div>
         </section>
 
         <!-- ================= CTA ================= -->
-        <section class="py-24 bg-gray-900 text-white text-center">
-          <h2 class="text-4xl font-bold mb-6">
+        <section class="py-20 sm:py-24 bg-white text-ink text-center">
+          <h2 class="text-3xl sm:text-4xl font-bold mb-5 sm:mb-6">
             Let’s Build Something Great Together
           </h2>
-          <p class="text-gray-300 mb-10">
+          <p class="text-ink/70 mb-8 sm:mb-10">
             Contact us today to discuss your next project and get a quick
             estimate.
           </p>
           <a
             href="contact.html"
-            class="bg-primary px-10 py-4 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
+            class="inline-flex bg-primary text-white px-9 sm:px-10 py-3.5 sm:py-4 rounded-lg font-semibold hover:brightness-95 transition shadow-soft"
           >
             Contact Us
           </a>
         </section>
 
         <!-- ================= FOOTER ================= -->
-        <footer class="bg-white border-t border-gray-200">
-          <div class="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
+        <footer class="bg-soft border-t border-black/10">
+          <div
+            class="max-w-7xl mx-auto px-5 sm:px-6 py-14 sm:py-16 grid gap-10 md:grid-cols-4"
+          >
             <div>
               <h3 class="text-2xl font-extrabold text-primary mb-4">
                 GenZ Engineering
               </h3>
-              <ul class="space-y-3 text-gray-600">
+              <ul class="space-y-3 text-ink/70">
                 <li class="hover:text-primary transition">
                   📍 Bhaktapur, Nepal
                 </li>
@@ -930,8 +987,8 @@
             </div>
 
             <div>
-              <h4 class="font-semibold text-lg mb-4 text-gray-900">Company</h4>
-              <ul class="space-y-3 text-gray-600">
+              <h4 class="font-semibold text-lg mb-4 text-ink">Company</h4>
+              <ul class="space-y-3 text-ink/70">
                 <li>
                   <a
                     href="index.html#about"
@@ -958,8 +1015,8 @@
             </div>
 
             <div>
-              <h4 class="font-semibold text-lg mb-4 text-gray-900">Services</h4>
-              <ul class="space-y-3 text-gray-600">
+              <h4 class="font-semibold text-lg mb-4 text-ink">Services</h4>
+              <ul class="space-y-3 text-ink/70">
                 <li>
                   <a
                     href="construction.html"
@@ -990,10 +1047,8 @@
             </div>
 
             <div>
-              <h4 class="font-semibold text-lg mb-4 text-gray-900">
-                Resources
-              </h4>
-              <ul class="space-y-3 text-gray-600">
+              <h4 class="font-semibold text-lg mb-4 text-ink">Resources</h4>
+              <ul class="space-y-3 text-ink/70">
                 <li>
                   <a
                     href="contact.html#faq"
@@ -1020,15 +1075,15 @@
             </div>
           </div>
 
-          <div class="border-t border-gray-200"></div>
+          <div class="border-t border-black/10"></div>
 
           <div
-            class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500"
+            class="max-w-7xl mx-auto px-5 sm:px-6 py-7 sm:py-8 flex flex-col md:flex-row justify-between items-center text-sm text-ink/60"
           >
             <p>
               © <span id="year"></span> GenZ Engineering. All rights reserved.
             </p>
-            <div class="flex space-x-6 mt-4 md:mt-0">
+            <div class="flex space-x-6 mt-3 md:mt-0">
               <a href="terms.html" class="hover:text-primary transition"
                 >Terms of Service</a
               >
@@ -1041,46 +1096,36 @@
       </div>
     </main>
 
-    <!-- ================= SCRIPTS ================= -->
     <script>
-      // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Mobile menu toggle
       const btn = document.getElementById("menuBtn");
       const menu = document.getElementById("mobileMenu");
+
       btn?.addEventListener("click", () => {
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", String(!isOpen));
         menu.classList.toggle("hidden");
       });
 
-      // Mobile services toggle
-      const mobileServicesBtn = document.getElementById("mobileServicesBtn");
-      const mobileServicesPanel = document.getElementById(
-        "mobileServicesPanel",
-      );
-      const mobileServicesIcon = document.getElementById("mobileServicesIcon");
-      mobileServicesBtn?.addEventListener("click", () => {
-        const isOpen =
-          mobileServicesBtn.getAttribute("aria-expanded") === "true";
-        mobileServicesBtn.setAttribute("aria-expanded", String(!isOpen));
-        mobileServicesPanel.classList.toggle("hidden");
-        mobileServicesIcon.textContent = isOpen ? "+" : "–";
+      // close menu when clicking a link (mobile UX)
+      menu?.querySelectorAll("a").forEach((a) => {
+        a.addEventListener("click", () => {
+          if (!menu.classList.contains("hidden")) {
+            menu.classList.add("hidden");
+            btn?.setAttribute("aria-expanded", "false");
+          }
+        });
       });
 
-      // Active nav highlight (based on current filename)
       const current = (
         location.pathname.split("/").pop() || "index.html"
       ).toLowerCase();
       document.querySelectorAll("[data-nav]").forEach((a) => {
         const href = (a.getAttribute("href") || "").toLowerCase();
-        if (href === current) a.classList.add("text-primary", "font-semibold");
+        if (href === current) a.classList.add("is-active");
       });
 
-      // ---------------------------
-      // Parallax (Hero is fixed, so use scrollY)
-      // ---------------------------
       const reduceMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
@@ -1098,7 +1143,7 @@
           heroSpacer?.offsetHeight || Math.round(window.innerHeight * 0.92);
         const progress = clamp(window.scrollY / (range || 1), 0, 1);
 
-        const translate = progress * 70; // px
+        const translate = progress * 70;
         const scale = 1.08 + progress * 0.03;
 
         heroImg.style.transform = `translate3d(0, ${translate}px, 0) scale(${scale})`;
@@ -1117,9 +1162,7 @@
       window.addEventListener("resize", onScroll);
       parallaxTick();
 
-      // ---------------------------------------------------------
-      // STACKED CARDS + IMAGE SWAP
-      // ---------------------------------------------------------
+      // STACKED CARDS + IMAGE SWAP (desktop behaves same; mobile still swaps but no sticky)
       const stackCards = Array.from(document.querySelectorAll(".stack-card"));
       const figures = Array.from(document.querySelectorAll("[data-stage-img]"));
 
@@ -1134,7 +1177,6 @@
 
       function pickActiveCard() {
         const center = window.innerHeight * 0.42;
-
         let best = null;
         let bestDist = Infinity;
 
@@ -1152,9 +1194,12 @@
       }
 
       function updateStackTransforms() {
+        // Only apply depth scaling on desktop (mobile disables sticky anyway)
         if (reduceMotion) return;
+        if (window.matchMedia("(max-width: 1023px)").matches) return;
+
         stackCards.forEach((card, i) => {
-          const base = 1 - i * 0.03; // depth look
+          const base = 1 - i * 0.03;
           card.style.transform = `scale(${base})`;
         });
       }
@@ -1173,6 +1218,10 @@
       }
 
       window.addEventListener("scroll", pickActiveCard, { passive: true });
+      window.addEventListener("resize", () => {
+        updateStackTransforms();
+        pickActiveCard();
+      });
     </script>
   </body>
 </html>

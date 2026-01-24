@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -15,9 +15,14 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary: "#c62828" },
+            colors: {
+              primary: "#c62828", // red
+              ink: "#0b0b10", // near-black text
+              soft: "#f6f7fb", // light section bg
+            },
             boxShadow: {
-              soft: "0 12px 30px rgba(0,0,0,0.12)",
+              soft: "0 10px 30px rgba(0,0,0,0.12)",
+              glass: "0 14px 40px rgba(0,0,0,0.10)",
             },
           },
         },
@@ -33,59 +38,203 @@
           animation-duration: 0.01ms !important;
         }
       }
+
+      /* iOS safe area */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+      }
+
+      /* ================= WHITE DYNAMIC ISLAND NAV (same as main page) ================= */
+      .island-header {
+        position: fixed;
+        top: calc(14px + var(--safe-top));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(980px, calc(100% - 20px));
+        pointer-events: none;
+      }
+
+      .island {
+        pointer-events: auto;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9999px;
+
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+        box-shadow:
+          0 14px 40px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* subtle red reflection */
+      .island::before {
+        content: "";
+        position: absolute;
+        inset: -60% -40%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(198, 40, 40, 0.14),
+          rgba(198, 40, 40, 0.06) 46%,
+          rgba(255, 255, 255, 0) 74%
+        );
+        transform: rotate(10deg);
+        pointer-events: none;
+      }
+
+      .island a,
+      .island button {
+        position: relative;
+      }
+
+      .island-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .island-link {
+        padding: 8px 12px;
+        border-radius: 9999px;
+        font-weight: 800;
+        color: rgba(11, 11, 16, 0.92);
+        transition: 180ms ease;
+      }
+      .island-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+      }
+      .island-link.is-active {
+        background: rgba(198, 40, 40, 0.12);
+        border: 1px solid rgba(198, 40, 40, 0.28);
+        color: #0b0b10;
+      }
+
+      .island-cta {
+        background: rgba(198, 40, 40, 0.95);
+        color: #ffffff;
+        padding: 9px 14px;
+        border-radius: 9999px;
+        font-weight: 900;
+        transition: 180ms ease;
+        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        white-space: nowrap;
+      }
+      .island-cta:hover {
+        filter: brightness(0.96);
+        transform: translateY(-1px);
+        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
+      }
+
+      /* Mobile */
+      @media (max-width: 768px) {
+        .island-nav {
+          display: none;
+        }
+      }
+
+      .mobile-glass {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+      }
+      #mobileMenu > nav {
+        max-width: 520px;
+      }
+
+      /* Page spacing under fixed island */
+      .page-top-pad {
+        padding-top: 96px;
+      }
+
+      /* Hero text legibility on white theme */
+      .hero-title {
+        text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      }
+      .hero-subtitle {
+        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      }
+
+      /* Lightbox */
+      .modal-glass {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+      }
     </style>
   </head>
 
-  <body class="bg-white text-gray-800 antialiased">
-    <!-- ================= NAVBAR ================= -->
-    <header
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
+  <body class="bg-white text-ink antialiased">
+    <!-- Skip link -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
     >
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
-      >
-        <a href="index.html" class="flex items-center gap-3">
+      Skip to content
+    </a>
+
+    <!-- ================= DYNAMIC ISLAND NAVBAR (WHITE) ================= -->
+    <header class="island-header" aria-label="Header">
+      <div class="island">
+        <!-- Logo -->
+        <a href="index.html" class="island-chip">
           <div
-            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+            class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
-            <span class="text-primary font-black">GZ</span>
+            <span class="text-ink font-extrabold">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold text-primary tracking-wide"
-            >GenZ Engineering</span
-          >
+          <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <!-- Desktop Nav -->
+        <!-- Desktop Nav (NO DROPDOWN) -->
         <nav
-          class="hidden md:flex items-center space-x-8 font-medium"
+          class="island-nav hidden md:flex items-center gap-1"
           aria-label="Primary navigation"
         >
-          <a href="index.html" class="hover:text-primary transition">Home</a>
-          <a href="gallery.html" class="text-primary font-semibold">Gallery</a>
-          <a href="blog.html" class="hover:text-primary transition">Blog</a>
-          <a href="contact.html" class="hover:text-primary transition"
-            >Contact</a
+          <a data-nav href="index.html" class="island-link">Home</a>
+          <a data-nav href="services.html" class="island-link">Services</a>
+          <a data-nav href="gallery.html" class="island-link is-active"
+            >Gallery</a
           >
-          <a
-            href="contact.html"
-            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-          >
-            Get a Quote
-          </a>
+          <a data-nav href="blog.html" class="island-link">Blog</a>
+          <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
+
+        <!-- CTA -->
+        <a href="contact.html" class="hidden md:inline-flex island-cta"
+          >Get a Quote</a
+        >
 
         <!-- Mobile Menu Button -->
         <button
           id="menuBtn"
-          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          class="md:hidden inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-3 py-2 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-primary/25"
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="mobileMenu"
+          type="button"
         >
-          <!-- Hamburger icon -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="h-6 w-6 text-ink"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -101,273 +250,289 @@
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div
-        id="mobileMenu"
-        class="md:hidden hidden border-t border-gray-200 bg-white"
-      >
+      <div id="mobileMenu" class="hidden mt-3">
         <nav
-          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium"
+          class="mx-auto w-full rounded-2xl shadow-soft p-3 grid gap-2 mobile-glass"
           aria-label="Mobile navigation"
         >
           <a
+            data-nav
             href="index.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
           >
+
           <a
+            data-nav
+            href="services.html"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Services</a
+          >
+
+          <a
+            data-nav
             href="gallery.html"
-            class="mobile-link py-2 px-3 rounded-lg bg-primary/10 text-primary"
+            class="block px-4 py-3 rounded-xl bg-primary/10 text-ink border border-primary/25 font-semibold"
             >Gallery</a
           >
           <a
+            data-nav
             href="blog.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Blog</a
           >
           <a
+            data-nav
             href="contact.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Contact</a
+          >
+
+          <a href="contact.html" class="mt-1 island-cta text-center"
+            >Get a Quote</a
           >
         </nav>
       </div>
     </header>
 
-    <!-- ================= HERO ================= -->
-    <section class="relative">
-      <img
-        src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=2400&q=70"
-        class="absolute inset-0 w-full h-full object-cover"
-        alt="Gallery hero"
-        loading="eager"
-      />
-      <div
-        class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-white/0"
-      ></div>
+    <main id="main" class="page-top-pad">
+      <!-- ================= HERO ================= -->
+      <section class="relative">
+        <img
+          src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=2400&q=70"
+          class="absolute inset-0 w-full h-full object-cover"
+          alt="Gallery hero"
+          loading="eager"
+        />
 
-      <div class="relative z-10">
-        <div class="max-w-7xl mx-auto px-6 pt-20 pb-16">
-          <div class="max-w-2xl">
-            <p
-              class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white px-4 py-2 rounded-full text-sm"
-            >
-              <span class="h-2 w-2 rounded-full bg-primary"></span>
-              Completed & Ongoing Projects
-            </p>
-
-            <h1
-              class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
-            >
-              Our Project Gallery
-            </h1>
-
-            <p class="mt-4 text-lg text-gray-200">
-              Explore our portfolio of quality construction, structural design,
-              and renovation work across Nepal.
-            </p>
-
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#projects"
-                class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-              >
-                View Projects
-              </a>
-              <a
-                href="contact.html"
-                class="bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition"
-              >
-                Request a Quote
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- nice curve separation -->
-      <div class="relative h-10 bg-white">
+        <!-- darker overlays (same style as main) -->
+        <div class="absolute inset-0 bg-black/35"></div>
         <div
-          class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-white/0 to-white"
+          class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/35"
         ></div>
-      </div>
-    </section>
-
-    <!-- ================= CONTROLS ================= -->
-    <section id="projects" class="py-14 bg-white">
-      <div class="max-w-7xl mx-auto px-6">
         <div
-          class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
-        >
-          <div>
-            <h2 class="text-3xl font-extrabold text-gray-900">
-              Projects <span class="text-primary">Showcase</span>
-            </h2>
-            <p class="mt-2 text-gray-600 max-w-2xl">
-              Filter by category or search by project name/location. Click any
-              card to preview.
-            </p>
-          </div>
+          class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(198,40,40,0.18),transparent_60%)]"
+        ></div>
 
-          <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-            <!-- Search -->
-            <div class="relative w-full sm:w-80">
-              <span
-                class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                >🔎</span
+        <div class="relative z-10">
+          <div class="max-w-7xl mx-auto px-6 pt-16 pb-16">
+            <div class="max-w-2xl text-white">
+              <p
+                class="inline-flex items-center gap-2 bg-white/12 border border-white/20 text-white px-4 py-2 rounded-full text-sm"
               >
-              <input
-                id="searchInput"
-                class="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                placeholder="Search projects (e.g., Kathmandu)"
-                aria-label="Search projects"
-              />
+                <span class="h-2 w-2 rounded-full bg-primary"></span>
+                Completed & Ongoing Projects
+              </p>
+
+              <h1
+                class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight hero-title"
+              >
+                Our Project Gallery
+              </h1>
+
+              <p class="mt-4 text-lg text-white/85 hero-subtitle">
+                Explore our portfolio of quality construction, structural
+                design, and renovation work across Nepal.
+              </p>
+
+              <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="#projects"
+                  class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+                >
+                  View Projects
+                </a>
+                <a
+                  href="contact.html"
+                  class="border border-white/25 bg-white/12 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/18 transition"
+                >
+                  Request a Quote
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative h-10 bg-white">
+          <div
+            class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-black/0 to-white"
+          ></div>
+        </div>
+      </section>
+
+      <!-- ================= CONTROLS ================= -->
+      <section id="projects" class="py-14 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div
+            class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
+          >
+            <div>
+              <h2 class="text-3xl font-extrabold text-ink">
+                Projects <span class="text-primary">Showcase</span>
+              </h2>
+              <p class="mt-2 text-ink/70 max-w-2xl">
+                Filter by category or search by project name/location. Click any
+                card to preview.
+              </p>
             </div>
 
-            <!-- Sort -->
-            <select
-              id="sortSelect"
-              class="w-full sm:w-48 border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
-              aria-label="Sort projects"
-            >
-              <option value="featured">Sort: Featured</option>
-              <option value="name">Sort: Name (A-Z)</option>
-              <option value="location">Sort: Location (A-Z)</option>
-            </select>
+            <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              <div class="relative w-full sm:w-80">
+                <span
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-ink/45"
+                  >🔎</span
+                >
+                <input
+                  id="searchInput"
+                  class="w-full border border-black/10 bg-black/5 rounded-xl pl-10 pr-4 py-3 text-ink placeholder:text-ink/45 focus:outline-none focus:ring-2 focus:ring-primary/25"
+                  placeholder="Search projects (e.g., Kathmandu)"
+                  aria-label="Search projects"
+                />
+              </div>
+
+              <select
+                id="sortSelect"
+                class="w-full sm:w-48 border border-black/10 bg-black/5 rounded-xl px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary/25"
+                aria-label="Sort projects"
+              >
+                <option value="featured">Sort: Featured</option>
+                <option value="name">Sort: Name (A-Z)</option>
+                <option value="location">Sort: Location (A-Z)</option>
+              </select>
+            </div>
           </div>
-        </div>
 
-        <!-- Filter Chips -->
-        <div class="mt-8 flex flex-wrap gap-3">
-          <button
-            data-filter="all"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition bg-primary text-white border-primary"
-          >
-            All
-          </button>
-          <button
-            data-filter="residential"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
-          >
-            Residential
-          </button>
-          <button
-            data-filter="commercial"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
-          >
-            Commercial
-          </button>
-          <button
-            data-filter="infrastructure"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
-          >
-            Infrastructure
-          </button>
-          <button
-            data-filter="renovation"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
-          >
-            Renovation
-          </button>
-          <button
-            data-filter="structural"
-            class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-gray-200"
-          >
-            Structural
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= GALLERY GRID ================= -->
-    <section class="pb-24 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-6">
-        <!-- Count row -->
-        <div class="flex items-center justify-between gap-4 py-6">
-          <p class="text-sm text-gray-600">
-            Showing
-            <span id="count" class="font-semibold text-gray-900">0</span>
-            projects
-          </p>
-
-          <a
-            href="contact.html"
-            class="text-sm font-semibold text-primary hover:underline"
-          >
-            Need something similar? Request a quote →
-          </a>
-        </div>
-
-        <div id="grid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
-
-        <!-- Empty state -->
-        <div id="emptyState" class="hidden text-center py-16">
-          <div
-            class="mx-auto max-w-md bg-white border rounded-2xl p-10 shadow-soft"
-          >
-            <p class="text-2xl font-extrabold text-gray-900">No results</p>
-            <p class="mt-2 text-gray-600">
-              Try a different category or search keyword.
-            </p>
+          <div class="mt-8 flex flex-wrap gap-3">
             <button
-              id="resetBtn"
-              class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+              data-filter="all"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition bg-primary text-white border-primary/30"
             >
-              Reset filters
+              All
+            </button>
+            <button
+              data-filter="residential"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+            >
+              Residential
+            </button>
+            <button
+              data-filter="commercial"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+            >
+              Commercial
+            </button>
+            <button
+              data-filter="infrastructure"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+            >
+              Infrastructure
+            </button>
+            <button
+              data-filter="renovation"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+            >
+              Renovation
+            </button>
+            <button
+              data-filter="structural"
+              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+            >
+              Structural
             </button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================= CTA ================= -->
-    <section class="py-20 bg-primary text-white">
-      <div class="max-w-7xl mx-auto px-6">
-        <div
-          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
-        >
-          <div>
-            <h3 class="text-4xl font-extrabold">Want to Build With Us?</h3>
-            <p class="mt-3 text-lg text-white/90">
-              Let’s turn your ideas into reality with disciplined engineering
-              and quality workmanship.
+      <!-- ================= GALLERY GRID ================= -->
+      <section class="pb-24 bg-soft">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="flex items-center justify-between gap-4 py-6">
+            <p class="text-sm text-ink/70">
+              Showing <span id="count" class="font-semibold text-ink">0</span>
+              projects
             </p>
-          </div>
-          <a
-            href="contact.html"
-            class="bg-white text-primary px-10 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-soft text-center"
-          >
-            Contact Us
-          </a>
-        </div>
-      </div>
-    </section>
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="bg-white border-t border-gray-200">
-      <div
-        class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500"
-      >
-        <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
-        <div class="flex gap-5">
-          <a class="hover:text-primary transition" href="terms.html">Terms</a>
-          <a class="hover:text-primary transition" href="privacy.html"
-            >Privacy</a
-          >
+            <a
+              href="contact.html"
+              class="text-sm font-semibold text-primary hover:underline"
+            >
+              Need something similar? Request a quote →
+            </a>
+          </div>
+
+          <div id="grid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+          <div id="emptyState" class="hidden text-center py-16">
+            <div
+              class="mx-auto max-w-md bg-white border border-black/10 rounded-2xl p-10 shadow-soft"
+            >
+              <p class="text-2xl font-extrabold text-ink">No results</p>
+              <p class="mt-2 text-ink/70">
+                Try a different category or search keyword.
+              </p>
+              <button
+                id="resetBtn"
+                class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+              >
+                Reset filters
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </footer>
+      </section>
+
+      <!-- ================= CTA ================= -->
+      <section class="py-20 bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div
+            class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
+          >
+            <div>
+              <h3 class="text-4xl font-extrabold">Want to Build With Us?</h3>
+              <p class="mt-3 text-lg text-white/90">
+                Let’s turn your ideas into reality with disciplined engineering
+                and quality workmanship.
+              </p>
+            </div>
+            <a
+              href="contact.html"
+              class="bg-red text-white px-10 py-4 rounded-lg font-semibold hover:bg-red-700/90 transition  border border-white/25 text-center"
+            >
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FOOTER ================= -->
+      <footer class="bg-soft border-t border-black/10">
+        <div
+          class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink/60"
+        >
+          <p>
+            © <span id="year"></span> GenZ Engineering. All rights reserved.
+          </p>
+          <div class="flex gap-5">
+            <a class="hover:text-primary transition" href="terms.html">Terms</a>
+            <a class="hover:text-primary transition" href="privacy.html"
+              >Privacy</a
+            >
+          </div>
+        </div>
+      </footer>
+    </main>
 
     <!-- ================= LIGHTBOX MODAL ================= -->
     <div id="lightbox" class="fixed inset-0 z-[60] hidden">
-      <div class="absolute inset-0 bg-black/80"></div>
+      <div class="absolute inset-0 bg-black/75"></div>
 
       <div class="relative h-full w-full flex items-center justify-center p-4">
         <div
-          class="relative w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-soft"
+          class="relative w-full max-w-4xl modal-glass rounded-2xl overflow-hidden shadow-soft"
         >
           <button
             id="closeLightbox"
-            class="absolute top-3 right-3 bg-black/70 text-white rounded-lg px-3 py-2 hover:bg-black transition"
+            class="absolute top-3 right-3 bg-white/80 text-ink rounded-lg px-3 py-2 hover:bg-white transition border border-black/10"
             aria-label="Close preview"
           >
             ✕
@@ -384,20 +549,15 @@
             <div class="flex flex-wrap items-center gap-3">
               <span
                 id="lightboxTag"
-                class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
               >
                 Tag
               </span>
-              <p
-                id="lightboxTitle"
-                class="text-xl font-extrabold text-gray-900"
-              >
+              <p id="lightboxTitle" class="text-xl font-extrabold text-ink">
                 Title
               </p>
             </div>
-            <p id="lightboxMeta" class="mt-2 text-gray-600">
-              Location • Status
-            </p>
+            <p id="lightboxMeta" class="mt-2 text-ink/70">Location • Status</p>
           </div>
         </div>
       </div>
@@ -408,7 +568,25 @@
       // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Project data (replace with real projects)
+      // Mobile menu toggle
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("mobileMenu");
+      btn?.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        menu.classList.toggle("hidden");
+      });
+
+      // Active nav highlight (filename match)
+      const current = (
+        location.pathname.split("/").pop() || "gallery.html"
+      ).toLowerCase();
+      document.querySelectorAll("[data-nav]").forEach((a) => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        if (href === current) a.classList.add("is-active");
+      });
+
+      // ---------- Gallery app ----------
       const projects = [
         {
           title: "Residential Building",
@@ -460,7 +638,6 @@
         },
       ];
 
-      // State
       let activeFilter = "all";
       let query = "";
       let sortMode = "featured";
@@ -488,7 +665,7 @@
           copy.sort((a, b) => a.title.localeCompare(b.title));
         else if (sortMode === "location")
           copy.sort((a, b) => a.location.localeCompare(b.location));
-        return copy; // featured keeps original order
+        return copy;
       }
 
       function filteredProjects() {
@@ -522,7 +699,7 @@
           .map(
             (p, idx) => `
             <article
-              class="group relative overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
+              class="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
               role="button"
               tabindex="0"
               aria-label="Open ${p.title} preview"
@@ -541,29 +718,28 @@
                   <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-gray-900">
                     ${p.status}
                   </span>
-                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white">
+                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white border border-primary/20">
                     ${p.tag}
                   </span>
                 </div>
               </div>
 
               <div class="p-6">
-                <h3 class="text-xl font-extrabold text-gray-900 group-hover:text-primary transition">
+                <h3 class="text-xl font-extrabold text-ink group-hover:text-primary transition">
                   ${p.title}
                 </h3>
-                <p class="mt-2 text-gray-600">📍 ${p.location}</p>
+                <p class="mt-2 text-ink/70">📍 ${p.location}</p>
 
                 <div class="mt-5 flex items-center justify-between">
-                  <p class="text-sm text-gray-500">Click to preview</p>
+                  <p class="text-sm text-ink/55">Click to preview</p>
                   <span class="text-primary font-semibold">View →</span>
                 </div>
               </div>
             </article>
-          `
+          `,
           )
           .join("");
 
-        // Bind clicks (lightbox)
         grid.querySelectorAll("[data-idx]").forEach((el) => {
           const idx = Number(el.getAttribute("data-idx"));
           const p = items[idx];
@@ -596,7 +772,6 @@
       closeLightbox.addEventListener("click", closeModal);
 
       lightbox.addEventListener("click", (e) => {
-        // click outside card closes
         if (e.target === lightbox.firstElementChild) closeModal();
       });
 
@@ -610,31 +785,28 @@
         btn.addEventListener("click", () => {
           activeFilter = btn.getAttribute("data-filter");
 
-          // UI highlight
           document.querySelectorAll(".filter-btn").forEach((b) => {
-            b.classList.remove("bg-primary", "text-white", "border-primary");
-            b.classList.add("border-gray-200");
+            b.classList.remove("bg-primary", "text-white", "border-primary/30");
+            b.classList.add("bg-black/5", "text-ink/90", "border-black/10");
           });
-          btn.classList.add("bg-primary", "text-white", "border-primary");
-          btn.classList.remove("border-gray-200");
+
+          btn.classList.add("bg-primary", "text-white", "border-primary/30");
+          btn.classList.remove("bg-black/5", "text-ink/90", "border-black/10");
 
           render();
         });
       });
 
-      // Search
       searchInput.addEventListener("input", (e) => {
         query = e.target.value;
         render();
       });
 
-      // Sort
       sortSelect.addEventListener("change", (e) => {
         sortMode = e.target.value;
         render();
       });
 
-      // Reset
       document.getElementById("resetBtn").addEventListener("click", () => {
         activeFilter = "all";
         query = "";
@@ -642,60 +814,18 @@
         searchInput.value = "";
         sortSelect.value = "featured";
 
-        // highlight "All"
         document.querySelectorAll(".filter-btn").forEach((b) => {
-          b.classList.remove("bg-primary", "text-white", "border-primary");
-          b.classList.add("border-gray-200");
+          b.classList.remove("bg-primary", "text-white", "border-primary/30");
+          b.classList.add("bg-black/5", "text-ink/90", "border-black/10");
         });
         document
           .querySelector('.filter-btn[data-filter="all"]')
-          .classList.add("bg-primary", "text-white", "border-primary");
+          .classList.add("bg-primary", "text-white", "border-primary/30");
 
         render();
       });
 
-      // Initial render
       render();
-    </script>
-
-    <script>
-      // Mobile navbar toggle
-      const menuBtn = document.getElementById("menuBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-
-      function closeMenu() {
-        if (!mobileMenu || !menuBtn) return;
-        mobileMenu.classList.add("hidden");
-        menuBtn.setAttribute("aria-expanded", "false");
-      }
-
-      function toggleMenu() {
-        if (!mobileMenu || !menuBtn) return;
-        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-        menuBtn.setAttribute("aria-expanded", String(!isOpen));
-        mobileMenu.classList.toggle("hidden");
-      }
-
-      menuBtn?.addEventListener("click", toggleMenu);
-
-      // Close when clicking a link
-      document.querySelectorAll(".mobile-link").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-
-      // Close on outside click
-      document.addEventListener("click", (e) => {
-        if (!mobileMenu || !menuBtn) return;
-        const clickedInsideMenu = mobileMenu.contains(e.target);
-        const clickedButton = menuBtn.contains(e.target);
-        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-        if (isOpen && !clickedInsideMenu && !clickedButton) closeMenu();
-      });
-
-      // Close on ESC
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeMenu();
-      });
     </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -24,14 +24,22 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary: "#c62828" },
-            boxShadow: { soft: "0 12px 30px rgba(0,0,0,0.12)" },
+            colors: {
+              primary: "#c62828",
+              ink: "#0b0b10",
+              soft: "#f6f7fb",
+            },
+            boxShadow: {
+              soft: "0 10px 30px rgba(0,0,0,0.12)",
+              glass: "0 14px 40px rgba(0,0,0,0.10)",
+            },
           },
         },
       };
     </script>
 
     <style>
+      /* Respect reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
           scroll-behavior: auto !important;
@@ -39,67 +47,193 @@
           animation-duration: 0.01ms !important;
         }
       }
+
+      /* iOS safe area */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+      }
+
+      /* ================= WHITE DYNAMIC ISLAND NAV (same as main + gallery) ================= */
+      .island-header {
+        position: fixed;
+        top: calc(14px + var(--safe-top));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(980px, calc(100% - 20px));
+        pointer-events: none;
+      }
+
+      .island {
+        pointer-events: auto;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9999px;
+
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+        box-shadow:
+          0 14px 40px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* subtle red reflection */
+      .island::before {
+        content: "";
+        position: absolute;
+        inset: -60% -40%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(198, 40, 40, 0.14),
+          rgba(198, 40, 40, 0.06) 46%,
+          rgba(255, 255, 255, 0) 74%
+        );
+        transform: rotate(10deg);
+        pointer-events: none;
+      }
+
+      .island a,
+      .island button {
+        position: relative;
+      }
+
+      .island-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .island-link {
+        padding: 8px 12px;
+        border-radius: 9999px;
+        font-weight: 800;
+        color: rgba(11, 11, 16, 0.92);
+        transition: 180ms ease;
+      }
+      .island-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+      }
+      .island-link.is-active {
+        background: rgba(198, 40, 40, 0.12);
+        border: 1px solid rgba(198, 40, 40, 0.28);
+        color: #0b0b10;
+      }
+
+      .island-cta {
+        background: rgba(198, 40, 40, 0.95);
+        color: #ffffff;
+        padding: 9px 14px;
+        border-radius: 9999px;
+        font-weight: 900;
+        transition: 180ms ease;
+        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        white-space: nowrap;
+      }
+      .island-cta:hover {
+        filter: brightness(0.96);
+        transform: translateY(-1px);
+        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
+      }
+
+      /* Mobile */
+      @media (max-width: 768px) {
+        .island-nav {
+          display: none;
+        }
+      }
+
+      .mobile-glass {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+      }
+      #mobileMenu > nav {
+        max-width: 520px;
+      }
+
+      /* Page spacing under fixed island */
+      .page-top-pad {
+        padding-top: 96px;
+      }
+
+      /* Hero text legibility on photo */
+      .hero-title {
+        text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      }
+      .hero-subtitle {
+        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      }
     </style>
   </head>
 
-  <body class="bg-white text-gray-800 antialiased">
-    <!-- ================= NAVBAR ================= -->
-    <header
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
+  <body class="bg-white text-ink antialiased">
+    <!-- Skip link -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
     >
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
-      >
-        <a href="index.html" class="flex items-center gap-3">
+      Skip to content
+    </a>
+
+    <!-- ================= DYNAMIC ISLAND NAVBAR (WHITE) ================= -->
+    <header class="island-header" aria-label="Header">
+      <div class="island">
+        <!-- Logo -->
+        <a href="index.html" class="island-chip">
           <div
-            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+            class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
-            <span class="text-primary font-black">GZ</span>
+            <span class="text-ink font-extrabold">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold tracking-wide text-primary"
-            >GenZ Engineering</span
-          >
+          <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <!-- Desktop Nav -->
+        <!-- Desktop Nav (NO DROPDOWN) -->
         <nav
-          class="hidden md:flex items-center space-x-8 font-medium"
+          class="island-nav hidden md:flex items-center gap-1"
           aria-label="Primary navigation"
         >
-          <a data-nav href="index.html" class="hover:text-primary transition"
-            >Home</a
-          >
-          <a data-nav href="gallery.html" class="hover:text-primary transition"
-            >Gallery</a
-          >
-          <a data-nav href="blog.html" class="hover:text-primary transition"
-            >Blog</a
-          >
-          <a data-nav href="contact.html" class="hover:text-primary transition"
-            >Contact</a
-          >
-
-          <a
-            href="contact.html"
-            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-          >
-            Get a Quote
-          </a>
+          <a data-nav href="index.html" class="island-link">Home</a>
+          <a data-nav href="services.html" class="island-link">Services</a>
+          <a data-nav href="gallery.html" class="island-link">Gallery</a>
+          <a data-nav href="blog.html" class="island-link is-active">Blog</a>
+          <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
 
-        <!-- Mobile Menu Button (FIXED: icon always visible even if JS fails) -->
+        <!-- CTA -->
+        <a href="contact.html" class="hidden md:inline-flex island-cta"
+          >Get a Quote</a
+        >
+
+        <!-- Mobile Menu Button -->
         <button
           id="menuBtn"
-          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          class="md:hidden inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-3 py-2 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-primary/25"
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="mobileMenu"
           type="button"
         >
-          <!-- Default hamburger icon -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="h-6 w-6 text-ink"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -115,245 +249,328 @@
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div
-        id="mobileMenu"
-        class="md:hidden hidden border-t border-gray-200 bg-white"
-      >
+      <div id="mobileMenu" class="hidden mt-3">
         <nav
-          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium"
+          class="mx-auto w-full rounded-2xl shadow-soft p-3 grid gap-2 mobile-glass"
           aria-label="Mobile navigation"
         >
           <a
+            data-nav
             href="index.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
-          >
-          <a
-            href="gallery.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
-            >Gallery</a
-          >
-          <a
-            href="blog.html"
-            class="mobile-link py-2 px-3 rounded-lg bg-primary/10 text-primary"
-            >Blog</a
-          >
-          <a
-            href="contact.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
-            >Contact</a
           >
 
           <a
+            data-nav
+            href="services.html"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Services</a
+          >
+
+          <a
+            data-nav
+            href="gallery.html"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Gallery</a
+          >
+
+          <a
+            data-nav
+            href="blog.html"
+            class="mobile-link block px-4 py-3 rounded-xl bg-primary/10 text-ink border border-primary/25 font-semibold"
+            >Blog</a
+          >
+
+          <a
+            data-nav
             href="contact.html"
-            class="mobile-link mt-2 bg-primary text-white py-2.5 px-3 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft text-center"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Contact</a
+          >
+
+          <a href="contact.html" class="mt-1 island-cta text-center"
             >Get a Quote</a
           >
         </nav>
       </div>
     </header>
 
-    <!-- ================= HERO ================= -->
-    <section class="relative overflow-hidden">
-      <div
-        class="absolute inset-0 bg-gradient-to-br from-primary/10 via-white to-white"
-      ></div>
-      <div class="max-w-7xl mx-auto px-6 py-16 relative">
-        <div class="max-w-3xl">
-          <p
-            class="inline-flex items-center gap-2 text-sm bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-full"
-          >
-            <span class="h-2 w-2 rounded-full bg-primary"></span>
-            Practical guides • Safety • Materials • Planning
-          </p>
-          <h1
-            class="mt-6 text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight"
-          >
-            Blog & Insights
-          </h1>
-          <p class="mt-4 text-lg text-gray-600">
-            Short, useful articles to help clients understand engineering,
-            construction quality, and project management.
-          </p>
+    <main id="main" class="page-top-pad">
+      <!-- ================= HERO (GALLERY STYLE) ================= -->
+      <section class="relative">
+        <img
+          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
+          class="absolute inset-0 w-full h-full object-cover"
+          alt="Blog hero"
+          loading="eager"
+        />
 
-          <!-- Controls -->
-          <div class="mt-8 flex flex-col sm:flex-row gap-3">
-            <div class="relative w-full sm:w-96">
-              <span
-                class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                >🔎</span
-              >
-              <input
-                id="searchInput"
-                class="w-full border rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                placeholder="Search articles (e.g., safety, cement, budget)"
-                aria-label="Search blog posts"
-              />
-            </div>
-
-            <select
-              id="categorySelect"
-              class="w-full sm:w-56 border rounded-xl px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-primary/30"
-              aria-label="Filter by category"
-            >
-              <option value="all">All categories</option>
-              <option value="planning">Planning</option>
-              <option value="safety">Safety</option>
-              <option value="materials">Materials</option>
-              <option value="design">Design</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <main class="max-w-7xl mx-auto px-6 pb-24">
-      <!-- ================= FEATURED ================= -->
-      <section class="mt-6">
-        <div class="flex items-end justify-between gap-4">
-          <h2 class="text-2xl font-extrabold text-gray-900">Featured</h2>
-          <a
-            href="contact.html"
-            class="text-sm font-semibold text-primary hover:underline"
-            >Need help with a project? →</a
-          >
-        </div>
-
-        <article
-          class="mt-5 grid lg:grid-cols-2 gap-6 border rounded-2xl overflow-hidden bg-white shadow-soft hover:shadow-lg transition"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=70"
-            alt="Featured post"
-            class="w-full h-64 lg:h-full object-cover"
-            loading="lazy"
-          />
-          <div class="p-6 flex flex-col">
-            <div class="flex flex-wrap gap-2">
-              <span
-                class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
-                >Planning</span
-              >
-              <span
-                class="text-xs font-bold px-3 py-1 rounded-full bg-gray-100 text-gray-700 border"
-                >Checklist</span
-              >
-            </div>
-            <h3 class="mt-4 text-2xl font-extrabold text-gray-900">
-              How to Plan a Construction Project (Client Checklist)
-            </h3>
-            <p class="mt-3 text-gray-600">
-              A simple step-by-step guide: scope, budget, drawings, approvals,
-              timeline, contractor selection, and quality checks.
-            </p>
-
-            <div class="mt-5 text-sm text-gray-500">
-              <span>Jan 2026</span> • <span>6 min read</span> •
-              <span>GenZ Engineering</span>
-            </div>
-
-            <div class="mt-6">
-              <a
-                href="posts/construction-planning-checklist.html"
-                class="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
-              >
-                Read article <span>→</span>
-              </a>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <!-- ================= POSTS GRID ================= -->
-      <section class="mt-12">
-        <div class="flex items-center justify-between gap-4">
-          <h2 class="text-2xl font-extrabold text-gray-900">Latest Articles</h2>
-          <p class="text-sm text-gray-600">
-            Showing
-            <span id="count" class="font-semibold text-gray-900">0</span> posts
-          </p>
-        </div>
-
+        <!-- darker overlays (same style as gallery) -->
+        <div class="absolute inset-0 bg-black/35"></div>
         <div
-          id="grid"
-          class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/35"
+        ></div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(198,40,40,0.18),transparent_60%)]"
         ></div>
 
-        <!-- Empty state -->
-        <div id="emptyState" class="hidden text-center py-14">
+        <div class="relative z-10">
+          <div class="max-w-7xl mx-auto px-6 pt-16 pb-16">
+            <div class="max-w-3xl text-white">
+              <p
+                class="inline-flex items-center gap-2 bg-white/12 border border-white/20 text-white px-4 py-2 rounded-full text-sm"
+              >
+                <span class="h-2 w-2 rounded-full bg-primary"></span>
+                Practical guides • Safety • Materials • Planning
+              </p>
+
+              <h1
+                class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight hero-title"
+              >
+                Blog & Insights
+              </h1>
+
+              <p class="mt-4 text-lg text-white/85 hero-subtitle">
+                Short, useful articles to help clients understand engineering,
+                construction quality, and project management.
+              </p>
+
+              <!-- Controls (match gallery styling) -->
+              <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <div class="relative w-full sm:w-96">
+                  <span
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-white/70"
+                    >🔎</span
+                  >
+                  <input
+                    id="searchInput"
+                    class="w-full border border-white/15 bg-white/10 text-white placeholder:text-white/70 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40"
+                    placeholder="Search articles (e.g., safety, cement, budget)"
+                    aria-label="Search blog posts"
+                  />
+                </div>
+
+                <select
+                  id="categorySelect"
+                  class="w-full sm:w-56 border border-white/15 rounded-xl px-4 py-3 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  aria-label="Filter by category"
+                >
+                  <option value="all" class="text-gray-900">
+                    All categories
+                  </option>
+                  <option value="planning" class="text-gray-900">
+                    Planning
+                  </option>
+                  <option value="safety" class="text-gray-900">Safety</option>
+                  <option value="materials" class="text-gray-900">
+                    Materials
+                  </option>
+                  <option value="design" class="text-gray-900">Design</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- bottom fade to white like gallery -->
+        <div class="relative h-10 bg-white">
           <div
-            class="mx-auto max-w-md bg-white border rounded-2xl p-10 shadow-soft"
-          >
-            <p class="text-2xl font-extrabold text-gray-900">No posts found</p>
-            <p class="mt-2 text-gray-600">
-              Try a different keyword or category.
-            </p>
-            <button
-              id="resetBtn"
-              class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
-              type="button"
+            class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-black/0 to-white"
+          ></div>
+        </div>
+      </section>
+
+      <!-- ================= FEATURED (white section like gallery controls) ================= -->
+      <section class="py-14 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <h2 class="text-3xl font-extrabold text-ink">
+                Featured <span class="text-primary">Post</span>
+              </h2>
+              <p class="mt-2 text-ink/70 max-w-2xl">
+                Start here for a clear client-side checklist before construction
+                begins.
+              </p>
+            </div>
+
+            <a
+              href="contact.html"
+              class="hidden sm:inline-flex text-sm font-semibold text-primary hover:underline"
+              >Need help with a project? →</a
             >
-              Reset
-            </button>
+          </div>
+
+          <article
+            class="mt-8 grid lg:grid-cols-2 gap-6 border border-black/10 rounded-2xl overflow-hidden bg-white shadow-soft hover:shadow-lg transition"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=70"
+              alt="Featured post"
+              class="w-full h-64 lg:h-full object-cover"
+              loading="lazy"
+            />
+            <div class="p-6 flex flex-col">
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20"
+                  >Planning</span
+                >
+                <span
+                  class="text-xs font-bold px-3 py-1 rounded-full bg-black/5 text-ink/80 border border-black/10"
+                  >Checklist</span
+                >
+              </div>
+
+              <h3 class="mt-4 text-2xl font-extrabold text-ink">
+                How to Plan a Construction Project (Client Checklist)
+              </h3>
+
+              <p class="mt-3 text-ink/70">
+                A simple step-by-step guide: scope, budget, drawings, approvals,
+                timeline, contractor selection, and quality checks.
+              </p>
+
+              <div class="mt-5 text-sm text-ink/55">
+                <span>Jan 2026</span> • <span>6 min read</span> •
+                <span>GenZ Engineering</span>
+              </div>
+
+              <div class="mt-6">
+                <a
+                  href="posts/construction-planning-checklist.html"
+                  class="inline-flex items-center gap-2 text-primary font-semibold hover:underline"
+                >
+                  Read article <span>→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= POSTS GRID (soft section like gallery grid section) ================= -->
+      <section class="pb-24 bg-soft">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="flex items-center justify-between gap-4 py-6">
+            <p class="text-sm text-ink/70">
+              Showing <span id="count" class="font-semibold text-ink">0</span>
+              posts
+            </p>
+
+            <a
+              href="contact.html"
+              class="hidden sm:inline-flex text-sm font-semibold text-primary hover:underline"
+            >
+              Want a quote? Contact us →
+            </a>
+          </div>
+
+          <div id="grid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+          <!-- Empty state -->
+          <div id="emptyState" class="hidden text-center py-16">
+            <div
+              class="mx-auto max-w-md bg-white border border-black/10 rounded-2xl p-10 shadow-soft"
+            >
+              <p class="text-2xl font-extrabold text-ink">No posts found</p>
+              <p class="mt-2 text-ink/70">
+                Try a different keyword or category.
+              </p>
+              <button
+                id="resetBtn"
+                class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+                type="button"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Newsletter CTA (inside soft section, styled like gallery cards) -->
+          <div class="mt-12">
+            <div
+              class="rounded-2xl border border-black/10 bg-white p-8 shadow-soft flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+            >
+              <div>
+                <h3 class="text-2xl font-extrabold text-ink">
+                  Get new posts in your inbox
+                </h3>
+                <p class="mt-2 text-ink/70">
+                  Monthly tips on construction planning, safety, and quality
+                  control.
+                </p>
+              </div>
+
+              <form
+                class="w-full lg:w-auto flex flex-col sm:flex-row gap-3"
+                action="#"
+                method="post"
+              >
+                <input
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  class="w-full sm:w-80 border border-black/10 bg-black/5 rounded-xl px-4 py-3 text-ink placeholder:text-ink/45 focus:outline-none focus:ring-2 focus:ring-primary/25"
+                />
+                <button
+                  class="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:brightness-95 transition"
+                  type="submit"
+                >
+                  Subscribe
+                </button>
+              </form>
+            </div>
+            <p class="mt-3 text-xs text-ink/55">
+              For real subscriptions, connect to Mailchimp/Brevo or a backend
+              endpoint.
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- ================= NEWSLETTER CTA ================= -->
-      <section class="mt-16">
-        <div
-          class="rounded-2xl border bg-gray-50 p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
-        >
-          <div>
-            <h3 class="text-2xl font-extrabold text-gray-900">
-              Get new posts in your inbox
-            </h3>
-            <p class="mt-2 text-gray-600">
-              Monthly tips on construction planning, safety, and quality
-              control.
-            </p>
-          </div>
-          <form
-            class="w-full lg:w-auto flex flex-col sm:flex-row gap-3"
-            action="#"
-            method="post"
+      <!-- ================= CTA (same as gallery) ================= -->
+      <section class="py-20 bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div
+            class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
           >
-            <input
-              type="email"
-              required
-              placeholder="you@example.com"
-              class="w-full sm:w-80 border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-            <button
-              class="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition"
-              type="submit"
+            <div>
+              <h3 class="text-4xl font-extrabold">Want to Build With Us?</h3>
+              <p class="mt-3 text-lg text-white/90">
+                Let’s turn your ideas into reality with disciplined engineering
+                and quality workmanship.
+              </p>
+            </div>
+            <a
+              href="contact.html"
+              class="bg-black text-white px-10 py-4 rounded-lg font-semibold hover:bg-black/90 transition border border-white/25 text-center"
             >
-              Subscribe
-            </button>
-          </form>
+              Contact Us
+            </a>
+          </div>
         </div>
-        <p class="mt-3 text-xs text-gray-500">
-          For real subscriptions, connect to Mailchimp/Brevo/Sendinblue or a
-          backend endpoint.
-        </p>
       </section>
+
+      <!-- ================= FOOTER (same as gallery) ================= -->
+      <footer class="bg-soft border-t border-black/10">
+        <div
+          class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink/60"
+        >
+          <p>
+            © <span id="year"></span> GenZ Engineering. All rights reserved.
+          </p>
+          <div class="flex gap-5">
+            <a class="hover:text-primary transition" href="terms.html">Terms</a>
+            <a class="hover:text-primary transition" href="privacy.html"
+              >Privacy</a
+            >
+          </div>
+        </div>
+      </footer>
     </main>
 
-    <footer class="border-t bg-white">
-      <div
-        class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500"
-      >
-        <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
-        <div class="flex gap-5">
-          <a class="hover:text-primary transition" href="terms.html">Terms</a>
-          <a class="hover:text-primary transition" href="privacy.html"
-            >Privacy</a
-          >
-        </div>
-      </div>
-    </footer>
-
-    <!-- ================= JSON-LD (optional but recommended) ================= -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -363,228 +580,193 @@
       }
     </script>
 
+    <!-- ================= SCRIPTS ================= -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // ===== Active nav highlight (desktop) =====
-        const current = (
-          location.pathname.split("/").pop() || "index.html"
-        ).toLowerCase();
-        document.querySelectorAll("[data-nav]").forEach((a) => {
-          if ((a.getAttribute("href") || "").toLowerCase() === current) {
-            a.classList.add("text-primary", "font-semibold");
-          }
+      // Footer year
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Mobile menu toggle (same behavior as gallery)
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("mobileMenu");
+      btn?.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        menu.classList.toggle("hidden");
+      });
+
+      // Active nav highlight (filename match)
+      const current = (
+        location.pathname.split("/").pop() || "blog.html"
+      ).toLowerCase();
+      document.querySelectorAll("[data-nav]").forEach((a) => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        if (href === current) a.classList.add("is-active");
+      });
+
+      // ===== Blog posts data =====
+      const posts = [
+        {
+          title: "Structural Safety: What Clients Should Ask",
+          excerpt:
+            "Questions that protect you from poor workmanship, weak design, and hidden costs.",
+          category: "safety",
+          tag: "Safety",
+          date: "Jan 2026",
+          read: "5 min read",
+          href: "posts/structural-safety-questions.html",
+          img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Cement Storage Basics: Silo Types & Best Practices",
+          excerpt:
+            "Horizontal vs vertical silos, moisture protection, discharge systems, and maintenance tips.",
+          category: "materials",
+          tag: "Materials",
+          date: "Jan 2026",
+          read: "7 min read",
+          href: "posts/cement-silo-basics.html",
+          img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Budget Control: How to Avoid Cost Overruns",
+          excerpt:
+            "Simple methods to keep your project on budget without compromising quality.",
+          category: "planning",
+          tag: "Planning",
+          date: "Dec 2025",
+          read: "6 min read",
+          href: "posts/budget-control.html",
+          img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Engineering Design: What a Good Drawing Set Includes",
+          excerpt:
+            "Key sheets and details your contractor needs for accurate execution and fewer mistakes.",
+          category: "design",
+          tag: "Design",
+          date: "Dec 2025",
+          read: "6 min read",
+          href: "posts/drawing-set.html",
+          img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Site Supervision: Daily Checklist for Quality",
+          excerpt:
+            "From materials inspection to curing and measurements—quick daily checks that matter.",
+          category: "safety",
+          tag: "Quality",
+          date: "Dec 2025",
+          read: "4 min read",
+          href: "posts/site-supervision-checklist.html",
+          img: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=70",
+        },
+        {
+          title: "Renovation Planning: Before You Break Anything",
+          excerpt:
+            "How to assess structure, utilities, and permissions before starting renovation work.",
+          category: "planning",
+          tag: "Renovation",
+          date: "Nov 2025",
+          read: "5 min read",
+          href: "posts/renovation-planning.html",
+          img: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70",
+        },
+      ];
+
+      let query = "";
+      let category = "all";
+
+      const grid = document.getElementById("grid");
+      const countEl = document.getElementById("count");
+      const emptyState = document.getElementById("emptyState");
+      const searchInput = document.getElementById("searchInput");
+      const categorySelect = document.getElementById("categorySelect");
+
+      function normalize(s) {
+        return (s || "").toLowerCase().trim();
+      }
+
+      function filtered() {
+        const q = normalize(query);
+        return posts.filter((p) => {
+          const matchesCategory = category === "all" || p.category === category;
+          const matchesQuery =
+            !q ||
+            normalize(p.title).includes(q) ||
+            normalize(p.excerpt).includes(q) ||
+            normalize(p.tag).includes(q);
+          return matchesCategory && matchesQuery;
         });
+      }
 
-        // Footer year
-        document.getElementById("year").textContent = new Date().getFullYear();
+      function render() {
+        const items = filtered();
+        countEl.textContent = items.length;
 
-        // ===== Mobile Navbar Toggle (FIXED) =====
-        const menuBtn = document.getElementById("menuBtn");
-        const mobileMenu = document.getElementById("mobileMenu");
-
-        const iconHamburger = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        `;
-        const iconClose = `
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        `;
-
-        function setMenuOpen(open) {
-          if (!menuBtn || !mobileMenu) return;
-          menuBtn.setAttribute("aria-expanded", String(open));
-          mobileMenu.classList.toggle("hidden", !open);
-          menuBtn.innerHTML = open ? iconClose : iconHamburger;
+        if (!items.length) {
+          grid.innerHTML = "";
+          emptyState.classList.remove("hidden");
+          return;
         }
+        emptyState.classList.add("hidden");
 
-        if (menuBtn && mobileMenu) {
-          // Start closed
-          setMenuOpen(false);
-
-          menuBtn.addEventListener("click", () => {
-            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-            setMenuOpen(!isOpen);
-          });
-
-          // Close when clicking a link
-          mobileMenu.querySelectorAll("a").forEach((a) => {
-            a.addEventListener("click", () => setMenuOpen(false));
-          });
-
-          // Close on outside click
-          document.addEventListener("click", (e) => {
-            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-            if (!isOpen) return;
-            if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-              setMenuOpen(false);
-            }
-          });
-
-          // Close on ESC
-          document.addEventListener("keydown", (e) => {
-            const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-            if (isOpen && e.key === "Escape") setMenuOpen(false);
-          });
-        }
-
-        // ===== Blog post data (replace with real posts) =====
-        const posts = [
-          {
-            title: "Structural Safety: What Clients Should Ask",
-            excerpt:
-              "Questions that protect you from poor workmanship, weak design, and hidden costs.",
-            category: "safety",
-            tag: "Safety",
-            date: "Jan 2026",
-            read: "5 min read",
-            href: "posts/structural-safety-questions.html",
-            img: "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1200&q=70",
-          },
-          {
-            title: "Cement Storage Basics: Silo Types & Best Practices",
-            excerpt:
-              "Horizontal vs vertical silos, moisture protection, discharge systems, and maintenance tips.",
-            category: "materials",
-            tag: "Materials",
-            date: "Jan 2026",
-            read: "7 min read",
-            href: "posts/cement-silo-basics.html",
-            img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=70",
-          },
-          {
-            title: "Budget Control: How to Avoid Cost Overruns",
-            excerpt:
-              "Simple methods to keep your project on budget without compromising quality.",
-            category: "planning",
-            tag: "Planning",
-            date: "Dec 2025",
-            read: "6 min read",
-            href: "posts/budget-control.html",
-            img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=70",
-          },
-          {
-            title: "Engineering Design: What a Good Drawing Set Includes",
-            excerpt:
-              "Key sheets and details your contractor needs for accurate execution and fewer mistakes.",
-            category: "design",
-            tag: "Design",
-            date: "Dec 2025",
-            read: "6 min read",
-            href: "posts/drawing-set.html",
-            img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?auto=format&fit=crop&w=1200&q=70",
-          },
-          {
-            title: "Site Supervision: Daily Checklist for Quality",
-            excerpt:
-              "From materials inspection to curing and measurements—quick daily checks that matter.",
-            category: "safety",
-            tag: "Quality",
-            date: "Dec 2025",
-            read: "4 min read",
-            href: "posts/site-supervision-checklist.html",
-            img: "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=70",
-          },
-          {
-            title: "Renovation Planning: Before You Break Anything",
-            excerpt:
-              "How to assess structure, utilities, and permissions before starting renovation work.",
-            category: "planning",
-            tag: "Renovation",
-            date: "Nov 2025",
-            read: "5 min read",
-            href: "posts/renovation-planning.html",
-            img: "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=70",
-          },
-        ];
-
-        // State
-        let query = "";
-        let category = "all";
-
-        const grid = document.getElementById("grid");
-        const countEl = document.getElementById("count");
-        const emptyState = document.getElementById("emptyState");
-        const searchInput = document.getElementById("searchInput");
-        const categorySelect = document.getElementById("categorySelect");
-
-        function normalize(s) {
-          return (s || "").toLowerCase().trim();
-        }
-
-        function filtered() {
-          const q = normalize(query);
-          return posts.filter((p) => {
-            const matchesCategory =
-              category === "all" || p.category === category;
-            const matchesQuery =
-              !q ||
-              normalize(p.title).includes(q) ||
-              normalize(p.excerpt).includes(q) ||
-              normalize(p.tag).includes(q);
-            return matchesCategory && matchesQuery;
-          });
-        }
-
-        function render() {
-          const items = filtered();
-          countEl.textContent = items.length;
-
-          if (!items.length) {
-            grid.innerHTML = "";
-            emptyState.classList.remove("hidden");
-            return;
-          }
-          emptyState.classList.add("hidden");
-
-          grid.innerHTML = items
-            .map(
-              (p) => `
-                <article class="bg-white border rounded-2xl overflow-hidden hover:border-primary transition shadow-soft hover:shadow-lg">
-                  <img src="${p.img}" alt="${p.title}" class="w-full h-44 object-cover" loading="lazy" />
-                  <div class="p-6">
-                    <div class="flex items-center justify-between gap-3">
-                      <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">${p.tag}</span>
-                      <span class="text-xs text-gray-500">${p.date} • ${p.read}</span>
-                    </div>
-                    <h3 class="mt-4 text-xl font-extrabold text-gray-900 leading-snug">
-                      ${p.title}
-                    </h3>
-                    <p class="mt-2 text-gray-600">
-                      ${p.excerpt}
-                    </p>
-                    <a href="${p.href}" class="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:underline">
-                      Read more <span>→</span>
-                    </a>
+        // Cards styled like gallery cards
+        grid.innerHTML = items
+          .map(
+            (p) => `
+              <article class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-soft hover:shadow-lg transition">
+                <div class="relative h-44 overflow-hidden">
+                  <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent opacity-90"></div>
+                  <div class="absolute top-4 left-4">
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white border border-primary/20">
+                      ${p.tag}
+                    </span>
                   </div>
-                </article>
-              `
-            )
-            .join("");
-        }
+                </div>
 
-        searchInput.addEventListener("input", (e) => {
-          query = e.target.value;
-          render();
-        });
+                <div class="p-6">
+                  <div class="flex items-center justify-between gap-3">
+                    <span class="text-xs text-ink/55">${p.date} • ${p.read}</span>
+                  </div>
 
-        categorySelect.addEventListener("change", (e) => {
-          category = e.target.value;
-          render();
-        });
+                  <h3 class="mt-3 text-xl font-extrabold text-ink group-hover:text-primary transition leading-snug">
+                    ${p.title}
+                  </h3>
 
-        document.getElementById("resetBtn")?.addEventListener("click", () => {
-          query = "";
-          category = "all";
-          searchInput.value = "";
-          categorySelect.value = "all";
-          render();
-        });
+                  <p class="mt-2 text-ink/70">
+                    ${p.excerpt}
+                  </p>
 
+                  <a href="${p.href}" class="inline-flex items-center gap-2 mt-5 text-primary font-semibold hover:underline">
+                    Read more <span>→</span>
+                  </a>
+                </div>
+              </article>
+            `,
+          )
+          .join("");
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        query = e.target.value;
         render();
       });
+
+      categorySelect.addEventListener("change", (e) => {
+        category = e.target.value;
+        render();
+      });
+
+      document.getElementById("resetBtn")?.addEventListener("click", () => {
+        query = "";
+        category = "all";
+        searchInput.value = "";
+        categorySelect.value = "all";
+        render();
+      });
+
+      render();
     </script>
   </body>
 </html>

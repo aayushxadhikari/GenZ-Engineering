@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -19,7 +19,10 @@
       content="Learn how GenZ Engineering collects, uses, and protects your information."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://genzengineering.com/privacy.html" />
+    <meta
+      property="og:url"
+      content="https://genzengineering.com/privacy.html"
+    />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -54,6 +57,119 @@
           transition-duration: 0.01ms !important;
         }
       }
+
+      /* ================= DYNAMIC ISLAND NAV (HOME/GALLERY STYLE) ================= */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+      }
+      .island-header {
+        position: fixed;
+        top: calc(14px + var(--safe-top));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(980px, calc(100% - 24px));
+        pointer-events: none;
+      }
+      .island {
+        pointer-events: auto;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 10px 12px;
+        border-radius: 9999px;
+
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+        box-shadow:
+          0 14px 40px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        overflow: hidden;
+      }
+      .island::before {
+        content: "";
+        position: absolute;
+        inset: -60% -40%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(198, 40, 40, 0.14),
+          rgba(198, 40, 40, 0.06) 46%,
+          rgba(255, 255, 255, 0) 74%
+        );
+        transform: rotate(10deg);
+        pointer-events: none;
+      }
+      .island a,
+      .island button {
+        position: relative;
+      }
+      .island-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .island-link {
+        padding: 8px 12px;
+        border-radius: 9999px;
+        font-weight: 800;
+        color: rgba(11, 11, 16, 0.92);
+        transition: 180ms ease;
+      }
+      .island-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+      }
+      .island-link.is-active {
+        background: rgba(198, 40, 40, 0.12);
+        border: 1px solid rgba(198, 40, 40, 0.28);
+        color: #0b0b10;
+      }
+      .island-cta {
+        background: rgba(198, 40, 40, 0.95);
+        color: #ffffff;
+        padding: 9px 14px;
+        border-radius: 9999px;
+        font-weight: 900;
+        transition: 180ms ease;
+        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        white-space: nowrap;
+      }
+      .island-cta:hover {
+        filter: brightness(0.96);
+        transform: translateY(-1px);
+        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
+      }
+      @media (max-width: 768px) {
+        .island {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .island-nav {
+          display: none;
+        }
+      }
+      .mobile-glass {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+      }
+
+      /* Spacer so fixed island doesn't overlap content */
+      .island-spacer {
+        height: 104px;
+      }
     </style>
   </head>
 
@@ -66,61 +182,100 @@
       Skip to content
     </a>
 
-    <!-- ================= NAVBAR ================= -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4">
-        <a href="index.html" class="flex items-center gap-3">
-          <div class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center">
-            <span class="text-primary font-black">GZ</span>
+    <!-- ================= NAVBAR (REPLACED TO MATCH HOME/GALLERY) ================= -->
+    <header class="island-header" aria-label="Header">
+      <div class="island">
+        <!-- Logo -->
+        <a href="index.html" class="island-chip">
+          <div
+            class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
+          >
+            <span class="text-gray-900 font-extrabold">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold tracking-wide text-primary">GenZ Engineering</span>
+          <span class="text-gray-900 font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <nav class="hidden md:flex items-center space-x-8 font-medium" aria-label="Primary navigation">
-          <a data-nav href="index.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">Home</a>
-          <a data-nav href="gallery.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">Gallery</a>
-          <a data-nav href="blog.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">Blog</a>
-          <a data-nav href="contact.html" class="hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/40 rounded">Contact</a>
-
-          <a
-            href="contact.html"
-            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-          >
-            Get a Quote
-          </a>
+        <!-- Desktop Nav -->
+        <nav
+          class="island-nav hidden md:flex items-center gap-1"
+          aria-label="Primary navigation"
+        >
+          <a data-nav href="index.html" class="island-link">Home</a>
+          <a data-nav href="gallery.html" class="island-link">Gallery</a>
+          <a data-nav href="blog.html" class="island-link">Blog</a>
+          <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
+
+        <!-- CTA -->
+        <a href="contact.html" class="hidden md:inline-flex island-cta"
+          >Get a Quote</a
+        >
 
         <!-- Mobile Menu Button -->
         <button
           id="menuBtn"
-          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          class="md:hidden inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-3 py-2 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-primary/25"
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="mobileMenu"
+          type="button"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-gray-900"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div id="mobileMenu" class="md:hidden hidden border-t border-gray-200 bg-white">
-        <nav class="max-w-7xl mx-auto px-6 py-4 grid gap-3" aria-label="Mobile navigation">
-          <a data-nav href="index.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">Home</a>
-          <a data-nav href="gallery.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">Gallery</a>
-          <a data-nav href="blog.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">Blog</a>
-          <a data-nav href="contact.html" class="py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition">Contact</a>
-
+      <div id="mobileMenu" class="hidden mt-3">
+        <nav
+          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium mobile-glass rounded-2xl shadow-soft"
+          aria-label="Mobile navigation"
+        >
           <a
-            href="contact.html"
-            class="mt-2 bg-primary text-white px-4 py-3 rounded-lg font-semibold hover:bg-red-700 transition text-center"
+            data-nav
+            href="index.html"
+            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            >Home</a
           >
-            Get a Quote
-          </a>
+          <a
+            data-nav
+            href="gallery.html"
+            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            >Gallery</a
+          >
+          <a
+            data-nav
+            href="blog.html"
+            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            >Blog</a
+          >
+          <a
+            data-nav
+            href="contact.html"
+            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            >Contact</a
+          >
+          <a href="contact.html" class="mt-2 island-cta text-center"
+            >Get a Quote</a
+          >
         </nav>
       </div>
     </header>
+
+    <!-- Spacer so fixed island doesn't overlap content -->
+    <div class="island-spacer"></div>
 
     <main id="main">
       <!-- ================= HERO ================= -->
@@ -135,7 +290,9 @@
 
         <div class="relative z-10 max-w-7xl mx-auto px-6 py-20">
           <div class="max-w-3xl text-white">
-            <p class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6">
+            <p
+              class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6"
+            >
               <span class="h-2 w-2 rounded-full bg-primary"></span>
               Legal • Privacy
             </p>
@@ -144,12 +301,19 @@
               Privacy Policy
             </h1>
             <p class="mt-4 text-gray-200 text-lg">
-              We respect your privacy. This page explains what we collect, why we collect it, and how we protect it.
+              We respect your privacy. This page explains what we collect, why
+              we collect it, and how we protect it.
             </p>
 
             <div class="mt-6 flex flex-wrap gap-3 text-sm">
-              <span class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg">📅 Last updated: 2026</span>
-              <a href="terms.html" class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg hover:bg-white/20 transition">
+              <span
+                class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg"
+                >📅 Last updated: 2026</span
+              >
+              <a
+                href="terms.html"
+                class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg hover:bg-white/20 transition"
+              >
                 📄 Terms of Service
               </a>
             </div>
@@ -161,7 +325,9 @@
       <section class="py-20 bg-gray-50">
         <div class="max-w-5xl mx-auto px-6">
           <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-primary">Privacy FAQs</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-primary">
+              Privacy FAQs
+            </h2>
             <p class="mt-3 text-gray-600">
               Clear answers about your data, cookies, and communication.
             </p>
@@ -174,79 +340,136 @@
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold">1) What information do you collect?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+                <span class="text-lg font-semibold"
+                  >1) What information do you collect?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
-                We may collect your name, email, phone number, and project details when you fill out a contact form,
-                request a quote, or communicate with us.
+                We may collect your name, email, phone number, and project
+                details when you fill out a contact form, request a quote, or
+                communicate with us.
               </div>
             </div>
 
             <div class="bg-white border rounded-2xl shadow-soft">
-              <button class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4" aria-expanded="false">
-                <span class="text-lg font-semibold">2) How do you use my information?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+              <button
+                class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
+                aria-expanded="false"
+              >
+                <span class="text-lg font-semibold"
+                  >2) How do you use my information?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
-                We use it to respond to inquiries, prepare estimates/proposals, coordinate projects, and improve our
-                service communication. We do not sell your data.
+                We use it to respond to inquiries, prepare estimates/proposals,
+                coordinate projects, and improve our service communication. We
+                do not sell your data.
               </div>
             </div>
 
             <div class="bg-white border rounded-2xl shadow-soft">
-              <button class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4" aria-expanded="false">
-                <span class="text-lg font-semibold">3) Do you use cookies or analytics?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+              <button
+                class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
+                aria-expanded="false"
+              >
+                <span class="text-lg font-semibold"
+                  >3) Do you use cookies or analytics?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
-                If we enable analytics in the future, it will be for understanding website performance and improving user
-                experience. You can also control cookies through your browser settings.
+                If we enable analytics in the future, it will be for
+                understanding website performance and improving user experience.
+                You can also control cookies through your browser settings.
               </div>
             </div>
 
             <div class="bg-white border rounded-2xl shadow-soft">
-              <button class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4" aria-expanded="false">
-                <span class="text-lg font-semibold">4) How do you protect my data?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+              <button
+                class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
+                aria-expanded="false"
+              >
+                <span class="text-lg font-semibold"
+                  >4) How do you protect my data?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
-                We use reasonable safeguards to protect data. However, no internet transmission can be guaranteed 100%
-                secure. We limit access to authorized personnel only.
+                We use reasonable safeguards to protect data. However, no
+                internet transmission can be guaranteed 100% secure. We limit
+                access to authorized personnel only.
               </div>
             </div>
 
             <div class="bg-white border rounded-2xl shadow-soft">
-              <button class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4" aria-expanded="false">
-                <span class="text-lg font-semibold">5) Can I request deletion or correction of my data?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+              <button
+                class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
+                aria-expanded="false"
+              >
+                <span class="text-lg font-semibold"
+                  >5) Can I request deletion or correction of my data?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
-                Yes. Email us with your request and we’ll help you access, correct, or delete your personal information,
-                subject to legal/operational requirements.
+                Yes. Email us with your request and we’ll help you access,
+                correct, or delete your personal information, subject to
+                legal/operational requirements.
               </div>
             </div>
 
             <div class="bg-white border rounded-2xl shadow-soft">
-              <button class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4" aria-expanded="false">
-                <span class="text-lg font-semibold">6) How can I contact you about privacy?</span>
-                <span class="faq-icon text-primary text-2xl leading-none">+</span>
+              <button
+                class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
+                aria-expanded="false"
+              >
+                <span class="text-lg font-semibold"
+                  >6) How can I contact you about privacy?</span
+                >
+                <span class="faq-icon text-primary text-2xl leading-none"
+                  >+</span
+                >
               </button>
               <div class="faq-panel hidden px-6 pb-6 text-gray-600">
                 Email us at
-                <a href="mailto:info@genzengineering.com" class="text-primary underline">info@genzengineering.com</a>
+                <a
+                  href="mailto:info@genzengineering.com"
+                  class="text-primary underline"
+                  >info@genzengineering.com</a
+                >
                 or use the contact page.
               </div>
             </div>
           </div>
 
           <!-- CTA -->
-          <div class="mt-12 bg-white border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div
+            class="mt-12 bg-white border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          >
             <div>
-              <p class="font-semibold text-gray-900">Need something clarified?</p>
-              <p class="text-gray-600 text-sm mt-1">Send a message and we’ll respond within 24–48 hours.</p>
+              <p class="font-semibold text-gray-900">
+                Need something clarified?
+              </p>
+              <p class="text-gray-600 text-sm mt-1">
+                Send a message and we’ll respond within 24–48 hours.
+              </p>
             </div>
-            <a href="contact.html" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition">
+            <a
+              href="contact.html"
+              class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+            >
               Contact Us
             </a>
           </div>
@@ -258,14 +481,22 @@
     <footer class="bg-white border-t border-gray-200">
       <div class="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
         <div>
-          <h3 class="text-2xl font-extrabold text-primary mb-4">GenZ Engineering</h3>
+          <h3 class="text-2xl font-extrabold text-primary mb-4">
+            GenZ Engineering
+          </h3>
           <ul class="space-y-3 text-gray-600">
             <li class="hover:text-primary transition">📍 Bhaktapur, Nepal</li>
             <li>
-              <a href="mailto:info@genzengineering.com" class="hover:text-primary transition">✉️ info@genzengineering.com</a>
+              <a
+                href="mailto:info@genzengineering.com"
+                class="hover:text-primary transition"
+                >✉️ info@genzengineering.com</a
+              >
             </li>
             <li>
-              <a href="tel:+9779800000000" class="hover:text-primary transition">📞 +977 98XXXXXXXX</a>
+              <a href="tel:+9779800000000" class="hover:text-primary transition"
+                >📞 +977 98XXXXXXXX</a
+              >
             </li>
           </ul>
         </div>
@@ -273,42 +504,104 @@
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Company</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="index.html#about" class="hover:text-primary transition">About Us</a></li>
-            <li><a href="gallery.html" class="hover:text-primary transition">Projects</a></li>
-            <li><a href="blog.html" class="hover:text-primary transition">Blog</a></li>
-            <li><a href="contact.html" class="hover:text-primary transition">Careers</a></li>
+            <li>
+              <a href="index.html#about" class="hover:text-primary transition"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a href="gallery.html" class="hover:text-primary transition"
+                >Projects</a
+              >
+            </li>
+            <li>
+              <a href="blog.html" class="hover:text-primary transition">Blog</a>
+            </li>
+            <li>
+              <a href="contact.html" class="hover:text-primary transition"
+                >Careers</a
+              >
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Services</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="index.html#services" class="hover:text-primary transition">Residential Construction</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Commercial Construction</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Architecture & Engineering</a></li>
-            <li><a href="index.html#services" class="hover:text-primary transition">Interiors & Renovation</a></li>
+            <li>
+              <a
+                href="index.html#services"
+                class="hover:text-primary transition"
+                >Residential Construction</a
+              >
+            </li>
+            <li>
+              <a
+                href="index.html#services"
+                class="hover:text-primary transition"
+                >Commercial Construction</a
+              >
+            </li>
+            <li>
+              <a
+                href="index.html#services"
+                class="hover:text-primary transition"
+                >Architecture & Engineering</a
+              >
+            </li>
+            <li>
+              <a
+                href="index.html#services"
+                class="hover:text-primary transition"
+                >Interiors & Renovation</a
+              >
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-semibold text-lg mb-4 text-gray-900">Resources</h4>
           <ul class="space-y-3 text-gray-600">
-            <li><a href="contact.html#faq" class="hover:text-primary transition">FAQ</a></li>
-            <li><a href="contact.html" class="hover:text-primary transition">Contact Us</a></li>
-            <li><a href="privacy.html" class="hover:text-primary transition font-semibold text-primary">Privacy Policy</a></li>
-            <li><a href="terms.html" class="hover:text-primary transition">Terms of Service</a></li>
+            <li>
+              <a href="contact.html#faq" class="hover:text-primary transition"
+                >FAQ</a
+              >
+            </li>
+            <li>
+              <a href="contact.html" class="hover:text-primary transition"
+                >Contact Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="privacy.html"
+                class="hover:text-primary transition font-semibold text-primary"
+                >Privacy Policy</a
+              >
+            </li>
+            <li>
+              <a href="terms.html" class="hover:text-primary transition"
+                >Terms of Service</a
+              >
+            </li>
           </ul>
         </div>
       </div>
 
       <div class="border-t border-gray-200"></div>
 
-      <div class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+      <div
+        class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500"
+      >
         <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
 
         <div class="flex space-x-6 mt-4 md:mt-0">
-          <a href="terms.html" class="hover:text-primary transition">Terms of Service</a>
-          <a href="privacy.html" class="hover:text-primary transition">Privacy Policy</a>
+          <a href="terms.html" class="hover:text-primary transition"
+            >Terms of Service</a
+          >
+          <a href="privacy.html" class="hover:text-primary transition"
+            >Privacy Policy</a
+          >
         </div>
       </div>
     </footer>
@@ -318,7 +611,7 @@
       // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Mobile menu toggle
+      // Mobile menu toggle (same IDs as before)
       const btn = document.getElementById("menuBtn");
       const menu = document.getElementById("mobileMenu");
 
@@ -326,6 +619,33 @@
         const isOpen = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", String(!isOpen));
         menu.classList.toggle("hidden");
+      });
+
+      // Close mobile menu when clicking a link
+      document.querySelectorAll("#mobileMenu a").forEach((a) => {
+        a.addEventListener("click", () => {
+          btn?.setAttribute("aria-expanded", "false");
+          menu?.classList.add("hidden");
+        });
+      });
+
+      // Close on outside click
+      document.addEventListener("click", (e) => {
+        if (!btn || !menu) return;
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        if (!isOpen) return;
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+          btn.setAttribute("aria-expanded", "false");
+          menu.classList.add("hidden");
+        }
+      });
+
+      // Close on ESC
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+        if (!btn || !menu) return;
+        btn.setAttribute("aria-expanded", "false");
+        menu.classList.add("hidden");
       });
 
       // FAQ accordion
@@ -337,9 +657,15 @@
           const isOpen = btn.getAttribute("aria-expanded") === "true";
 
           // close all
-          document.querySelectorAll(".faq-panel").forEach((p) => p.classList.add("hidden"));
-          document.querySelectorAll(".faq-btn").forEach((b) => b.setAttribute("aria-expanded", "false"));
-          document.querySelectorAll(".faq-icon").forEach((i) => (i.textContent = "+"));
+          document
+            .querySelectorAll(".faq-panel")
+            .forEach((p) => p.classList.add("hidden"));
+          document
+            .querySelectorAll(".faq-btn")
+            .forEach((b) => b.setAttribute("aria-expanded", "false"));
+          document
+            .querySelectorAll(".faq-icon")
+            .forEach((i) => (i.textContent = "+"));
 
           // open selected if it was closed
           if (!isOpen) {
@@ -350,13 +676,13 @@
         });
       });
 
-      // Active nav highlight
-      const current = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+      // Active nav highlight (island style)
+      const current = (
+        location.pathname.split("/").pop() || "privacy.html"
+      ).toLowerCase();
       document.querySelectorAll("[data-nav]").forEach((a) => {
         const href = (a.getAttribute("href") || "").toLowerCase();
-        if (href === current) {
-          a.classList.add("text-primary", "font-semibold");
-        }
+        if (href === current) a.classList.add("is-active");
       });
     </script>
   </body>

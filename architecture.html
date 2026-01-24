@@ -15,14 +15,22 @@
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary: "#c62828" },
-            boxShadow: { soft: "0 12px 30px rgba(0,0,0,0.12)" },
+            colors: {
+              primary: "#c62828",
+              ink: "#0b0b10",
+              soft: "#f6f7fb",
+            },
+            boxShadow: {
+              soft: "0 10px 30px rgba(0,0,0,0.12)",
+              glass: "0 14px 40px rgba(0,0,0,0.10)",
+            },
           },
         },
       };
     </script>
 
     <style>
+      /* Respect reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
           scroll-behavior: auto !important;
@@ -30,129 +38,199 @@
           animation-duration: 0.01ms !important;
         }
       }
+
+      /* iOS safe area */
+      :root {
+        --safe-top: env(safe-area-inset-top, 0px);
+      }
+
+      /* ================= WHITE DYNAMIC ISLAND NAV (same as main + gallery) ================= */
+      .island-header {
+        position: fixed;
+        top: calc(14px + var(--safe-top));
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 60;
+        width: min(980px, calc(100% - 20px));
+        pointer-events: none;
+      }
+
+      .island {
+        pointer-events: auto;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9999px;
+
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(18px) saturate(160%);
+        -webkit-backdrop-filter: blur(18px) saturate(160%);
+
+        box-shadow:
+          0 14px 40px rgba(0, 0, 0, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        overflow: hidden;
+      }
+
+      .island::before {
+        content: "";
+        position: absolute;
+        inset: -60% -40%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(198, 40, 40, 0.14),
+          rgba(198, 40, 40, 0.06) 46%,
+          rgba(255, 255, 255, 0) 74%
+        );
+        transform: rotate(10deg);
+        pointer-events: none;
+      }
+
+      .island a,
+      .island button {
+        position: relative;
+      }
+
+      .island-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .island-link {
+        padding: 8px 12px;
+        border-radius: 9999px;
+        font-weight: 800;
+        color: rgba(11, 11, 16, 0.92);
+        transition: 180ms ease;
+      }
+      .island-link:hover {
+        background: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+      }
+      .island-link.is-active {
+        background: rgba(198, 40, 40, 0.12);
+        border: 1px solid rgba(198, 40, 40, 0.28);
+        color: #0b0b10;
+      }
+
+      .island-cta {
+        background: rgba(198, 40, 40, 0.95);
+        color: #ffffff;
+        padding: 9px 14px;
+        border-radius: 9999px;
+        font-weight: 900;
+        transition: 180ms ease;
+        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        white-space: nowrap;
+      }
+      .island-cta:hover {
+        filter: brightness(0.96);
+        transform: translateY(-1px);
+        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
+      }
+
+      @media (max-width: 768px) {
+        .island-nav {
+          display: none;
+        }
+      }
+
+      .mobile-glass {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+      }
+      #mobileMenu > nav {
+        max-width: 520px;
+      }
+
+      /* Page spacing under fixed island */
+      .page-top-pad {
+        padding-top: 96px;
+      }
+
+      /* Hero text legibility */
+      .hero-title {
+        text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      }
+      .hero-subtitle {
+        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      }
+
+      /* Glass cards (matches the other pages) */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(16px) saturate(150%);
+        -webkit-backdrop-filter: blur(16px) saturate(150%);
+      }
     </style>
   </head>
 
-  <body class="bg-white text-gray-800 antialiased">
-    <!-- ================= NAVBAR ================= -->
-    <header
-      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b-4 border-primary"
+  <body class="bg-white text-ink antialiased">
+    <!-- Skip link -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
     >
-      <div
-        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center gap-4"
-      >
-        <a href="index.html" class="flex items-center gap-3">
+      Skip to content
+    </a>
+
+    <!-- ================= DYNAMIC ISLAND NAVBAR (WHITE) ================= -->
+    <header class="island-header" aria-label="Header">
+      <div class="island">
+        <!-- Logo -->
+        <a href="index.html" class="island-chip">
           <div
-            class="h-10 w-10 rounded-xl bg-primary/10 grid place-items-center"
+            class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
-            <span class="text-primary font-black">GZ</span>
+            <span class="text-ink font-extrabold">GZ</span>
           </div>
-          <span class="text-2xl font-extrabold text-primary tracking-wide"
-            >GenZ Engineering</span
-          >
+          <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <!-- Desktop Nav -->
+        <!-- Desktop Nav (no dropdown) -->
         <nav
-          class="hidden md:flex items-center space-x-8 font-medium"
+          class="island-nav hidden md:flex items-center gap-1"
           aria-label="Primary navigation"
         >
-          <a href="index.html" class="hover:text-primary transition">Home</a>
-
-          <!-- Services dropdown -->
-          <div class="relative group">
-            <button
-              class="inline-flex items-center gap-2 hover:text-primary transition focus:outline-none focus:ring-2 focus:ring-primary/30 rounded"
-              aria-haspopup="true"
-              aria-expanded="false"
-              type="button"
-            >
-              Services
-              <svg
-                class="h-4 w-4 opacity-80"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-
-            <div
-              class="absolute left-0 top-full mt-3 w-72 rounded-2xl border bg-white shadow-soft opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200"
-            >
-              <div class="p-2">
-                <a
-                  href="architecture.html"
-                  class="block px-4 py-3 rounded-xl bg-primary/10 text-primary font-semibold"
-                >
-                  🧱 Architecture Design
-                  <p class="text-xs text-gray-600 mt-1 font-normal">
-                    Plans, drawings & approvals support
-                  </p>
-                </a>
-                <a
-                  href="interior.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🎨 Interior Design
-                  <p class="text-xs text-gray-500 mt-1">
-                    Space planning & modern finishes
-                  </p>
-                </a>
-                <a
-                  href="construction.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🏗️ Construction
-                  <p class="text-xs text-gray-500 mt-1">
-                    Residential & commercial execution
-                  </p>
-                </a>
-                <a
-                  href="renovation.html"
-                  class="block px-4 py-3 rounded-xl hover:bg-gray-50 hover:text-primary transition"
-                >
-                  🛠️ Renovation
-                  <p class="text-xs text-gray-500 mt-1">
-                    Upgrades, retrofitting & strengthening
-                  </p>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <a href="gallery.html" class="hover:text-primary transition"
-            >Gallery</a
-          >
-          <a href="blog.html" class="hover:text-primary transition">Blog</a>
-          <a href="contact.html" class="hover:text-primary transition"
-            >Contact</a
-          >
-
-          <a
-            href="contact.html"
-            class="ml-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
-          >
-            Get a Quote
-          </a>
+          <a data-nav href="index.html" class="island-link">Home</a>
+          <a data-nav href="services.html" class="island-link">Services</a>
+          <a data-nav href="gallery.html" class="island-link">Gallery</a>
+          <a data-nav href="blog.html" class="island-link">Blog</a>
+          <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
+
+        <!-- CTA -->
+        <a href="contact.html" class="hidden md:inline-flex island-cta"
+          >Get a Quote</a
+        >
 
         <!-- Mobile Menu Button -->
         <button
           id="menuBtn"
-          class="md:hidden inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+          class="md:hidden inline-flex items-center justify-center rounded-full border border-black/10 bg-black/5 px-3 py-2 hover:bg-black/10 focus:outline-none focus:ring-2 focus:ring-primary/25"
           aria-label="Open menu"
           aria-expanded="false"
           aria-controls="mobileMenu"
+          type="button"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="h-6 w-6 text-ink"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -168,340 +246,295 @@
       </div>
 
       <!-- Mobile Menu Panel -->
-      <div
-        id="mobileMenu"
-        class="md:hidden hidden border-t border-gray-200 bg-white"
-      >
+      <div id="mobileMenu" class="hidden mt-3">
         <nav
-          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium"
+          class="mx-auto w-full rounded-2xl shadow-soft p-3 grid gap-2 mobile-glass"
           aria-label="Mobile navigation"
         >
           <a
+            data-nav
             href="index.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
           >
-
-          <!-- Mobile Services dropdown -->
-          <div class="border border-gray-200 rounded-xl overflow-hidden">
-            <button
-              id="mobileServicesBtn"
-              class="w-full flex items-center justify-between py-2 px-3 hover:bg-gray-50 hover:text-primary transition"
-              aria-expanded="false"
-              type="button"
-            >
-              <span>Services</span>
-              <span id="mobileServicesIcon" class="text-primary font-bold"
-                >+</span
-              >
-            </button>
-
-            <div
-              id="mobileServicesPanel"
-              class="hidden bg-white border-t border-gray-200"
-            >
-              <a
-                href="architecture.html"
-                class="mobile-link block py-2 px-4 bg-primary/10 text-primary"
-                >🧱 Architecture Design</a
-              >
-              <a
-                href="interior.html"
-                class="mobile-link block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🎨 Interior Design</a
-              >
-              <a
-                href="construction.html"
-                class="mobile-link block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🏗️ Construction</a
-              >
-              <a
-                href="renovation.html"
-                class="mobile-link block py-2 px-4 hover:bg-gray-50 hover:text-primary transition"
-                >🛠️ Renovation</a
-              >
-            </div>
-          </div>
-
           <a
+            data-nav
+            href="services.html"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Services</a
+          >
+          <a
+            data-nav
             href="gallery.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Gallery</a
           >
           <a
+            data-nav
             href="blog.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Blog</a
           >
           <a
+            data-nav
             href="contact.html"
-            class="mobile-link py-2 px-3 rounded-lg hover:bg-gray-50 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Contact</a
+          >
+
+          <a href="contact.html" class="mt-1 island-cta text-center"
+            >Get a Quote</a
           >
         </nav>
       </div>
     </header>
 
-    <!-- ================= HERO ================= -->
-    <section class="relative">
-      <img
-        src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
-        class="absolute inset-0 w-full h-full object-cover"
-        alt="Architecture design hero"
-        loading="eager"
-      />
-      <div
-        class="absolute inset-0 bg-gradient-to-b from-black/75 via-black/60 to-white/0"
-      ></div>
+    <main id="main" class="page-top-pad">
+      <!-- ================= HERO ================= -->
+      <section class="relative">
+        <img
+          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2400&q=70"
+          class="absolute inset-0 w-full h-full object-cover"
+          alt="Architecture design hero"
+          loading="eager"
+        />
 
-      <div class="relative z-10">
-        <div class="max-w-7xl mx-auto px-6 pt-20 pb-16">
-          <div class="max-w-2xl">
-            <p
-              class="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white px-4 py-2 rounded-full text-sm"
-            >
-              <span class="h-2 w-2 rounded-full bg-primary"></span>
-              Architecture • Planning • Drawings
-            </p>
+        <!-- overlays like main/gallery -->
+        <div class="absolute inset-0 bg-black/35"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/20 to-black/35"
+        ></div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(198,40,40,0.18),transparent_60%)]"
+        ></div>
 
-            <h1
-              class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight"
-            >
-              Architecture Design
-            </h1>
-
-            <p class="mt-4 text-lg text-gray-200">
-              Smart, build-ready architecture — from concept and space planning
-              to drawings and approvals support.
-            </p>
-
-            <div class="mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href="#scope"
-                class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition shadow-soft"
+        <div class="relative z-10">
+          <div class="max-w-7xl mx-auto px-6 pt-16 pb-16">
+            <div class="max-w-2xl text-white">
+              <p
+                class="inline-flex items-center gap-2 bg-white/12 border border-white/20 text-white px-4 py-2 rounded-full text-sm"
               >
-                View Scope
-              </a>
-              <a
-                href="contact.html"
-                class="bg-white/10 border border-white/20 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-900 transition"
+                <span class="h-2 w-2 rounded-full bg-primary"></span>
+                Architecture • Planning • Drawings
+              </p>
+
+              <h1
+                class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight hero-title"
               >
-                Request a Quote
-              </a>
+                Architecture Design
+              </h1>
+
+              <p class="mt-4 text-lg text-white/85 hero-subtitle">
+                Smart, build-ready architecture — from concept and space
+                planning to drawings and approvals support.
+              </p>
+
+              <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="#scope"
+                  class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+                >
+                  View Scope
+                </a>
+                <a
+                  href="contact.html"
+                  class="border border-white/25 bg-white/12 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/18 transition"
+                >
+                  Request a Quote
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="relative h-10 bg-white">
-        <div
-          class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-white/0 to-white"
-        ></div>
-      </div>
-    </section>
-
-    <!-- ================= SCOPE ================= -->
-    <section id="scope" class="py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center">
-          <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
-            What We Deliver <span class="text-primary">In Architecture</span>
-          </h2>
-          <p class="mt-3 text-gray-600 max-w-2xl mx-auto">
-            Clear drawings, realistic planning, and design decisions that reduce
-            site confusion and rework.
-          </p>
+        <div class="relative h-10 bg-white">
+          <div
+            class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-black/0 to-white"
+          ></div>
         </div>
+      </section>
 
-        <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <div
-            class="bg-gray-50 border rounded-2xl p-7 hover:shadow-soft transition"
-          >
-            <h3 class="text-lg font-extrabold text-primary">
-              Concept & Layout
-            </h3>
-            <p class="mt-2 text-gray-600">
-              Site-aware planning, room flow, daylighting, and circulation.
-            </p>
-          </div>
-          <div
-            class="bg-gray-50 border rounded-2xl p-7 hover:shadow-soft transition"
-          >
-            <h3 class="text-lg font-extrabold text-primary">3D / Elevations</h3>
-            <p class="mt-2 text-gray-600">
-              Front elevations, massing, and visualization for clarity.
-            </p>
-          </div>
-          <div
-            class="bg-gray-50 border rounded-2xl p-7 hover:shadow-soft transition"
-          >
-            <h3 class="text-lg font-extrabold text-primary">
-              Working Drawings
-            </h3>
-            <p class="mt-2 text-gray-600">
-              Plans, sections, schedules, and build-ready detailing.
-            </p>
-          </div>
-          <div
-            class="bg-gray-50 border rounded-2xl p-7 hover:shadow-soft transition"
-          >
-            <h3 class="text-lg font-extrabold text-primary">
-              Approvals Support
-            </h3>
-            <p class="mt-2 text-gray-600">
-              Documentation support to help with local submission flow.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PROCESS ================= -->
-    <section class="py-20 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 class="text-3xl font-extrabold text-gray-900">
-              Our Design <span class="text-primary">Process</span>
+      <!-- ================= SCOPE ================= -->
+      <section id="scope" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="text-center">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-ink">
+              What We Deliver <span class="text-primary">In Architecture</span>
             </h2>
-            <p class="mt-3 text-gray-600">
-              We keep the process simple and transparent — you always know
-              what’s next.
+            <p class="mt-3 text-ink/70 max-w-2xl mx-auto">
+              Clear drawings, realistic planning, and design decisions that
+              reduce site confusion and rework.
             </p>
-
-            <ol class="mt-8 space-y-4">
-              <li class="bg-white border rounded-2xl p-5">
-                <p class="font-bold">1) Requirements & Site Info</p>
-                <p class="text-gray-600 mt-1 text-sm">
-                  Plot size, budget, style preference, bylaws constraints.
-                </p>
-              </li>
-              <li class="bg-white border rounded-2xl p-5">
-                <p class="font-bold">2) Concept Options</p>
-                <p class="text-gray-600 mt-1 text-sm">
-                  We propose layouts and refine based on your feedback.
-                </p>
-              </li>
-              <li class="bg-white border rounded-2xl p-5">
-                <p class="font-bold">3) Drawings & Coordination</p>
-                <p class="text-gray-600 mt-1 text-sm">
-                  Plans/sections + coordination to reduce site conflicts.
-                </p>
-              </li>
-              <li class="bg-white border rounded-2xl p-5">
-                <p class="font-bold">4) Handover</p>
-                <p class="text-gray-600 mt-1 text-sm">
-                  Final drawing set + revisions record + execution guidance.
-                </p>
-              </li>
-            </ol>
           </div>
 
-          <div class="rounded-2xl overflow-hidden border shadow-soft">
-            <img
-              src="https://images.unsplash.com/photo-1529421308418-eab98863cee6?auto=format&fit=crop&w=1600&q=70"
-              alt="Architecture planning"
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
+          <div class="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div
+              class="glass-card rounded-2xl p-7 shadow-soft hover:shadow-lg transition"
+            >
+              <h3 class="text-lg font-extrabold text-primary">
+                Concept & Layout
+              </h3>
+              <p class="mt-2 text-ink/70">
+                Site-aware planning, room flow, daylighting, and circulation.
+              </p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-7 shadow-soft hover:shadow-lg transition"
+            >
+              <h3 class="text-lg font-extrabold text-primary">
+                3D / Elevations
+              </h3>
+              <p class="mt-2 text-ink/70">
+                Front elevations, massing, and visualization for clarity.
+              </p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-7 shadow-soft hover:shadow-lg transition"
+            >
+              <h3 class="text-lg font-extrabold text-primary">
+                Working Drawings
+              </h3>
+              <p class="mt-2 text-ink/70">
+                Plans, sections, schedules, and build-ready detailing.
+              </p>
+            </div>
+            <div
+              class="glass-card rounded-2xl p-7 shadow-soft hover:shadow-lg transition"
+            >
+              <h3 class="text-lg font-extrabold text-primary">
+                Approvals Support
+              </h3>
+              <p class="mt-2 text-ink/70">
+                Documentation support to help with local submission flow.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ================= CTA ================= -->
-    <section class="py-20 bg-primary text-white">
-      <div class="max-w-7xl mx-auto px-6">
+      <!-- ================= PROCESS ================= -->
+      <section class="py-20 bg-soft">
+        <div class="max-w-7xl mx-auto px-6">
+          <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 class="text-3xl font-extrabold text-ink">
+                Our Design <span class="text-primary">Process</span>
+              </h2>
+              <p class="mt-3 text-ink/70">
+                We keep the process simple and transparent — you always know
+                what’s next.
+              </p>
+
+              <ol class="mt-8 space-y-4">
+                <li class="glass-card rounded-2xl p-5 shadow-soft">
+                  <p class="font-extrabold text-ink">
+                    1) Requirements & Site Info
+                  </p>
+                  <p class="text-ink/70 mt-1 text-sm">
+                    Plot size, budget, style preference, bylaws constraints.
+                  </p>
+                </li>
+                <li class="glass-card rounded-2xl p-5 shadow-soft">
+                  <p class="font-extrabold text-ink">2) Concept Options</p>
+                  <p class="text-ink/70 mt-1 text-sm">
+                    We propose layouts and refine based on your feedback.
+                  </p>
+                </li>
+                <li class="glass-card rounded-2xl p-5 shadow-soft">
+                  <p class="font-extrabold text-ink">
+                    3) Drawings & Coordination
+                  </p>
+                  <p class="text-ink/70 mt-1 text-sm">
+                    Plans/sections + coordination to reduce site conflicts.
+                  </p>
+                </li>
+                <li class="glass-card rounded-2xl p-5 shadow-soft">
+                  <p class="font-extrabold text-ink">4) Handover</p>
+                  <p class="text-ink/70 mt-1 text-sm">
+                    Final drawing set + revisions record + execution guidance.
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <div
+              class="rounded-2xl overflow-hidden border border-black/10 shadow-soft"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1529421308418-eab98863cee6?auto=format&fit=crop&w=1600&q=70"
+                alt="Architecture planning"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= CTA ================= -->
+      <section class="py-20 bg-primary text-white">
+        <div class="max-w-7xl mx-auto px-6">
+          <div
+            class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
+          >
+            <div>
+              <h3 class="text-4xl font-extrabold">
+                Ready to Start Your Design?
+              </h3>
+              <p class="mt-3 text-lg text-white/90">
+                Share your plot details and requirements — we’ll respond with
+                next steps within 24–48 hours.
+              </p>
+            </div>
+            <a
+              href="contact.html"
+              class="bg-black text-white px-10 py-4 rounded-lg font-semibold hover:bg-black/90 transition shadow-soft border border-white/25 text-center"
+            >
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FOOTER ================= -->
+      <footer class="bg-soft border-t border-black/10">
         <div
-          class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
+          class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink/60"
         >
-          <div>
-            <h3 class="text-4xl font-extrabold">Ready to Start Your Design?</h3>
-            <p class="mt-3 text-lg text-white/90">
-              Share your plot details and requirements — we’ll respond with next
-              steps within 24–48 hours.
-            </p>
+          <p>
+            © <span id="year"></span> GenZ Engineering. All rights reserved.
+          </p>
+          <div class="flex gap-5">
+            <a class="hover:text-primary transition" href="terms.html">Terms</a>
+            <a class="hover:text-primary transition" href="privacy.html"
+              >Privacy</a
+            >
           </div>
-          <a
-            href="contact.html"
-            class="bg-white text-primary px-10 py-4 rounded-lg font-semibold hover:bg-gray-100 transition shadow-soft text-center"
-          >
-            Contact Us
-          </a>
         </div>
-      </div>
-    </section>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="bg-white border-t border-gray-200">
-      <div
-        class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500"
-      >
-        <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
-        <div class="flex gap-5">
-          <a class="hover:text-primary transition" href="terms.html">Terms</a>
-          <a class="hover:text-primary transition" href="privacy.html"
-            >Privacy</a
-          >
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </main>
 
     <!-- ================= SCRIPTS ================= -->
     <script>
+      // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Mobile navbar toggle
-      const menuBtn = document.getElementById("menuBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
-
-      function closeMenu() {
-        if (!mobileMenu || !menuBtn) return;
-        mobileMenu.classList.add("hidden");
-        menuBtn.setAttribute("aria-expanded", "false");
-      }
-
-      function toggleMenu() {
-        if (!mobileMenu || !menuBtn) return;
-        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-        menuBtn.setAttribute("aria-expanded", String(!isOpen));
-        mobileMenu.classList.toggle("hidden");
-      }
-
-      menuBtn?.addEventListener("click", toggleMenu);
-
-      // Mobile services toggle
-      const mobileServicesBtn = document.getElementById("mobileServicesBtn");
-      const mobileServicesPanel = document.getElementById(
-        "mobileServicesPanel",
-      );
-      const mobileServicesIcon = document.getElementById("mobileServicesIcon");
-
-      mobileServicesBtn?.addEventListener("click", () => {
-        const isOpen =
-          mobileServicesBtn.getAttribute("aria-expanded") === "true";
-        mobileServicesBtn.setAttribute("aria-expanded", String(!isOpen));
-        mobileServicesPanel.classList.toggle("hidden");
-        mobileServicesIcon.textContent = isOpen ? "+" : "–";
+      // Mobile menu toggle
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("mobileMenu");
+      btn?.addEventListener("click", () => {
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        menu.classList.toggle("hidden");
       });
 
-      // Close when clicking a link
-      document.querySelectorAll(".mobile-link").forEach((link) => {
-        link.addEventListener("click", closeMenu);
-      });
-
-      // Close on outside click
-      document.addEventListener("click", (e) => {
-        if (!mobileMenu || !menuBtn) return;
-        const clickedInsideMenu = mobileMenu.contains(e.target);
-        const clickedButton = menuBtn.contains(e.target);
-        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
-        if (isOpen && !clickedInsideMenu && !clickedButton) closeMenu();
-      });
-
-      // Close on ESC
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeMenu();
+      // Active nav highlight (filename match)
+      const current = (
+        location.pathname.split("/").pop() || "architecture.html"
+      ).toLowerCase();
+      document.querySelectorAll("[data-nav]").forEach((a) => {
+        const href = (a.getAttribute("href") || "").toLowerCase();
+        if (href === current) a.classList.add("is-active");
       });
     </script>
   </body>
