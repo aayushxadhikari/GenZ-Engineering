@@ -20,25 +20,32 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://genzengineering.com/terms.html" />
-
-    <!-- Twitter -->
+    <meta
+      property="og:image"
+      content="https://images.unsplash.com/photo-1590650046871-92c887180603?auto=format&fit=crop&w=1600&q=80"
+    />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Basic CSP -->
+    <!-- Basic CSP (kept) -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; img-src 'self' https: data:; script-src 'self' https://cdn.tailwindcss.com 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
     />
 
-    <!-- Tailwind CDN -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            colors: { primary: "#c62828" },
+            colors: {
+              primary: "#E31B23", // poster theme red
+              ink: "#111115",
+              soft: "#F6F7FB",
+            },
             boxShadow: {
-              soft: "0 10px 30px rgba(0,0,0,0.12)",
+              soft: "0 14px 40px rgba(0,0,0,0.10)",
+              crisp: "0 10px 26px rgba(0,0,0,0.08)",
             },
           },
         },
@@ -46,6 +53,7 @@
     </script>
 
     <style>
+      /* Respect reduced motion */
       @media (prefers-reduced-motion: reduce) {
         * {
           scroll-behavior: auto !important;
@@ -55,120 +63,194 @@
         }
       }
 
-      /* ================= DYNAMIC ISLAND NAV (HOME/GALLERY STYLE) ================= */
       :root {
         --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
       }
+
+      /* ===== Poster background elements ===== */
+      .bg-diagonal {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(227, 27, 35, 0.06) 0%,
+            rgba(227, 27, 35, 0) 55%
+          ),
+          linear-gradient(
+            225deg,
+            rgba(17, 17, 21, 0.06) 0%,
+            rgba(17, 17, 21, 0) 55%
+          );
+      }
+      .dots {
+        background-image: radial-gradient(
+          rgba(227, 27, 35, 0.75) 1.4px,
+          transparent 1.4px
+        );
+        background-size: 14px 14px;
+        opacity: 0.35;
+      }
+      .dots-white {
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.85) 1.4px,
+          transparent 1.4px
+        );
+        background-size: 12px 12px;
+        opacity: 0.7;
+      }
+
+      /* ===== Dynamic Island (poster theme) ===== */
       .island-header {
         position: fixed;
         top: calc(14px + var(--safe-top));
         left: 50%;
         transform: translateX(-50%);
         z-index: 60;
-        width: min(980px, calc(100% - 24px));
+        width: min(980px, calc(100% - 20px));
         pointer-events: none;
       }
+
       .island {
         pointer-events: auto;
-        margin: 0 auto;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 14px;
+        gap: 10px;
         padding: 10px 12px;
         border-radius: 9999px;
 
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        backdrop-filter: blur(18px) saturate(160%);
-        -webkit-backdrop-filter: blur(18px) saturate(160%);
-        box-shadow:
-          0 14px 40px rgba(0, 0, 0, 0.12),
-          inset 0 1px 0 rgba(255, 255, 255, 0.75);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(17, 17, 21, 0.1);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
 
         position: relative;
         overflow: hidden;
       }
+
       .island::before {
         content: "";
         position: absolute;
-        inset: -60% -40%;
+        inset: -80% -40%;
         background: radial-gradient(
           circle at 30% 30%,
-          rgba(198, 40, 40, 0.14),
-          rgba(198, 40, 40, 0.06) 46%,
-          rgba(255, 255, 255, 0) 74%
+          rgba(227, 27, 35, 0.16),
+          rgba(227, 27, 35, 0.06) 45%,
+          rgba(255, 255, 255, 0) 72%
         );
-        transform: rotate(10deg);
+        transform: rotate(8deg);
         pointer-events: none;
       }
+
       .island a,
       .island button {
         position: relative;
       }
+
       .island-chip {
         display: inline-flex;
         align-items: center;
         gap: 10px;
         padding: 8px 12px;
         border-radius: 9999px;
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(17, 17, 21, 0.03);
+        border: 1px solid rgba(17, 17, 21, 0.08);
       }
+
       .island-link {
         padding: 8px 12px;
         border-radius: 9999px;
-        font-weight: 800;
-        color: rgba(11, 11, 16, 0.92);
+        font-weight: 900;
+        color: rgba(17, 17, 21, 0.92);
         transition: 180ms ease;
+        white-space: nowrap;
       }
       .island-link:hover {
-        background: rgba(0, 0, 0, 0.04);
-        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+        background: rgba(17, 17, 21, 0.04);
+        box-shadow: 0 0 0 1px rgba(227, 27, 35, 0.22);
       }
       .island-link.is-active {
-        background: rgba(198, 40, 40, 0.12);
-        border: 1px solid rgba(198, 40, 40, 0.28);
-        color: #0b0b10;
+        background: rgba(227, 27, 35, 0.1);
+        border: 1px solid rgba(227, 27, 35, 0.28);
+        color: #111115;
       }
+
       .island-cta {
-        background: rgba(198, 40, 40, 0.95);
+        background: #e31b23;
         color: #ffffff;
         padding: 9px 14px;
         border-radius: 9999px;
         font-weight: 900;
         transition: 180ms ease;
-        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        box-shadow: 0 18px 44px rgba(227, 27, 35, 0.2);
         white-space: nowrap;
       }
       .island-cta:hover {
-        filter: brightness(0.96);
+        filter: brightness(0.95);
         transform: translateY(-1px);
-        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
       }
+
       @media (max-width: 768px) {
-        .island {
-          width: 100%;
-          justify-content: space-between;
-        }
         .island-nav {
           display: none;
         }
       }
+
       .mobile-glass {
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(17, 17, 21, 0.1);
         backdrop-filter: blur(16px) saturate(160%);
         -webkit-backdrop-filter: blur(16px) saturate(160%);
       }
-      .island-spacer {
-        height: 104px;
+      #mobileMenu > nav {
+        max-width: 520px;
+      }
+
+      /* Space under fixed island */
+      .page-top-pad {
+        padding-top: 96px;
+      }
+
+      /* Surfaces */
+      .glass-white {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(17, 17, 21, 0.1);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+      }
+
+      .pill-outline {
+        border: 1px solid rgba(17, 17, 21, 0.12);
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(10px) saturate(150%);
+        -webkit-backdrop-filter: blur(10px) saturate(150%);
+      }
+
+      .btn-poster {
+        background: #e31b23;
+        color: #fff;
+        font-weight: 900;
+        border-radius: 14px;
+        box-shadow: 0 18px 44px rgba(227, 27, 35, 0.2);
+        transition: 180ms ease;
+      }
+      .btn-poster:hover {
+        filter: brightness(0.95);
+        transform: translateY(-1px);
+      }
+
+      /* FAQ cards */
+      .faq-card {
+        border: 1px solid rgba(17, 17, 21, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 18px;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
       }
     </style>
   </head>
 
-  <body class="bg-white text-gray-800 antialiased">
+  <body class="bg-white text-ink antialiased">
     <!-- Skip link -->
     <a
       href="#main"
@@ -177,17 +259,17 @@
       Skip to content
     </a>
 
-    <!-- ================= NAVBAR (REPLACED TO MATCH HOME/GALLERY) ================= -->
+    <!-- ================= DYNAMIC ISLAND NAV (POSTER THEME) ================= -->
     <header class="island-header" aria-label="Header">
       <div class="island">
         <!-- Logo -->
-        <a href="index.html" class="island-chip">
+        <a href="index.html" class="island-chip" aria-label="GenZ Home">
           <div
             class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
-            <span class="text-gray-900 font-extrabold">GZ</span>
+            <span class="text-ink font-extrabold">GZ</span>
           </div>
-          <span class="text-gray-900 font-extrabold tracking-wide">GenZ</span>
+          <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
         <!-- Desktop Nav -->
@@ -196,6 +278,9 @@
           aria-label="Primary navigation"
         >
           <a data-nav href="index.html" class="island-link">Home</a>
+          <a data-nav href="index.html#services" class="island-link"
+            >Services</a
+          >
           <a data-nav href="gallery.html" class="island-link">Gallery</a>
           <a data-nav href="blog.html" class="island-link">Blog</a>
           <a data-nav href="contact.html" class="island-link">Contact</a>
@@ -217,7 +302,7 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-gray-900"
+            class="h-6 w-6 text-ink"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -235,81 +320,102 @@
       <!-- Mobile Menu Panel -->
       <div id="mobileMenu" class="hidden mt-3">
         <nav
-          class="max-w-7xl mx-auto px-6 py-4 grid gap-2 font-medium mobile-glass rounded-2xl shadow-soft"
+          class="mx-auto w-full rounded-2xl shadow-soft p-3 grid gap-2 mobile-glass"
           aria-label="Mobile navigation"
         >
           <a
             data-nav
             href="index.html"
-            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
           >
           <a
             data-nav
+            href="index.html#services"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            >Services</a
+          >
+          <a
+            data-nav
             href="gallery.html"
-            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Gallery</a
           >
           <a
             data-nav
             href="blog.html"
-            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Blog</a
           >
           <a
             data-nav
             href="contact.html"
-            class="py-2 px-3 rounded-xl hover:bg-black/5 hover:text-primary transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Contact</a
           >
-          <a href="contact.html" class="mt-2 island-cta text-center"
+
+          <a href="contact.html" class="mt-1 island-cta text-center"
             >Get a Quote</a
           >
         </nav>
       </div>
     </header>
 
-    <!-- Spacer so fixed island doesn't overlap content -->
-    <div class="island-spacer"></div>
+    <main id="main" class="page-top-pad">
+      <!-- ================= HERO (POSTER STYLE, NO PHOTO HERO) ================= -->
+      <section
+        class="bg-diagonal relative overflow-hidden border-b border-black/10"
+      >
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            class="absolute -left-40 -top-44 w-[520px] h-[520px] rounded-full bg-primary/10 blur-2xl"
+          ></div>
+          <div
+            class="absolute left-[46%] top-[-120px] w-[520px] h-[520px] rounded-full bg-black/5 blur-2xl"
+          ></div>
+          <div
+            class="absolute right-10 top-16 w-44 h-20 dots-white hidden lg:block"
+          ></div>
+          <div class="absolute left-10 top-24 w-48 h-28 dots"></div>
+        </div>
 
-    <main id="main">
-      <!-- ================= HERO ================= -->
-      <section class="relative">
-        <img
-          src="https://images.unsplash.com/photo-1590650046871-92c887180603?auto=format&fit=crop&w=2400&q=70"
-          alt="Engineering background"
-          class="absolute inset-0 w-full h-full object-cover"
-          loading="eager"
-        />
-        <div class="absolute inset-0 bg-black/65"></div>
-
-        <div class="relative z-10 max-w-7xl mx-auto px-6 py-20">
-          <div class="max-w-3xl text-white">
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-14 sm:py-16">
+          <div class="max-w-3xl">
             <p
-              class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-2 rounded-full text-sm mb-6"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full pill-outline text-xs sm:text-sm font-semibold"
             >
               <span class="h-2 w-2 rounded-full bg-primary"></span>
               Legal • Terms
             </p>
 
-            <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
-              Terms of Service
+            <h1
+              class="mt-5 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05]"
+            >
+              Terms of <span class="text-primary">Service</span>
             </h1>
-            <p class="mt-4 text-gray-200 text-lg">
+
+            <p class="mt-5 text-base sm:text-lg text-ink/70 leading-relaxed">
               These terms explain how you can use our website and what to expect
               when requesting services.
             </p>
 
-            <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            <div class="mt-6 flex flex-wrap gap-3 text-sm font-semibold">
               <span
-                class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg"
-                >📅 Last updated: 2026</span
+                class="px-3 py-2 rounded-xl bg-white/75 border border-black/10"
               >
+                📅 Last updated: <span id="lastUpdated">2026</span>
+              </span>
               <a
                 href="privacy.html"
-                class="bg-white/10 border border-white/15 px-3 py-2 rounded-lg hover:bg-white/20 transition"
+                class="px-3 py-2 rounded-xl bg-white/75 border border-black/10 hover:bg-black/5 transition"
               >
                 🔒 Privacy Policy
+              </a>
+              <a
+                href="#faqs"
+                class="px-3 py-2 rounded-xl bg-white/75 border border-black/10 hover:bg-black/5 transition"
+              >
+                ❓ FAQs
               </a>
             </div>
           </div>
@@ -317,337 +423,243 @@
       </section>
 
       <!-- ================= FAQ ACCORDION ================= -->
-      <section class="py-20 bg-gray-50">
-        <div class="max-w-5xl mx-auto px-6">
+      <section id="faqs" class="py-20 bg-soft">
+        <div class="max-w-5xl mx-auto px-5 sm:px-6">
           <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-primary">
-              Terms FAQs
+            <h2 class="text-3xl md:text-4xl font-extrabold text-ink">
+              Terms <span class="text-primary">FAQs</span>
             </h2>
-            <p class="mt-3 text-gray-600">
+            <p class="mt-3 text-ink/70 font-semibold">
               Quick, readable terms — in an FAQ format.
             </p>
           </div>
 
           <div class="grid gap-5">
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
-                  >1) What am I agreeing to by using this website?</span
-                >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span class="text-lg font-extrabold text-ink">
+                  1) What am I agreeing to by using this website?
+                </span>
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 By accessing this website, you agree to follow these Terms and
                 any applicable laws. If you don’t agree, please do not use the
                 site.
               </div>
             </div>
 
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
+                <span class="text-lg font-extrabold text-ink"
                   >2) What services do you provide?</span
                 >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 We provide construction, engineering design, project management,
                 supervision, renovation, and consultancy services depending on
                 scope and agreement.
               </div>
             </div>
 
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
+                <span class="text-lg font-extrabold text-ink"
                   >3) Can I reuse your images or content?</span
                 >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 No. Website content, branding, text, and design are owned by
                 GenZ Engineering unless stated otherwise. You must request
                 permission for reuse.
               </div>
             </div>
 
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
+                <span class="text-lg font-extrabold text-ink"
                   >4) Do you guarantee project cost or completion time?</span
                 >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 Estimates are based on shared requirements and site conditions.
                 Final cost and timelines depend on scope, approvals, material
                 availability, and contract terms.
               </div>
             </div>
 
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
+                <span class="text-lg font-extrabold text-ink"
                   >5) Limitation of liability (simple explanation)</span
                 >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 We are not responsible for indirect damages or losses arising
                 from website use. For project services, liability is governed by
                 the signed agreement/contract.
               </div>
             </div>
 
-            <div class="bg-white border rounded-2xl shadow-soft">
+            <div class="faq-card">
               <button
                 class="faq-btn w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                 aria-expanded="false"
               >
-                <span class="text-lg font-semibold"
+                <span class="text-lg font-extrabold text-ink"
                   >6) How do I contact you about these terms?</span
                 >
-                <span class="faq-icon text-primary text-2xl leading-none"
+                <span
+                  class="faq-icon text-primary text-2xl leading-none font-black"
                   >+</span
                 >
               </button>
-              <div class="faq-panel hidden px-6 pb-6 text-gray-600">
+              <div class="faq-panel hidden px-6 pb-6 text-ink/70 font-semibold">
                 Email us at
                 <a
-                  href="mailto:info@genzengineering.com"
-                  class="text-primary underline"
-                  >info@genzengineering.com</a
+                  href="mailto:genzengineeringgroup@gmail.com"
+                  class="text-primary underline font-extrabold"
                 >
+                  genzengineeringgroup@gmail.com
+                </a>
                 or message via the contact page.
               </div>
             </div>
           </div>
 
           <div
-            class="mt-12 bg-white border rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+            class="mt-12 glass-white rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
           >
             <div>
-              <p class="font-semibold text-gray-900">
+              <p class="font-extrabold text-ink">
                 Ready to discuss your project?
               </p>
-              <p class="text-gray-600 text-sm mt-1">
+              <p class="text-ink/70 text-sm mt-1 font-semibold">
                 Send details and we’ll respond within 24–48 hours.
               </p>
             </div>
             <a
               href="contact.html"
-              class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition"
+              class="btn-poster px-6 py-3 rounded-xl font-extrabold text-center"
             >
               Request Quote
             </a>
           </div>
         </div>
       </section>
+
+      <!-- ================= FOOTER (SAME AS UPDATED PAGES) ================= -->
+      <footer class="bg-soft border-t border-black/10">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 py-14 sm:py-16">
+          <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/60 font-semibold"
+          >
+            <p>
+              © <span id="year"></span> GenZ Engineering. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6">
+              <a class="hover:text-primary transition" href="terms.html"
+                >Terms</a
+              >
+              <a class="hover:text-primary transition" href="privacy.html"
+                >Privacy</a
+              >
+              <a class="hover:text-primary transition" href="#main"
+                >Back to top ↑</a
+              >
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="bg-white border-t border-gray-200">
-      <div class="max-w-7xl mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
-        <div>
-          <h3 class="text-2xl font-extrabold text-primary mb-4">
-            GenZ Engineering
-          </h3>
-          <ul class="space-y-3 text-gray-600">
-            <li class="hover:text-primary transition">📍 Bhaktapur, Nepal</li>
-            <li>
-              <a
-                href="mailto:info@genzengineering.com"
-                class="hover:text-primary transition"
-                >✉️ info@genzengineering.com</a
-              >
-            </li>
-            <li>
-              <a href="tel:+9779800000000" class="hover:text-primary transition"
-                >📞 +977 98XXXXXXXX</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-lg mb-4 text-gray-900">Company</h4>
-          <ul class="space-y-3 text-gray-600">
-            <li>
-              <a href="index.html#about" class="hover:text-primary transition"
-                >About Us</a
-              >
-            </li>
-            <li>
-              <a href="gallery.html" class="hover:text-primary transition"
-                >Projects</a
-              >
-            </li>
-            <li>
-              <a href="blog.html" class="hover:text-primary transition">Blog</a>
-            </li>
-            <li>
-              <a href="contact.html" class="hover:text-primary transition"
-                >Careers</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-lg mb-4 text-gray-900">Services</h4>
-          <ul class="space-y-3 text-gray-600">
-            <li>
-              <a
-                href="index.html#services"
-                class="hover:text-primary transition"
-                >Residential Construction</a
-              >
-            </li>
-            <li>
-              <a
-                href="index.html#services"
-                class="hover:text-primary transition"
-                >Commercial Construction</a
-              >
-            </li>
-            <li>
-              <a
-                href="index.html#services"
-                class="hover:text-primary transition"
-                >Architecture & Engineering</a
-              >
-            </li>
-            <li>
-              <a
-                href="index.html#services"
-                class="hover:text-primary transition"
-                >Interiors & Renovation</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-semibold text-lg mb-4 text-gray-900">Resources</h4>
-          <ul class="space-y-3 text-gray-600">
-            <li>
-              <a href="contact.html#faq" class="hover:text-primary transition"
-                >FAQ</a
-              >
-            </li>
-            <li>
-              <a href="contact.html" class="hover:text-primary transition"
-                >Contact Us</a
-              >
-            </li>
-            <li>
-              <a href="privacy.html" class="hover:text-primary transition"
-                >Privacy Policy</a
-              >
-            </li>
-            <li>
-              <a
-                href="terms.html"
-                class="hover:text-primary transition font-semibold text-primary"
-                >Terms of Service</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="border-t border-gray-200"></div>
-
-      <div
-        class="max-w-7xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500"
-      >
-        <p>© <span id="year"></span> GenZ Engineering. All rights reserved.</p>
-
-        <div class="flex space-x-6 mt-4 md:mt-0">
-          <a href="terms.html" class="hover:text-primary transition"
-            >Terms of Service</a
-          >
-          <a href="privacy.html" class="hover:text-primary transition"
-            >Privacy Policy</a
-          >
-        </div>
-      </div>
-    </footer>
 
     <!-- ================= SCRIPTS ================= -->
     <script>
       // Footer year
       document.getElementById("year").textContent = new Date().getFullYear();
 
-      // Mobile menu toggle (same IDs as before)
-      const btn = document.getElementById("menuBtn");
-      const menu = document.getElementById("mobileMenu");
+      // Last updated
+      const lastUpdatedEl = document.getElementById("lastUpdated");
+      if (lastUpdatedEl) lastUpdatedEl.textContent = "2026";
 
-      btn?.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!isOpen));
-        menu.classList.toggle("hidden");
+      // Mobile menu toggle
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      menuBtn?.addEventListener("click", () => {
+        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+        menuBtn.setAttribute("aria-expanded", String(!isOpen));
+        mobileMenu.classList.toggle("hidden");
       });
 
       // Close mobile menu when clicking a link
       document.querySelectorAll("#mobileMenu a").forEach((a) => {
         a.addEventListener("click", () => {
-          btn?.setAttribute("aria-expanded", "false");
-          menu?.classList.add("hidden");
+          menuBtn?.setAttribute("aria-expanded", "false");
+          mobileMenu?.classList.add("hidden");
         });
       });
 
       // Close on outside click
       document.addEventListener("click", (e) => {
-        if (!btn || !menu) return;
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        if (!menuBtn || !mobileMenu) return;
+        const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
         if (!isOpen) return;
-        if (!btn.contains(e.target) && !menu.contains(e.target)) {
-          btn.setAttribute("aria-expanded", "false");
-          menu.classList.add("hidden");
+        if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+          menuBtn.setAttribute("aria-expanded", "false");
+          mobileMenu.classList.add("hidden");
         }
       });
 
       // Close on ESC
       document.addEventListener("keydown", (e) => {
         if (e.key !== "Escape") return;
-        if (!btn || !menu) return;
-        btn.setAttribute("aria-expanded", "false");
-        menu.classList.add("hidden");
+        if (!menuBtn || !mobileMenu) return;
+        menuBtn.setAttribute("aria-expanded", "false");
+        mobileMenu.classList.add("hidden");
       });
 
-      // FAQ accordion
-      document.querySelectorAll(".faq-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const card = btn.closest("div");
-          const panel = card.querySelector(".faq-panel");
-          const icon = card.querySelector(".faq-icon");
-          const isOpen = btn.getAttribute("aria-expanded") === "true";
+      // FAQ accordion (single-open)
+      document.querySelectorAll(".faq-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          const card = b.closest(".faq-card");
+          const panel = card?.querySelector(".faq-panel");
+          const icon = card?.querySelector(".faq-icon");
+          const isOpen = b.getAttribute("aria-expanded") === "true";
 
           // close all
           document
@@ -655,21 +667,21 @@
             .forEach((p) => p.classList.add("hidden"));
           document
             .querySelectorAll(".faq-btn")
-            .forEach((b) => b.setAttribute("aria-expanded", "false"));
+            .forEach((x) => x.setAttribute("aria-expanded", "false"));
           document
             .querySelectorAll(".faq-icon")
             .forEach((i) => (i.textContent = "+"));
 
           // open selected if it was closed
-          if (!isOpen) {
-            btn.setAttribute("aria-expanded", "true");
+          if (!isOpen && panel && icon) {
+            b.setAttribute("aria-expanded", "true");
             panel.classList.remove("hidden");
             icon.textContent = "–";
           }
         });
       });
 
-      // Active nav highlight (island style)
+      // Active nav highlight (filename match)
       const current = (
         location.pathname.split("/").pop() || "terms.html"
       ).toLowerCase();

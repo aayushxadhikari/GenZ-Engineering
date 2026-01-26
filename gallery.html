@@ -8,6 +8,25 @@
       content="Explore completed and ongoing construction projects by GenZ Engineering."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://genzengineering.com/gallery.html" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Gallery | GenZ Engineering" />
+    <meta
+      property="og:description"
+      content="Explore completed and ongoing construction projects by GenZ Engineering."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://genzengineering.com/gallery.html"
+    />
+    <meta
+      property="og:image"
+      content="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=80"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,13 +35,14 @@
         theme: {
           extend: {
             colors: {
-              primary: "#c62828", // red
-              ink: "#0b0b10", // near-black text
-              soft: "#f6f7fb", // light section bg
+              primary: "#E31B23", // same as renovation/construction theme
+              ink: "#111115",
+              soft: "#F6F7FB",
+              line: "rgba(17,17,21,0.10)",
             },
             boxShadow: {
-              soft: "0 10px 30px rgba(0,0,0,0.12)",
-              glass: "0 14px 40px rgba(0,0,0,0.10)",
+              soft: "0 14px 40px rgba(0,0,0,0.10)",
+              crisp: "0 10px 26px rgba(0,0,0,0.08)",
             },
           },
         },
@@ -42,9 +62,43 @@
       /* iOS safe area */
       :root {
         --safe-top: env(safe-area-inset-top, 0px);
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
       }
 
-      /* ================= WHITE DYNAMIC ISLAND NAV (same as main page) ================= */
+      /* ===== Poster-style background elements (same as renovation/construction) ===== */
+      .bg-diagonal {
+        background:
+          linear-gradient(
+            135deg,
+            rgba(227, 27, 35, 0.06) 0%,
+            rgba(227, 27, 35, 0) 55%
+          ),
+          linear-gradient(
+            225deg,
+            rgba(17, 17, 21, 0.06) 0%,
+            rgba(17, 17, 21, 0) 55%
+          );
+      }
+
+      .dots {
+        background-image: radial-gradient(
+          rgba(227, 27, 35, 0.75) 1.4px,
+          transparent 1.4px
+        );
+        background-size: 14px 14px;
+        opacity: 0.35;
+      }
+
+      .dots-white {
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.85) 1.4px,
+          transparent 1.4px
+        );
+        background-size: 12px 12px;
+        opacity: 0.7;
+      }
+
+      /* ===== Dynamic Island (same as renovation/construction) ===== */
       .island-header {
         position: fixed;
         top: calc(14px + var(--safe-top));
@@ -57,7 +111,6 @@
 
       .island {
         pointer-events: auto;
-        margin: 0 auto;
         width: 100%;
         display: flex;
         align-items: center;
@@ -65,32 +118,26 @@
         gap: 10px;
         padding: 10px 12px;
         border-radius: 9999px;
-
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        backdrop-filter: blur(18px) saturate(160%);
-        -webkit-backdrop-filter: blur(18px) saturate(160%);
-
-        box-shadow:
-          0 14px 40px rgba(0, 0, 0, 0.12),
-          inset 0 1px 0 rgba(255, 255, 255, 0.75);
-
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(17, 17, 21, 0.1);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
       }
 
-      /* subtle red reflection */
       .island::before {
         content: "";
         position: absolute;
-        inset: -60% -40%;
+        inset: -80% -40%;
         background: radial-gradient(
           circle at 30% 30%,
-          rgba(198, 40, 40, 0.14),
-          rgba(198, 40, 40, 0.06) 46%,
-          rgba(255, 255, 255, 0) 74%
+          rgba(227, 27, 35, 0.16),
+          rgba(227, 27, 35, 0.06) 45%,
+          rgba(255, 255, 255, 0) 72%
         );
-        transform: rotate(10deg);
+        transform: rotate(8deg);
         pointer-events: none;
       }
 
@@ -105,44 +152,43 @@
         gap: 10px;
         padding: 8px 12px;
         border-radius: 9999px;
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(17, 17, 21, 0.03);
+        border: 1px solid rgba(17, 17, 21, 0.08);
       }
 
       .island-link {
         padding: 8px 12px;
         border-radius: 9999px;
-        font-weight: 800;
-        color: rgba(11, 11, 16, 0.92);
+        font-weight: 900;
+        color: rgba(17, 17, 21, 0.92);
         transition: 180ms ease;
+        white-space: nowrap;
       }
       .island-link:hover {
-        background: rgba(0, 0, 0, 0.04);
-        box-shadow: 0 0 0 1px rgba(198, 40, 40, 0.18);
+        background: rgba(17, 17, 21, 0.04);
+        box-shadow: 0 0 0 1px rgba(227, 27, 35, 0.22);
       }
       .island-link.is-active {
-        background: rgba(198, 40, 40, 0.12);
-        border: 1px solid rgba(198, 40, 40, 0.28);
-        color: #0b0b10;
+        background: rgba(227, 27, 35, 0.1);
+        border: 1px solid rgba(227, 27, 35, 0.28);
+        color: #111115;
       }
 
       .island-cta {
-        background: rgba(198, 40, 40, 0.95);
+        background: #e31b23;
         color: #ffffff;
         padding: 9px 14px;
         border-radius: 9999px;
         font-weight: 900;
         transition: 180ms ease;
-        box-shadow: 0 16px 40px rgba(198, 40, 40, 0.18);
+        box-shadow: 0 18px 44px rgba(227, 27, 35, 0.2);
         white-space: nowrap;
       }
       .island-cta:hover {
-        filter: brightness(0.96);
+        filter: brightness(0.95);
         transform: translateY(-1px);
-        box-shadow: 0 18px 45px rgba(198, 40, 40, 0.22);
       }
 
-      /* Mobile */
       @media (max-width: 768px) {
         .island-nav {
           display: none;
@@ -150,8 +196,8 @@
       }
 
       .mobile-glass {
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(17, 17, 21, 0.1);
         backdrop-filter: blur(16px) saturate(160%);
         -webkit-backdrop-filter: blur(16px) saturate(160%);
       }
@@ -164,20 +210,62 @@
         padding-top: 96px;
       }
 
-      /* Hero text legibility on white theme */
-      .hero-title {
-        text-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+      /* Buttons / cards (same vibe) */
+      .btn-poster {
+        background: #e31b23;
+        color: #fff;
+        font-weight: 900;
+        border-radius: 14px;
+        box-shadow: 0 18px 44px rgba(227, 27, 35, 0.2);
       }
-      .hero-subtitle {
-        text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      .btn-poster:hover {
+        filter: brightness(0.95);
+        transform: translateY(-1px);
+      }
+
+      .pill-outline {
+        border: 1px solid rgba(17, 17, 21, 0.12);
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(10px) saturate(150%);
+        -webkit-backdrop-filter: blur(10px) saturate(150%);
+      }
+
+      .glass-white {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(17, 17, 21, 0.1);
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+      }
+
+      .section-title {
+        letter-spacing: -0.02em;
       }
 
       /* Lightbox */
       .modal-glass {
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(17, 17, 21, 0.1);
         backdrop-filter: blur(18px) saturate(160%);
         -webkit-backdrop-filter: blur(18px) saturate(160%);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18);
+      }
+
+      /* Filter pills */
+      .pill {
+        border-radius: 9999px;
+        border: 1px solid rgba(17, 17, 21, 0.12);
+        background: rgba(17, 17, 21, 0.04);
+        font-weight: 800;
+        transition: 180ms ease;
+      }
+      .pill:hover {
+        border-color: rgba(227, 27, 35, 0.28);
+        color: #e31b23;
+        background: rgba(227, 27, 35, 0.06);
+      }
+      .pill.is-active {
+        background: #e31b23;
+        color: #fff;
+        border-color: rgba(227, 27, 35, 0.35);
       }
     </style>
   </head>
@@ -186,16 +274,16 @@
     <!-- Skip link -->
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-soft"
     >
       Skip to content
     </a>
 
-    <!-- ================= DYNAMIC ISLAND NAVBAR (WHITE) ================= -->
+    <!-- ================= DYNAMIC ISLAND NAVBAR (POSTER THEME) ================= -->
     <header class="island-header" aria-label="Header">
       <div class="island">
         <!-- Logo -->
-        <a href="index.html" class="island-chip">
+        <a href="index.html" class="island-chip" aria-label="GenZ Home">
           <div
             class="h-9 w-9 rounded-full bg-black/5 grid place-items-center border border-black/10"
           >
@@ -204,16 +292,16 @@
           <span class="text-ink font-extrabold tracking-wide">GenZ</span>
         </a>
 
-        <!-- Desktop Nav (NO DROPDOWN) -->
+        <!-- Desktop Nav -->
         <nav
           class="island-nav hidden md:flex items-center gap-1"
           aria-label="Primary navigation"
         >
           <a data-nav href="index.html" class="island-link">Home</a>
-          <a data-nav href="services.html" class="island-link">Services</a>
-          <a data-nav href="gallery.html" class="island-link is-active"
-            >Gallery</a
+          <a data-nav href="index.html#services" class="island-link"
+            >Services</a
           >
+          <a data-nav href="gallery.html" class="island-link">Gallery</a>
           <a data-nav href="blog.html" class="island-link">Blog</a>
           <a data-nav href="contact.html" class="island-link">Contact</a>
         </nav>
@@ -258,36 +346,33 @@
           <a
             data-nav
             href="index.html"
-            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Home</a
           >
-
           <a
             data-nav
-            href="services.html"
-            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            href="index.html#services"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Services</a
           >
-
           <a
             data-nav
             href="gallery.html"
-            class="block px-4 py-3 rounded-xl bg-primary/10 text-ink border border-primary/25 font-semibold"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Gallery</a
           >
           <a
             data-nav
             href="blog.html"
-            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Blog</a
           >
           <a
             data-nav
             href="contact.html"
-            class="block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
+            class="mobile-link block px-4 py-3 rounded-xl hover:bg-black/5 text-ink transition"
             >Contact</a
           >
-
           <a href="contact.html" class="mt-1 island-cta text-center"
             >Get a Quote</a
           >
@@ -296,73 +381,168 @@
     </header>
 
     <main id="main" class="page-top-pad">
-      <!-- ================= HERO ================= -->
-      <section class="relative">
-        <img
-          src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?auto=format&fit=crop&w=2400&q=70"
-          class="absolute inset-0 w-full h-full object-cover"
-          alt="Gallery hero"
-          loading="eager"
-        />
+      <!-- ================= HERO (RENOVATION/CONSTRUCTION STYLE, NO PHOTO HERO) ================= -->
+      <section
+        class="bg-diagonal relative overflow-hidden border-b border-black/10"
+      >
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            class="absolute -left-40 -top-44 w-[520px] h-[520px] rounded-full bg-primary/10 blur-2xl"
+          ></div>
+          <div
+            class="absolute left-[46%] top-[-120px] w-[520px] h-[520px] rounded-full bg-black/5 blur-2xl"
+          ></div>
+          <div
+            class="absolute right-10 top-16 w-44 h-20 dots-white hidden lg:block"
+          ></div>
+          <div class="absolute left-10 top-24 w-48 h-28 dots"></div>
+        </div>
 
-        <!-- darker overlays (same style as main) -->
-        <div class="absolute inset-0 bg-black/35"></div>
-        <div
-          class="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/35"
-        ></div>
-        <div
-          class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(198,40,40,0.18),transparent_60%)]"
-        ></div>
-
-        <div class="relative z-10">
-          <div class="max-w-7xl mx-auto px-6 pt-16 pb-16">
-            <div class="max-w-2xl text-white">
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-6 py-14 sm:py-16">
+          <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <!-- Left -->
+            <div class="lg:col-span-6">
               <p
-                class="inline-flex items-center gap-2 bg-white/12 border border-white/20 text-white px-4 py-2 rounded-full text-sm"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full pill-outline text-xs sm:text-sm font-semibold"
               >
                 <span class="h-2 w-2 rounded-full bg-primary"></span>
                 Completed & Ongoing Projects
               </p>
 
               <h1
-                class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight hero-title"
+                class="mt-5 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-[1.05] section-title"
               >
-                Our Project Gallery
+                Our Project<br /><span class="text-primary">Gallery</span>
               </h1>
 
-              <p class="mt-4 text-lg text-white/85 hero-subtitle">
+              <p
+                class="mt-5 max-w-2xl text-base sm:text-lg text-ink/70 leading-relaxed"
+              >
                 Explore our portfolio of quality construction, structural
                 design, and renovation work across Nepal.
               </p>
 
-              <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <div class="mt-7 flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <a
                   href="#projects"
-                  class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+                  class="btn-poster px-7 py-3.5 inline-flex items-center justify-center transition"
                 >
                   View Projects
                 </a>
                 <a
                   href="contact.html"
-                  class="border border-white/25 bg-white/12 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/18 transition"
+                  class="px-7 py-3.5 inline-flex items-center justify-center rounded-[14px] font-extrabold border border-black/15 bg-white hover:bg-black/5 transition"
                 >
                   Request a Quote
                 </a>
               </div>
+
+              <div class="mt-8 grid gap-2 text-sm text-ink/70">
+                <div class="flex items-center gap-3">
+                  <span
+                    class="inline-flex w-9 h-9 rounded-xl bg-black/5 border border-black/10 items-center justify-center"
+                    >🗂️</span
+                  >
+                  <span class="font-semibold text-ink/75"
+                    >Filter, search, and preview projects</span
+                  >
+                </div>
+                <div class="flex items-center gap-3">
+                  <span
+                    class="inline-flex w-9 h-9 rounded-xl bg-black/5 border border-black/10 items-center justify-center"
+                    >⚡</span
+                  >
+                  <span class="font-semibold text-ink/75"
+                    >Fast, lightweight gallery layout</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: featured preview card (poster look) -->
+            <div class="lg:col-span-6">
+              <div
+                class="relative overflow-hidden rounded-2xl border border-black/10 shadow-soft bg-white"
+              >
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-primary/10 via-white to-black/5"
+                ></div>
+                <div
+                  class="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(227,27,35,0.18),transparent_60%)]"
+                ></div>
+
+                <div class="relative p-6 sm:p-8">
+                  <div class="flex items-center justify-between gap-4">
+                    <div
+                      class="inline-flex items-center gap-2 rounded-full bg-white/80 border border-black/10 px-3 py-2 font-extrabold text-ink"
+                    >
+                      <span class="h-2 w-2 rounded-full bg-primary"></span>
+                      Featured Projects
+                    </div>
+                    <div
+                      class="hidden sm:flex items-center gap-2 text-ink/70 font-semibold"
+                    >
+                      <span
+                        class="inline-flex w-9 h-9 rounded-xl bg-white/70 border border-black/10 items-center justify-center"
+                        >👁️</span
+                      >
+                      Click any card to preview
+                    </div>
+                  </div>
+
+                  <div class="mt-6 grid grid-cols-2 gap-4">
+                    <div
+                      class="rounded-2xl overflow-hidden border border-black/10 bg-white/70"
+                    >
+                      <img
+                        src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=70"
+                        alt="Featured residential project"
+                        class="w-full h-40 object-cover"
+                        loading="lazy"
+                      />
+                      <div class="p-3">
+                        <p class="text-sm font-extrabold text-ink">
+                          Residential
+                        </p>
+                        <p class="text-xs text-ink/60 font-semibold">
+                          Build-ready delivery
+                        </p>
+                      </div>
+                    </div>
+
+                    <div
+                      class="rounded-2xl overflow-hidden border border-black/10 bg-white/70"
+                    >
+                      <img
+                        src="https://images.unsplash.com/photo-1590650046871-92c887180603?auto=format&fit=crop&w=1200&q=70"
+                        alt="Featured commercial project"
+                        class="w-full h-40 object-cover"
+                        loading="lazy"
+                      />
+                      <div class="p-3">
+                        <p class="text-sm font-extrabold text-ink">
+                          Commercial
+                        </p>
+                        <p class="text-xs text-ink/60 font-semibold">
+                          Quality finishes
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="absolute -right-10 -bottom-10 w-36 h-20 dots-white hidden lg:block"
+              ></div>
             </div>
           </div>
-        </div>
-
-        <div class="relative h-10 bg-white">
-          <div
-            class="absolute -top-10 left-0 right-0 h-10 bg-gradient-to-b from-black/0 to-white"
-          ></div>
         </div>
       </section>
 
       <!-- ================= CONTROLS ================= -->
       <section id="projects" class="py-14 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
           <div
             class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
           >
@@ -392,7 +572,7 @@
 
               <select
                 id="sortSelect"
-                class="w-full sm:w-48 border border-black/10 bg-black/5 rounded-xl px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary/25"
+                class="w-full sm:w-52 border border-black/10 bg-black/5 rounded-xl px-4 py-3 text-ink focus:outline-none focus:ring-2 focus:ring-primary/25"
                 aria-label="Sort projects"
               >
                 <option value="featured">Sort: Featured</option>
@@ -405,37 +585,37 @@
           <div class="mt-8 flex flex-wrap gap-3">
             <button
               data-filter="all"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition bg-primary text-white border-primary/30"
+              class="filter-btn pill is-active px-4 py-2 text-sm"
             >
               All
             </button>
             <button
               data-filter="residential"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+              class="filter-btn pill px-4 py-2 text-sm"
             >
               Residential
             </button>
             <button
               data-filter="commercial"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+              class="filter-btn pill px-4 py-2 text-sm"
             >
               Commercial
             </button>
             <button
               data-filter="infrastructure"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+              class="filter-btn pill px-4 py-2 text-sm"
             >
               Infrastructure
             </button>
             <button
               data-filter="renovation"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+              class="filter-btn pill px-4 py-2 text-sm"
             >
               Renovation
             </button>
             <button
               data-filter="structural"
-              class="filter-btn px-4 py-2 rounded-full border text-sm font-semibold hover:border-primary hover:text-primary transition border-black/10 bg-black/5 text-ink/90"
+              class="filter-btn pill px-4 py-2 text-sm"
             >
               Structural
             </button>
@@ -445,16 +625,18 @@
 
       <!-- ================= GALLERY GRID ================= -->
       <section class="pb-24 bg-soft">
-        <div class="max-w-7xl mx-auto px-6">
-          <div class="flex items-center justify-between gap-4 py-6">
-            <p class="text-sm text-ink/70">
-              Showing <span id="count" class="font-semibold text-ink">0</span>
-              projects
+        <div class="max-w-7xl mx-auto px-5 sm:px-6">
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-6"
+          >
+            <p class="text-sm text-ink/70 font-semibold">
+              Showing
+              <span id="count" class="font-extrabold text-ink">0</span> projects
             </p>
 
             <a
               href="contact.html"
-              class="text-sm font-semibold text-primary hover:underline"
+              class="text-sm font-extrabold text-primary hover:underline"
             >
               Need something similar? Request a quote →
             </a>
@@ -463,16 +645,14 @@
           <div id="grid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
 
           <div id="emptyState" class="hidden text-center py-16">
-            <div
-              class="mx-auto max-w-md bg-white border border-black/10 rounded-2xl p-10 shadow-soft"
-            >
+            <div class="mx-auto max-w-md glass-white rounded-2xl p-10">
               <p class="text-2xl font-extrabold text-ink">No results</p>
-              <p class="mt-2 text-ink/70">
+              <p class="mt-2 text-ink/70 font-semibold">
                 Try a different category or search keyword.
               </p>
               <button
                 id="resetBtn"
-                class="mt-6 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:brightness-95 transition"
+                class="mt-6 btn-poster px-6 py-3 rounded-xl font-extrabold transition"
               >
                 Reset filters
               </button>
@@ -481,14 +661,23 @@
         </div>
       </section>
 
-      <!-- ================= CTA ================= -->
-      <section class="py-20 bg-primary text-white">
-        <div class="max-w-7xl mx-auto px-6">
+      <!-- ================= CTA (MATCH POSTER STYLE) ================= -->
+      <section class="py-20 bg-ink text-white relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            class="absolute -left-24 -top-24 w-72 h-72 rounded-full bg-primary/25 blur-3xl"
+          ></div>
+          <div class="absolute right-0 top-10 w-44 h-24 dots-white"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-5 sm:px-6">
           <div
             class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8"
           >
             <div>
-              <h3 class="text-4xl font-extrabold">Want to Build With Us?</h3>
+              <h3 class="text-3xl sm:text-4xl font-black">
+                Want to Build With Us?
+              </h3>
               <p class="mt-3 text-lg text-white/90">
                 Let’s turn your ideas into reality with disciplined engineering
                 and quality workmanship.
@@ -496,7 +685,7 @@
             </div>
             <a
               href="contact.html"
-              class="bg-red text-white px-10 py-4 rounded-lg font-semibold hover:bg-red-700/90 transition  border border-white/25 text-center"
+              class="inline-flex items-center justify-center rounded-[14px] bg-white text-ink font-extrabold px-9 py-3.5 hover:bg-white/95 transition text-center"
             >
               Contact Us
             </a>
@@ -506,33 +695,40 @@
 
       <!-- ================= FOOTER ================= -->
       <footer class="bg-soft border-t border-black/10">
-        <div
-          class="max-w-7xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-ink/60"
-        >
-          <p>
-            © <span id="year"></span> GenZ Engineering. All rights reserved.
-          </p>
-          <div class="flex gap-5">
-            <a class="hover:text-primary transition" href="terms.html">Terms</a>
-            <a class="hover:text-primary transition" href="privacy.html"
-              >Privacy</a
-            >
+        <div class="max-w-7xl mx-auto px-5 sm:px-6 py-14 sm:py-16">
+          <div
+            class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-ink/60 font-semibold"
+          >
+            <p>
+              © <span id="year"></span> GenZ Engineering. All rights reserved.
+            </p>
+            <div class="flex items-center gap-6">
+              <a class="hover:text-primary transition" href="terms.html"
+                >Terms</a
+              >
+              <a class="hover:text-primary transition" href="privacy.html"
+                >Privacy</a
+              >
+              <a class="hover:text-primary transition" href="#main"
+                >Back to top ↑</a
+              >
+            </div>
           </div>
         </div>
       </footer>
     </main>
 
     <!-- ================= LIGHTBOX MODAL ================= -->
-    <div id="lightbox" class="fixed inset-0 z-[60] hidden">
+    <div id="lightbox" class="fixed inset-0 z-[60] hidden" aria-hidden="true">
       <div class="absolute inset-0 bg-black/75"></div>
 
       <div class="relative h-full w-full flex items-center justify-center p-4">
         <div
-          class="relative w-full max-w-4xl modal-glass rounded-2xl overflow-hidden shadow-soft"
+          class="relative w-full max-w-4xl modal-glass rounded-2xl overflow-hidden"
         >
           <button
             id="closeLightbox"
-            class="absolute top-3 right-3 bg-white/80 text-ink rounded-lg px-3 py-2 hover:bg-white transition border border-black/10"
+            class="absolute top-3 right-3 bg-white/90 text-ink rounded-xl px-3 py-2 hover:bg-white transition border border-black/10 font-extrabold"
             aria-label="Close preview"
           >
             ✕
@@ -545,11 +741,11 @@
             class="w-full max-h-[72vh] object-cover"
           />
 
-          <div class="p-6">
+          <div class="p-6 bg-white/70">
             <div class="flex flex-wrap items-center gap-3">
               <span
                 id="lightboxTag"
-                class="text-xs font-bold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
+                class="text-xs font-extrabold px-3 py-1 rounded-full bg-primary/10 text-ink border border-primary/20"
               >
                 Tag
               </span>
@@ -557,7 +753,9 @@
                 Title
               </p>
             </div>
-            <p id="lightboxMeta" class="mt-2 text-ink/70">Location • Status</p>
+            <p id="lightboxMeta" class="mt-2 text-ink/70 font-semibold">
+              Location • Status
+            </p>
           </div>
         </div>
       </div>
@@ -684,6 +882,49 @@
         return sortItems(items);
       }
 
+      function cardHTML(p, idx) {
+        return `
+          <article
+            class="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
+            role="button"
+            tabindex="0"
+            aria-label="Open ${p.title} preview"
+            data-idx="${idx}"
+          >
+            <div class="relative h-72 overflow-hidden">
+              <img
+                src="${p.img}"
+                alt="${p.title}"
+                loading="lazy"
+                class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+
+              <div class="absolute top-4 left-4 flex items-center gap-2">
+                <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-white/90 text-ink border border-black/10">
+                  ${p.status}
+                </span>
+                <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-primary text-white border border-primary/20">
+                  ${p.tag}
+                </span>
+              </div>
+            </div>
+
+            <div class="p-6">
+              <h3 class="text-xl font-extrabold text-ink group-hover:text-primary transition">
+                ${p.title}
+              </h3>
+              <p class="mt-2 text-ink/70 font-semibold">📍 ${p.location}</p>
+
+              <div class="mt-5 flex items-center justify-between">
+                <p class="text-sm text-ink/55 font-semibold">Click to preview</p>
+                <span class="text-primary font-extrabold">View →</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
       function render() {
         const items = filteredProjects();
         countEl.textContent = items.length;
@@ -695,50 +936,7 @@
         }
 
         emptyState.classList.add("hidden");
-        grid.innerHTML = items
-          .map(
-            (p, idx) => `
-            <article
-              class="group relative overflow-hidden rounded-2xl border border-black/10 bg-white shadow-soft hover:shadow-lg transition cursor-pointer"
-              role="button"
-              tabindex="0"
-              aria-label="Open ${p.title} preview"
-              data-idx="${idx}"
-            >
-              <div class="relative h-72 overflow-hidden">
-                <img
-                  src="${p.img}"
-                  alt="${p.title}"
-                  loading="lazy"
-                  class="h-full w-full object-cover group-hover:scale-105 transition duration-700"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-90"></div>
-
-                <div class="absolute top-4 left-4 flex items-center gap-2">
-                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-white/90 text-gray-900">
-                    ${p.status}
-                  </span>
-                  <span class="text-xs font-bold px-3 py-1 rounded-full bg-primary/90 text-white border border-primary/20">
-                    ${p.tag}
-                  </span>
-                </div>
-              </div>
-
-              <div class="p-6">
-                <h3 class="text-xl font-extrabold text-ink group-hover:text-primary transition">
-                  ${p.title}
-                </h3>
-                <p class="mt-2 text-ink/70">📍 ${p.location}</p>
-
-                <div class="mt-5 flex items-center justify-between">
-                  <p class="text-sm text-ink/55">Click to preview</p>
-                  <span class="text-primary font-semibold">View →</span>
-                </div>
-              </div>
-            </article>
-          `,
-          )
-          .join("");
+        grid.innerHTML = items.map((p, idx) => cardHTML(p, idx)).join("");
 
         grid.querySelectorAll("[data-idx]").forEach((el) => {
           const idx = Number(el.getAttribute("data-idx"));
@@ -759,12 +957,14 @@
         lightboxTag.textContent = p.tag;
 
         lightbox.classList.remove("hidden");
+        lightbox.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
         closeLightbox.focus();
       }
 
       function closeModal() {
         lightbox.classList.add("hidden");
+        lightbox.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
         lightboxImg.src = "";
       }
@@ -781,18 +981,17 @@
       });
 
       // Filters
-      document.querySelectorAll(".filter-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          activeFilter = btn.getAttribute("data-filter");
+      function setActivePill(targetBtn) {
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((b) => b.classList.remove("is-active"));
+        targetBtn.classList.add("is-active");
+      }
 
-          document.querySelectorAll(".filter-btn").forEach((b) => {
-            b.classList.remove("bg-primary", "text-white", "border-primary/30");
-            b.classList.add("bg-black/5", "text-ink/90", "border-black/10");
-          });
-
-          btn.classList.add("bg-primary", "text-white", "border-primary/30");
-          btn.classList.remove("bg-black/5", "text-ink/90", "border-black/10");
-
+      document.querySelectorAll(".filter-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          activeFilter = b.getAttribute("data-filter") || "all";
+          setActivePill(b);
           render();
         });
       });
@@ -814,18 +1013,18 @@
         searchInput.value = "";
         sortSelect.value = "featured";
 
-        document.querySelectorAll(".filter-btn").forEach((b) => {
-          b.classList.remove("bg-primary", "text-white", "border-primary/30");
-          b.classList.add("bg-black/5", "text-ink/90", "border-black/10");
-        });
-        document
-          .querySelector('.filter-btn[data-filter="all"]')
-          .classList.add("bg-primary", "text-white", "border-primary/30");
+        const allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allBtn) setActivePill(allBtn);
 
         render();
       });
 
+      // First render + set active nav
       render();
+      // ensure Gallery highlighted even if routing differs
+      document
+        .querySelectorAll('[data-nav][href="gallery.html"]')
+        .forEach((a) => a.classList.add("is-active"));
     </script>
   </body>
 </html>
